@@ -71,8 +71,8 @@ def render_global_help() -> str:
             "Examples:",
             *[f"  {ex}" for ex in EXAMPLES],
             "",
-            "Docs: docs/kxlang.md",
-            "Note: Prefer `kx` over Anthropic skill names. Authorized use only.",
+            "Docs: docs/kxlang.md · Policy: docs/policy-self-built.md",
+            "Note: Self-built engines only. Authorized use only.",
         ]
     )
     return "\n".join(lines) + "\n"
