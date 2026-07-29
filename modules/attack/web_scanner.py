@@ -11,6 +11,7 @@ from urllib.request import Request, urlopen
 
 from kx_defender.base import AttackModule
 from kx_defender.result import Finding, ModuleResult
+from modules.engines.report import findings_report
 
 SQLI_PAYLOADS = ["'", "' OR '1'='1", "1; SELECT 1--"]
 XSS_PAYLOADS = ['"><svg/onload=alert(1)>', "<script>alert(1)</script>"]
@@ -94,7 +95,11 @@ class WebScannerModule(AttackModule):
                 ),
             ]
             result.artifacts = {"pages_crawled": 3, "mode": "simulate"}
-            return result.finish("ok")
+            result.finish("ok")
+            result.artifacts["report_html"] = findings_report("KxSweep Report", result.to_dict())
+            result.artifacts["engine"] = "KxSweep"
+            result.artifacts["self_built"] = True
+            return result
 
         findings: list[Finding] = []
         crawled: list[str] = []
@@ -185,5 +190,9 @@ class WebScannerModule(AttackModule):
             "seed_status": status,
             "forms": len(parser.forms),
             "links": crawled,
+            "engine": "KxSweep",
+            "self_built": True,
         }
-        return result.finish("ok")
+        result.finish("ok")
+        result.artifacts["report_html"] = findings_report("KxSweep Report", result.to_dict())
+        return result

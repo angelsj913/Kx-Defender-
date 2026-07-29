@@ -205,6 +205,24 @@
         "process": "process_monitor"
       },
       "default_object": "procs"
+    },
+    "kill": {
+      "role": "process_kill",
+      "module": "process_kill",
+      "objects": {
+        "pid": "process_kill",
+        "proc": "process_kill"
+      },
+      "default_object": "pid"
+    },
+    "sig": {
+      "role": "signature_scan",
+      "module": "sig_scan",
+      "objects": {
+        "scan": "sig_scan",
+        "file": "sig_scan"
+      },
+      "default_object": "scan"
     }
   }
 }

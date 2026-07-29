@@ -14,9 +14,10 @@ from modules.attack.ntlm_relay import NtlmRelayModule
 from modules.attack.web_scanner import WebScannerModule
 from modules.attack.wifi import WifiModule
 from modules.catalog.factory import build_catalog_modules
+from modules.defense.process_kill import ProcessKillModule
 from modules.defense.process_monitor import ProcessMonitorModule
+from modules.defense.sig_scan import SigScanModule
 
-# Short aliases kept for agent convenience / backward compatibility.
 LEGACY_CLASSES: list[Type[AttackModule]] = [
     KerberoastingModule,
     NtlmRelayModule,
@@ -27,6 +28,8 @@ LEGACY_CLASSES: list[Type[AttackModule]] = [
     WebScannerModule,
     LlmRedteamModule,
     ProcessMonitorModule,
+    ProcessKillModule,
+    SigScanModule,
 ]
 
 ALIASES: dict[str, str] = {
@@ -42,15 +45,11 @@ ALIASES: dict[str, str] = {
 
 def build_registry() -> Dict[str, AttackModule]:
     registry: Dict[str, AttackModule] = {}
-
     for mod in build_catalog_modules():
         registry[mod.name] = mod
-
-    # Legacy short names remain callable.
     for cls in LEGACY_CLASSES:
         instance = cls()
         registry[instance.name] = instance
-
     return registry
 
 

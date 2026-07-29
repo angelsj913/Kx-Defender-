@@ -50,6 +50,31 @@ def main(argv: list[str] | None = None) -> None:
         _print_json({"language": "KxLang", "codename": "DEFCOM", "verbs": list_verbs()})
         return
 
+    if head == "serve":
+        host = "127.0.0.1"
+        port = 8787
+        i = 1
+        while i < len(args):
+            if args[i] == "--bind" and i + 1 < len(args):
+                bind = args[i + 1]
+                if ":" in bind:
+                    host, port_s = bind.rsplit(":", 1)
+                    port = int(port_s)
+                else:
+                    host = bind
+                i += 2
+                continue
+            if args[i] == "--port" and i + 1 < len(args):
+                port = int(args[i + 1])
+                i += 2
+                continue
+            print(f"KxLang error: unknown serve flag {args[i]!r}", file=sys.stderr)
+            raise SystemExit(2)
+        from kx_defender.api import serve
+
+        serve(host=host, port=port)
+        return
+
     try:
         cmd = parse_argv(args)
     except KxLangError as exc:

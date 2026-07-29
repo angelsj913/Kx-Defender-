@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "id": "KXSIG-001",
+      "name": "suspicious_powershell_enc",
+      "severity": "high",
+      "patterns": ["(?i)powershell.*-enc\\s+", "(?i)frombase64string"]
+    },
+    {
+      "id": "KXSIG-002",
+      "name": "credential_dump_strings",
+      "severity": "critical",
+      "patterns": ["(?i)sekurlsa::", "(?i)lsass"]
+    },
+    {
+      "id": "KXSIG-003",
+      "name": "lab_marker",
+      "severity": "medium",
+      "patterns": ["KX_LAB_MALICIOUS_MARKER"]
+    }
+  ]
+}

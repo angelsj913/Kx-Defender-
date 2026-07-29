@@ -15,15 +15,19 @@ Kx-Defender has its own command grammar — do **not** drive the product with An
 
 ```bash
 kx /h
-kx /h roast
 kx lexicon
 
+# Strike / Sentry
 kx roast tickets --scope lab --realm lab.local --sim
-kx sentry detect --scope lab --sim
+kx watch procs --scope lab --live
+kx sig scan --scope lab --sim
+kx kill pid --scope lab --pid 4242 --sim
 kx nexus listen --scope lab --bind 127.0.0.1:4455 --live
-kx sweep web --scope owned --url http://127.0.0.1:8080/ --live
-kx probe mind --scope lab --at local-fixture --live
-kx forge sigma-rules --scope lab --sim
+kx sweep web --scope owned --url http://127.0.0.1:8080/ --sim
+
+# Console UI (self-built)
+kx serve --bind 127.0.0.1:8787
+# open http://127.0.0.1:8787/
 ```
 
 Full grammar: [`docs/kxlang.md`](docs/kxlang.md)  

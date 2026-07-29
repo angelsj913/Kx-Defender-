@@ -173,6 +173,18 @@ def parse_argv(argv: list[str], lexicon: dict[str, Any] | None = None) -> KxComm
                 raise KxLangError("--with requires key=value")
             k, v = rest[i].split("=", 1)
             params[k] = v
+        elif tok == "--pid":
+            i += 1
+            if i >= len(rest):
+                raise KxLangError("--pid requires a value")
+            params["pid"] = rest[i]
+            params.setdefault("target", rest[i])
+        elif tok == "--path":
+            i += 1
+            if i >= len(rest):
+                raise KxLangError("--path requires a value")
+            params["path"] = rest[i]
+            params.setdefault("target", rest[i])
         else:
             raise KxLangError(f"unknown flag {tok!r}")
         i += 1

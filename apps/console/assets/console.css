@@ -1,0 +1,33 @@
+:root {
+  --bg: #05070a;
+  --panel: #0a1016;
+  --cyan: #00d9ff;
+  --orange: #ff6600;
+  --text: #d7f7ff;
+  --muted: #6f8b96;
+  --line: #143040;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: radial-gradient(1200px 600px at 20% -10%, #0b1c28, var(--bg)); color: var(--text); font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace; }
+.scanlines { pointer-events: none; position: fixed; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.03) 1px, transparent 2px, transparent 4px); opacity: .25; }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.brand { letter-spacing: .18em; font-weight: 700; color: var(--cyan); }
+.brand span { color: var(--orange); }
+.meta { display: flex; gap: 12px; align-items: center; color: var(--muted); font-size: 12px; }
+select { background: #071018; color: var(--text); border: 1px solid var(--line); padding: 4px 8px; }
+.pill { border: 1px solid var(--cyan); color: var(--cyan); padding: 2px 8px; }
+.command { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--line); align-items: center; }
+.prompt { color: var(--orange); }
+#cmd { width: 100%; background: #071018; border: 1px solid var(--line); color: var(--text); padding: 10px 12px; outline: none; }
+#cmd:focus { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(0,217,255,.25); }
+button { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 12px; cursor: pointer; }
+button:hover { background: rgba(0,217,255,.08); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px 20px 28px; }
+.panel { background: linear-gradient(180deg, rgba(0,217,255,.04), transparent 40%), var(--panel); border: 1px solid var(--line); padding: 12px; min-height: 220px; animation: rise .45s ease both; }
+.panel.wide { grid-column: 1 / -1; }
+.panel h2 { margin: 0 0 10px; font-size: 13px; letter-spacing: .16em; color: var(--orange); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.actions button { font-size: 11px; padding: 6px 8px; }
+.out { margin: 0; white-space: pre-wrap; word-break: break-word; color: var(--text); font-size: 11px; max-height: 260px; overflow: auto; opacity: .95; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .command { grid-template-columns: 1fr; } }

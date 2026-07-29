@@ -18,11 +18,12 @@ HELP_TOKENS = {
 
 EXAMPLES = [
     "kx roast tickets --scope lab --realm lab.local --sim",
-    "kx sentry detect --scope lab --sim",
+    "kx watch procs --scope lab --live",
+    "kx sig scan --scope lab --sim",
+    "kx kill pid --scope lab --pid 4242 --sim",
     "kx nexus listen --scope lab --bind 127.0.0.1:4455 --live",
     "kx sweep web --scope owned --url http://127.0.0.1:8080/ --live",
-    "kx probe mind --scope lab --at local-fixture --live",
-    "kx forge sigma-rules --scope lab --sim",
+    "kx serve --bind 127.0.0.1:8787",
 ]
 
 
@@ -42,6 +43,7 @@ def render_global_help() -> str:
         "  kx /h                 Show this help",
         "  kx /h <VERB>          Show help for one verb",
         "  kx lexicon            Dump verb/object lexicon (JSON)",
+        "  kx serve [--bind host:port]  Start self-built Console UI",
         "",
         "Flags:",
         "  --scope lab|owned|pact   Authorization scope (required)",
@@ -50,7 +52,9 @@ def render_global_help() -> str:
         "  --at <target>            Target host/tenant/ESSID",
         "  --realm <domain>         AD/Entra domain",
         "  --url <url>              Web target URL",
-        "  --bind <host:port>       Listener bind address",
+        "  --bind <host:port>       Listener / console bind address",
+        "  --pid <n>                Process id for kill",
+        "  --path <file>            File path for sig scan",
         "  --pact-file <path>       Engagement allow-list file",
         "  --with key=value         Extra module parameter",
         "",

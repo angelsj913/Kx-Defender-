@@ -2,7 +2,7 @@
 
 **문서 버전**: 3.1  
 **작성일**: 2026-07-29  
-**상태**: Self-Built Only 원칙 고정 + 코드 반영  
+**상태**: **APPROVED** — 전체 시스템 구현 진행  
 **라이선스**: Apache-2.0  
 **명령 언어**: KxLang / DEFCOM (`kx`)  
 **강제 정책**: [`docs/policy-self-built.md`](../policy-self-built.md)
@@ -42,12 +42,13 @@
 | 영역 | 상태 |
 |---|---|
 | Self-Built Only 정책 문서 | ✅ |
-| KxLang (`kx`, `/h`, lexicon) | ✅ (stdlib) |
+| KxLang (`kx`, `/h`, lexicon, `serve`) | ✅ (stdlib) |
 | 오케스트레이터 + 인가 게이트 + SQLite | ✅ |
-| 공격 코어 모듈 + 방어 stub (자체 코드) | ✅ 랩/시뮬 |
+| 공격 코어 + KxSweep HTML report + Nexus ledger | ✅ |
+| KxWatch / KxScore / KxAction / KxSig | ✅ |
 | 지정 스킬 카탈로그 262 (개념→자체 handler) | ✅ |
-| 자체 Console UI | ❌ 미구현 |
-| Windows 실시간 센서 | ❌ stub |
+| 자체 Console UI (`kx serve`) | ✅ stdlib HTTP + HTML/CSS/JS |
+| Windows 센서 | ✅ tasklist 경로 / POSIX /proc (심화 여지) |
 | 외부 툴 래핑 | ❌ 금지·미사용 |
 
 ---
