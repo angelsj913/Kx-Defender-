@@ -42,22 +42,15 @@ Engines 예:
 
 ## 3. 배포 형태
 
-### 현재
+### 현재 (승인 PRD 구현)
 ```
-kx / kxctl   (Python, stdlib CLI)
-modules/     (자체 엔진)
-fixtures/    (랩 데이터)
-```
-
-### 목표
-```
-Kx-Defender/
-  bin/kx(.exe)
-  console/          # 자체 UI
-  modules/
-  rules/kxsig/      # 자체 시그니처
-  rules/kxrule/     # 자체 탐지 규칙
-  data/ledger.db
+kx / kxctl          # stdlib CLI + KxLang
+kx serve            # 자체 Console (stdlib HTTP)
+apps/console/       # HTML/CSS/JS UI
+modules/engines/    # KxWatch KxScore KxSig KxAction KxNexus report
+modules/attack|defense|catalog/
+rules/kxsig/        # 자체 시그니처
+fixtures/ data/
 ```
 
 **금지**: `vendor/impacket`, `tools/aircrack`, `bin/havoc` 같은 외부 툴 트리.

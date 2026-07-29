@@ -20,8 +20,8 @@ kx <VERB> <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]
 ```bash
 kx /h
 kx /h roast
-kx roast /h
 kx lexicon
+kx serve --bind 127.0.0.1:8787
 ```
 
 ## Examples
