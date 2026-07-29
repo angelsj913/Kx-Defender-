@@ -1,0 +1,6 @@
+AUTHORIZED LAB ENGAGEMENT
+authorized_targets:
+  lab.local
+  127.0.0.1
+  mock.idp.local
+  adcs.lab.local

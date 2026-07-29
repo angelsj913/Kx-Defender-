@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kx-defender"
+version = "0.1.0"
+description = "Kx-Defender attack/defense module orchestrator (lab-authorized, no SaaS API keys)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Kx-Defender Contributors" }]
+dependencies = [
+  "click>=8.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+kxctl = "kx_defender.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["services/orchestrator", "."]
+include = ["kx_defender*", "modules*"]
+exclude = ["tests*", "fixtures*", "skills*", "docs*", "data*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["services/orchestrator", "."]
