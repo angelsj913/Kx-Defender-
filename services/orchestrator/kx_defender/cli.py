@@ -1,237 +1,142 @@
-"""kxctl — agent-friendly CLI for Kx-Defender modules."""
+"""kxctl — low-level module CLI (stdlib argparse)."""
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from typing import Any
-
-import click
 
 from kx_defender.orchestrator import Orchestrator
 
 
 def _print_json(data: Any) -> None:
-    click.echo(json.dumps(data, indent=2, ensure_ascii=False))
+    print(json.dumps(data, indent=2, ensure_ascii=False))
 
 
-def _collect_params(
-    authorized_scope: str,
-    mode: str,
-    target: str | None,
-    domain: str | None,
-    url: str | None,
-    host: str | None,
-    essid: str | None,
-    port: int | None,
-    action: str | None,
-    engagement_file: str | None,
-    param: tuple[str, ...],
-) -> dict[str, Any]:
+def _params_from_ns(ns: argparse.Namespace) -> dict[str, Any]:
     params: dict[str, Any] = {
-        "authorized_scope": authorized_scope.lower(),
-        "mode": mode.lower(),
+        "authorized_scope": ns.authorized_scope.lower(),
+        "mode": ns.mode.lower(),
     }
-    for key, value in {
-        "target": target,
-        "domain": domain,
-        "url": url,
-        "host": host,
-        "essid": essid,
-        "port": port,
-        "action": action,
-        "engagement_file": engagement_file,
-    }.items():
+    for key in ("target", "domain", "url", "host", "essid", "action", "engagement_file"):
+        value = getattr(ns, key, None)
         if value is not None:
             params[key] = value
-    for item in param:
+    if getattr(ns, "port", None) is not None:
+        params["port"] = ns.port
+    for item in getattr(ns, "param", []) or []:
         if "=" not in item:
-            raise click.ClickException(f"invalid --param {item!r}, expected key=value")
+            raise SystemExit(f"invalid --param {item!r}, expected key=value")
         k, v = item.split("=", 1)
         params[k] = v
     return params
 
 
-def _run_module(module_name: str, params: dict[str, Any]) -> None:
+def _run(module_name: str, params: dict[str, Any]) -> None:
     orch = Orchestrator()
     try:
         result = orch.run(module_name, params)
     except KeyError as exc:
-        raise click.ClickException(str(exc)) from exc
+        raise SystemExit(str(exc)) from exc
     _print_json(result.to_dict())
     if result.status in {"denied", "error"}:
-        sys.exit(2)
+        raise SystemExit(2)
 
 
-@click.group()
-@click.version_option(package_name="kx-defender")
-def main() -> None:
-    """Kx-Defender control plane (lab-authorized modules, no SaaS API keys)."""
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="kxctl", description="Kx-Defender low-level module control")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    modules = sub.add_parser("modules", help="Module discovery")
+    modules_sub = modules.add_subparsers(dest="modules_cmd", required=True)
+    m_list = modules_sub.add_parser("list", help="List modules")
+    m_list.add_argument("--category", choices=["attack", "defense"])
+    m_list.add_argument("--family")
+    m_list.add_argument("--prefix")
+    m_list.add_argument("--names-only", action="store_true")
+    modules_sub.add_parser("families", help="Count modules by family")
+
+    skill = sub.add_parser("skill", help="Run catalog skill name")
+    skill_sub = skill.add_subparsers(dest="skill_cmd", required=True)
+    s_run = skill_sub.add_parser("run")
+    _add_run_flags(s_run, require_scope=True)
+    s_run.add_argument("skill_name")
+
+    attack = sub.add_parser("attack", help="Run attack module")
+    attack_sub = attack.add_subparsers(dest="attack_cmd", required=True)
+    a_run = attack_sub.add_parser("run")
+    _add_run_flags(a_run, require_scope=True)
+    a_run.add_argument("module_name")
+
+    defense = sub.add_parser("defense", help="Run defense module")
+    defense_sub = defense.add_subparsers(dest="defense_cmd", required=True)
+    d_run = defense_sub.add_parser("run")
+    d_run.add_argument("module_name")
+    d_run.add_argument("--authorized-scope", required=True, choices=["lab", "owned", "engagement"])
+    d_run.add_argument("--mode", default="simulate", choices=["simulate", "execute"])
+    d_run.add_argument("--target")
+    d_run.add_argument("--url")
+    d_run.add_argument("--param", action="append", default=[])
+
+    result = sub.add_parser("result", help="Inspect runs")
+    result_sub = result.add_subparsers(dest="result_cmd", required=True)
+    r_show = result_sub.add_parser("show")
+    r_show.add_argument("run_id")
+    r_list = result_sub.add_parser("list")
+    r_list.add_argument("--limit", type=int, default=20)
+    return p
 
 
-@main.group()
-def modules() -> None:
-    """Module discovery."""
+def _add_run_flags(parser: argparse.ArgumentParser, require_scope: bool) -> None:
+    parser.add_argument("--authorized-scope", required=require_scope, choices=["lab", "owned", "engagement"])
+    parser.add_argument("--mode", default="simulate", choices=["simulate", "execute"])
+    parser.add_argument("--target")
+    parser.add_argument("--domain")
+    parser.add_argument("--url")
+    parser.add_argument("--host")
+    parser.add_argument("--essid")
+    parser.add_argument("--port", type=int)
+    parser.add_argument("--action")
+    parser.add_argument("--engagement-file")
+    parser.add_argument("--param", action="append", default=[])
 
 
-@modules.command("list")
-@click.option("--category", type=click.Choice(["attack", "defense"], case_sensitive=False))
-@click.option("--family", default=None, help="Catalog family (detecting, analyzing, attack_named, ...)")
-@click.option("--prefix", default=None, help="Filter by skill name prefix")
-@click.option("--names-only", is_flag=True, help="Print only module names")
-def modules_list(category: str | None, family: str | None, prefix: str | None, names_only: bool) -> None:
+def main(argv: list[str] | None = None) -> None:
+    parser = build_parser()
+    ns = parser.parse_args(argv)
     orch = Orchestrator()
-    items = orch.list_modules(
-        category=category.lower() if category else None,
-        family=family,
-        prefix=prefix,
-    )
-    if names_only:
-        _print_json([i["name"] for i in items])
-    else:
-        _print_json(items)
 
+    if ns.cmd == "modules":
+        if ns.modules_cmd == "list":
+            items = orch.list_modules(category=ns.category, family=ns.family, prefix=ns.prefix)
+            _print_json([i["name"] for i in items] if ns.names_only else items)
+            return
+        if ns.modules_cmd == "families":
+            _print_json(orch.families())
+            return
 
-@modules.command("families")
-def modules_families() -> None:
-    orch = Orchestrator()
-    _print_json(orch.families())
+    if ns.cmd == "skill" and ns.skill_cmd == "run":
+        _run(ns.skill_name, _params_from_ns(ns))
+        return
+    if ns.cmd == "attack" and ns.attack_cmd == "run":
+        _run(ns.module_name, _params_from_ns(ns))
+        return
+    if ns.cmd == "defense" and ns.defense_cmd == "run":
+        _run(ns.module_name, _params_from_ns(ns))
+        return
+    if ns.cmd == "result":
+        if ns.result_cmd == "show":
+            item = orch.get_result(ns.run_id)
+            if item is None:
+                raise SystemExit(f"run not found: {ns.run_id}")
+            _print_json(item.to_dict())
+            return
+        if ns.result_cmd == "list":
+            _print_json(orch.list_results(limit=ns.limit))
+            return
 
-
-@main.group()
-def skill() -> None:
-    """Run full catalog skill names (Anthropic-Cybersecurity style)."""
-
-
-@skill.command("run")
-@click.argument("skill_name")
-@click.option(
-    "--authorized-scope",
-    type=click.Choice(["lab", "owned", "engagement"], case_sensitive=False),
-    required=True,
-)
-@click.option("--mode", type=click.Choice(["simulate", "execute"], case_sensitive=False), default="simulate")
-@click.option("--target", default=None)
-@click.option("--domain", default=None)
-@click.option("--url", default=None)
-@click.option("--host", default=None)
-@click.option("--essid", default=None)
-@click.option("--port", default=None, type=int)
-@click.option("--action", default=None)
-@click.option("--engagement-file", default=None, type=click.Path())
-@click.option("--param", multiple=True, help="Extra key=value params")
-def skill_run(
-    skill_name: str,
-    authorized_scope: str,
-    mode: str,
-    target: str | None,
-    domain: str | None,
-    url: str | None,
-    host: str | None,
-    essid: str | None,
-    port: int | None,
-    action: str | None,
-    engagement_file: str | None,
-    param: tuple[str, ...],
-) -> None:
-    params = _collect_params(
-        authorized_scope, mode, target, domain, url, host, essid, port, action, engagement_file, param
-    )
-    _run_module(skill_name, params)
-
-
-@main.group()
-def attack() -> None:
-    """Run attack modules (short names or full skill names)."""
-
-
-@attack.command("run")
-@click.argument("module_name")
-@click.option(
-    "--authorized-scope",
-    type=click.Choice(["lab", "owned", "engagement"], case_sensitive=False),
-    required=True,
-)
-@click.option("--mode", type=click.Choice(["simulate", "execute"], case_sensitive=False), default="simulate")
-@click.option("--target", default=None)
-@click.option("--domain", default=None)
-@click.option("--url", default=None)
-@click.option("--host", default=None)
-@click.option("--essid", default=None)
-@click.option("--port", default=None, type=int)
-@click.option("--action", default=None)
-@click.option("--engagement-file", default=None, type=click.Path())
-@click.option("--param", multiple=True, help="Extra key=value params")
-def attack_run(
-    module_name: str,
-    authorized_scope: str,
-    mode: str,
-    target: str | None,
-    domain: str | None,
-    url: str | None,
-    host: str | None,
-    essid: str | None,
-    port: int | None,
-    action: str | None,
-    engagement_file: str | None,
-    param: tuple[str, ...],
-) -> None:
-    params = _collect_params(
-        authorized_scope, mode, target, domain, url, host, essid, port, action, engagement_file, param
-    )
-    _run_module(module_name, params)
-
-
-@main.group()
-def defense() -> None:
-    """Run defense modules (detecting/analyzing/auditing/securing/triaging/compliance/building)."""
-
-
-@defense.command("run")
-@click.argument("module_name")
-@click.option(
-    "--authorized-scope",
-    type=click.Choice(["lab", "owned", "engagement"], case_sensitive=False),
-    required=True,
-)
-@click.option("--mode", type=click.Choice(["simulate", "execute"], case_sensitive=False), default="simulate")
-@click.option("--target", default=None)
-@click.option("--url", default=None)
-@click.option("--param", multiple=True, help="Extra key=value params")
-def defense_run(
-    module_name: str,
-    authorized_scope: str,
-    mode: str,
-    target: str | None,
-    url: str | None,
-    param: tuple[str, ...],
-) -> None:
-    params = _collect_params(
-        authorized_scope, mode, target, None, url, None, None, None, None, None, param
-    )
-    _run_module(module_name, params)
-
-
-@main.group()
-def result() -> None:
-    """Inspect persisted runs."""
-
-
-@result.command("show")
-@click.argument("run_id")
-def result_show(run_id: str) -> None:
-    orch = Orchestrator()
-    item = orch.get_result(run_id)
-    if item is None:
-        raise click.ClickException(f"run not found: {run_id}")
-    _print_json(item.to_dict())
-
-
-@result.command("list")
-@click.option("--limit", default=20, show_default=True)
-def result_list(limit: int) -> None:
-    orch = Orchestrator()
-    _print_json(orch.list_results(limit=limit))
+    parser.error("unknown command")
 
 
 if __name__ == "__main__":

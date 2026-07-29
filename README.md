@@ -1,10 +1,13 @@
 # Kx-Defender
 
-Windows-oriented attack + defense security platform (Phase 1 slice): **self-built modules**, proprietary **KxLang/DEFCOM** command language (`kx`), low-level `kxctl`, and **Cursor agent skills**.
+**Self-built** Windows-oriented attack + defense platform. Proprietary **KxLang/DEFCOM** (`kx`), orchestrator, and in-house modules.
 
-> **Authorized & lawful use only.** Attack modules are for systems you own or have explicit written permission to test (lab / CTF / engagement).
+> **Authorized & lawful use only.**  
+> **Self-Built Only:** 외부 보안 프로그램(Impacket/Aircrack/Havoc/ZAP/Garak 등)을 **가져오지 않습니다.**  
+> 사용자가 지정한 스킬은 능력 목록일 뿐, 구현은 전부 이 레포에서 직접 작성합니다.  
+> 정책: [`docs/policy-self-built.md`](docs/policy-self-built.md)
 
-License: **Apache-2.0** (not MIT). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+License: **Apache-2.0**. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ## KxLang (primary interface)
 
@@ -59,17 +62,17 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 | Family | Count | Examples |
 |---|---|---|
-| `attack_named` | 10 | Entra/ROADtools, OAuth device code, Havoc/Sliver listeners, NTLM ESC8, DPAPI, WiFi, Kerberoasting, GraphRunner mock, Garak-style LLM |
-| `testing_for` | 12 | `testing-for-xss-vulnerabilities`, JWT, XXE, ... |
-| `detecting` | 96 | `detecting-*` |
+| `attack_named` | 10 | Entra(KxBreach), OAuth device-code, Nexus listeners, NTLM ESC8, DPAPI, WiFi, Kerberoasting, KxGraph, KxProbe |
+| `testing_for` | 12 | `testing-for-*` → 자체 KxSweep |
+| `detecting` | 96 | `detecting-*` → 자체 Sentry handlers |
 | `analyzing` | 76 | `analyzing-*` |
 | `auditing` | 12 | `auditing-*` |
 | `securing` | 13 | `securing-*` |
 | `triaging` | 5 | `triaging-*` |
 | `compliance` | 7 | CMMC, PCI-DSS, NERC CIP, ... |
-| `building_defense` | 31 | defensive `building-*` (Sigma, SIEM, IR playbooks, ...) |
+| `building_defense` | 31 | defensive `building-*` blueprints |
 
-**Not included:** custom C2 implants, AMSI/ETW bypass, real phishing kits, SaaS LLM API calls.
+**금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
 ## Install
 
@@ -98,9 +101,12 @@ kxctl result list
 
 Agent skills live under [`skills/`](skills/):
 
-- **Primary:** `skills/kxlang` — use `kx` / KxLang
+- **Primary:** `skills/kxlang` — use `kx` / KxLang (self-built only)
 - Catalog guides: `skills/kx-catalog-attack`, `skills/kx-catalog-defense`
 - Legacy helpers: `skills/kx-attack-*`
+- Policy: [`docs/policy-self-built.md`](docs/policy-self-built.md)
+- PRD: [`docs/prd/kx-defender-v3.md`](docs/prd/kx-defender-v3.md)
+- Architecture: [`docs/architecture.md`](docs/architecture.md)
 
 ## Tests
 

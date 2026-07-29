@@ -1,29 +1,16 @@
 ---
 name: kx-attack-kerberoasting
-description: Run Kx-Defender Kerberoasting lab module via kxctl (SPN/TGS fixtures, no live AD required for simulate).
+description: Run self-built KxRoast lab module via kx/kxctl (no external Kerberos tool binaries).
 ---
 
-# Kx Attack — Kerberoasting
+# Kx Attack — Kerberoasting (Self-Built)
 
 Authorized lab use only.
 
-## When to use
-
-- Need SPN enumeration / TGS hash artifacts for AD lab workflows
-- Agent should call `kxctl`, not invent Impacket commands
-
-## Command
-
 ```bash
-kxctl attack run kerberoasting --authorized-scope lab --mode simulate --domain lab.local
-kxctl attack run kerberoasting --authorized-scope lab --mode execute --domain lab.local
+kx roast tickets --scope lab --realm lab.local --sim
+kx roast tickets --scope lab --realm lab.local --live
 ```
 
-## Output
-
-JSON with `artifacts.spns`, `artifacts.tgs_hashes`, `run_id`.
-
-## Forbidden
-
-- Running against domains you do not own / lack written authorization for
+Forbidden: installing/calling external roasting toolchains.
 ---

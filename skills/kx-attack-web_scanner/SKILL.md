@@ -1,24 +1,11 @@
 ---
 name: kx-attack-web_scanner
-description: Run self-built OWASP-ish web scanner (SQLi/XSS/CSRF) against authorized local targets via kxctl.
+description: Run self-built KxSweep web scanner via kx (no external web scanner binaries).
 ---
 
-# Kx Attack — Web Scanner
-
-Authorized owned/lab targets only. No ZAP API.
-
-## Command
+# Kx Attack — Web Scanner (Self-Built)
 
 ```bash
-kxctl attack run web_scanner --authorized-scope lab --mode simulate --url http://127.0.0.1:8080/
-kxctl attack run web_scanner --authorized-scope owned --mode execute --url http://127.0.0.1:8080/?q=test&id=1
+kx sweep web --scope owned --url http://127.0.0.1:8080/ --live
 ```
-
-## Output
-
-Findings with severities + crawled links.
-
-## Forbidden
-
-- Scanning public internet hosts without engagement allow-list
 ---

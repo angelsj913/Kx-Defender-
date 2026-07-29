@@ -207,9 +207,9 @@ def handle_attack_named(skill: str, params: dict[str, Any]) -> ModuleResult:
         "abusing-dpapi-for-credential-access": lambda p: _delegate(DpapiModule, skill, p),
         "performing-wifi-password-cracking-with-aircrack": lambda p: _delegate(WifiModule, skill, p),
         "performing-kerberoasting-attack": lambda p: _delegate(KerberoastingModule, skill, p),
-        "red-teaming-llms-with-garak": lambda p: _delegate(LlmRedteamModule, skill, p, {"engine": "garak-style-local"}),
-        "building-red-team-c2-infrastructure-with-havoc": lambda p: _c2_framework(skill, p, "havoc"),
-        "building-c2-infrastructure-with-sliver-framework": lambda p: _c2_framework(skill, p, "sliver"),
+        "red-teaming-llms-with-garak": lambda p: _delegate(LlmRedteamModule, skill, p, {"engine": "KxProbe"}),
+        "building-red-team-c2-infrastructure-with-havoc": lambda p: _c2_framework(skill, p, "kx-nexus-alpha"),
+        "building-c2-infrastructure-with-sliver-framework": lambda p: _c2_framework(skill, p, "kx-nexus-beta"),
         "attacking-entra-id-with-roadtools": lambda p: _entra(skill, p),
         "post-exploiting-microsoft-graph-with-graphrunner": lambda p: _graph(skill, p),
     }
@@ -230,14 +230,14 @@ def _c2_framework(skill: str, params: dict[str, Any], framework: str) -> ModuleR
     result.findings.insert(
         0,
         Finding(
-            title=f"{framework} lab infrastructure blueprint",
+            title=f"{framework} lab listener blueprint",
             severity="info",
-            detail="Listener/session manager only — no implant/shellcode/AMSI bypass",
-            evidence={"framework": framework},
+            detail="Self-built Nexus listener/session manager only — no implant/shellcode/AMSI bypass",
+            evidence={"framework": framework, "self_built": True},
         ),
     )
     result.artifacts["framework"] = framework
-    result.artifacts["exclusions"] = ["implant", "shellcode", "amsi_bypass"]
+    result.artifacts["exclusions"] = ["implant", "shellcode", "amsi_bypass", "external_c2_binary"]
     return result
 
 
@@ -251,10 +251,10 @@ def _entra(skill: str, params: dict[str, Any]) -> ModuleResult:
     ]
     result.findings.append(
         Finding(
-            title="Entra ID recon (ROADtools-style lab)",
+            title="Entra ID recon (KxBreach engine)",
             severity="medium",
-            detail="Enumerated lab directory objects without cloud API keys",
-            evidence={"users": len(users), "tenant": tenant},
+            detail="Self-built directory enumeration workflow — no external identity toolkit binaries",
+            evidence={"users": len(users), "tenant": tenant, "engine": "KxBreach"},
         )
     )
     result.artifacts = {
@@ -262,7 +262,8 @@ def _entra(skill: str, params: dict[str, Any]) -> ModuleResult:
         "users": users,
         "apps": [{"name": "LabApp", "permissions": ["User.Read.All"]}],
         "token_ops": {"prt": "simulated", "foci_exchange": "simulated"},
-        "tooling": "self-built roadtools-style workflow",
+        "engine": "KxBreach",
+        "self_built": True,
     }
     return result.finish("ok")
 
@@ -272,17 +273,18 @@ def _graph(skill: str, params: dict[str, Any]) -> ModuleResult:
     token = params.get("access_token") or "labtok_mock"
     result.findings.append(
         Finding(
-            title="Microsoft Graph post-exploit (mock)",
+            title="Graph post-exploit mock (KxGraph engine)",
             severity="high",
-            detail="Queried mock Graph endpoints with lab token (no real M365 tenant)",
-            evidence={"token_masked": mask_secret(token, keep=4)},
+            detail="Self-built mock Graph collection — no external GraphRunner binary, no cloud API keys",
+            evidence={"token_masked": mask_secret(token, keep=4), "engine": "KxGraph"},
         )
     )
     result.artifacts = {
         "mail_sample": [{"subject": "Lab invoice", "from": "billing@lab.local"}],
         "drive_sample": [{"name": "secrets-lab.txt", "path": "/Documents"}],
         "teams_sample": [{"channel": "General", "message": "lab ping"}],
-        "note": "Mock GraphRunner-style collection only",
+        "engine": "KxGraph",
+        "self_built": True,
     }
     return result.finish("ok")
 

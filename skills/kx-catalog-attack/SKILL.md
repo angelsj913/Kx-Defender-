@@ -1,33 +1,25 @@
 ---
 name: kx-catalog-attack
-description: Run named offensive catalog skills (Entra, OAuth device code, Havoc/Sliver C2 listeners, NTLM ESC8, DPAPI, WiFi, Kerberoasting, GraphRunner mock, Garak-style LLM, testing-for-*).
+description: Run named offensive catalog capabilities via KxLang/kxctl using self-built engines only.
 ---
 
-# Kx Catalog — Attack Skills
+# Kx Catalog — Attack (Self-Built)
 
-Authorized lab use only. No SaaS API keys. No implants/AMSI bypass.
+Authorized lab use only. **No external security binaries.**
 
-## Discover
-
-```bash
-kxctl modules families
-kxctl modules list --family attack_named --names-only
-kxctl modules list --prefix testing-for- --names-only
-```
-
-## Named skills
+Skill names are capability IDs. Engines are Kx-Defender modules.
 
 ```bash
-kxctl skill run attacking-entra-id-with-roadtools --authorized-scope lab --mode simulate --domain contoso.lab.local
-kxctl skill run attacking-oauth-with-device-code-phishing --authorized-scope lab --mode execute --target mock.idp.local
-kxctl skill run building-red-team-c2-infrastructure-with-havoc --authorized-scope lab --mode execute --host 127.0.0.1 --port 4455 --action start_listener
-kxctl skill run building-c2-infrastructure-with-sliver-framework --authorized-scope lab --mode simulate --action status
-kxctl skill run relaying-ntlm-for-adcs-esc8 --authorized-scope lab --mode simulate --target adcs.lab.local
-kxctl skill run abusing-dpapi-for-credential-access --authorized-scope lab --mode execute --target 127.0.0.1
-kxctl skill run performing-wifi-password-cracking-with-aircrack --authorized-scope lab --mode execute --essid LabWiFi
-kxctl skill run performing-kerberoasting-attack --authorized-scope lab --mode execute --domain lab.local
-kxctl skill run post-exploiting-microsoft-graph-with-graphrunner --authorized-scope lab --mode simulate --target lab.local
-kxctl skill run red-teaming-llms-with-garak --authorized-scope lab --mode execute --target local-fixture
-kxctl skill run testing-for-xss-vulnerabilities --authorized-scope owned --mode execute --url http://127.0.0.1:8080/?q=test
+kx /h
+kx breach entra --scope lab --realm contoso.lab.local --sim
+kx bait dcode --scope lab --at mock.idp.local --live
+kx nexus listen --scope lab --bind 127.0.0.1:4455 --live
+kx relay esc8 --scope lab --at adcs.lab.local --sim
+kx loot vault --scope lab --at 127.0.0.1 --live
+kx crack wifi --scope lab --at LabWiFi --live
+kx roast tickets --scope lab --realm lab.local --sim
+kx graph pull --scope lab --at lab.local --sim
+kx probe mind --scope lab --at local-fixture --live
+kx sweep xss --scope owned --url http://127.0.0.1/?q=1 --sim
 ```
 ---

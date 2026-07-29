@@ -1,4 +1,4 @@
-"""Self-built web vulnerability scanner (no ZAP API)."""
+"""Self-built web vulnerability scanner (KxSweep)."""
 
 from __future__ import annotations
 
