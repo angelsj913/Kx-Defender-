@@ -13,11 +13,13 @@ Always prefer `kx` over raw `kxctl` or Anthropic skill names.
 kx <VERB> <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]
 ```
 
-## Meta
+## Meta / Help
 
 ```bash
+kx /h
+kx /h roast
+kx roast /h
 kx lexicon
-kx help roast
 ```
 
 ## Attack examples

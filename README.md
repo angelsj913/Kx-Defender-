@@ -11,8 +11,9 @@ License: **Apache-2.0** (not MIT). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 Kx-Defender has its own command grammar — do **not** drive the product with Anthropic skill names.
 
 ```bash
+kx /h
+kx /h roast
 kx lexicon
-kx help roast
 
 kx roast tickets --scope lab --realm lab.local --sim
 kx sentry detect --scope lab --sim

@@ -55,3 +55,39 @@ def test_kx_cli_lexicon(capsys):
     out = capsys.readouterr().out
     assert "DEFCOM" in out
     assert "sentry" in out
+
+
+def test_kx_slash_h_help(capsys):
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["/h"])
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert "KxLang / DEFCOM" in out
+    assert "kx /h" in out
+    assert "roast" in out
+    assert "--scope" in out
+
+
+def test_kx_slash_h_verb_help(capsys):
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["/h", "roast"])
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert "KxLang verb: roast" in out
+    assert "performing-kerberoasting-attack" in out
+
+
+def test_kx_verb_slash_h(capsys):
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["nexus", "/h"])
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert "KxLang verb: nexus" in out
+
+
+def test_kx_help_unknown_verb(capsys):
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["/h", "nukem"])
+    assert exc.value.code == 2
+    err = capsys.readouterr().err
+    assert "unknown verb" in err

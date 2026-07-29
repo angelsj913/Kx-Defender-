@@ -1,0 +1,124 @@
+"""Human-readable KxLang help text."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from kx_defender.kxlang import list_verbs, load_lexicon
+
+HELP_TOKENS = {
+    "/h",
+    "/help",
+    "-h",
+    "--help",
+    "help",
+    "?",
+}
+
+
+EXAMPLES = [
+    "kx roast tickets --scope lab --realm lab.local --sim",
+    "kx sentry detect --scope lab --sim",
+    "kx nexus listen --scope lab --bind 127.0.0.1:4455 --live",
+    "kx sweep web --scope owned --url http://127.0.0.1:8080/ --live",
+    "kx probe mind --scope lab --at local-fixture --live",
+    "kx forge sigma-rules --scope lab --sim",
+]
+
+
+def is_help_token(token: str | None) -> bool:
+    if token is None:
+        return False
+    return token.lower() in HELP_TOKENS
+
+
+def render_global_help() -> str:
+    verbs = list_verbs()
+    lines = [
+        "KxLang / DEFCOM — Kx-Defender command language",
+        "",
+        "Usage:",
+        "  kx <VERB> <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]",
+        "  kx /h                 Show this help",
+        "  kx /h <VERB>          Show help for one verb",
+        "  kx lexicon            Dump verb/object lexicon (JSON)",
+        "",
+        "Flags:",
+        "  --scope lab|owned|pact   Authorization scope (required)",
+        "  --sim                    Simulate (default)",
+        "  --live                   Execute (lab/private/pact only)",
+        "  --at <target>            Target host/tenant/ESSID",
+        "  --realm <domain>         AD/Entra domain",
+        "  --url <url>              Web target URL",
+        "  --bind <host:port>       Listener bind address",
+        "  --pact-file <path>       Engagement allow-list file",
+        "  --with key=value         Extra module parameter",
+        "",
+        "Verbs:",
+    ]
+    for verb in sorted(verbs):
+        meta = verbs[verb]
+        objs = ", ".join(meta.get("objects", [])[:6])
+        more = ""
+        if len(meta.get("objects", [])) > 6:
+            more = ", ..."
+        role = meta.get("role") or "-"
+        lines.append(f"  {verb:<8} {role:<16} objects: {objs}{more}")
+
+    lines.extend(
+        [
+            "",
+            "Examples:",
+            *[f"  {ex}" for ex in EXAMPLES],
+            "",
+            "Docs: docs/kxlang.md",
+            "Note: Prefer `kx` over Anthropic skill names. Authorized use only.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def render_verb_help(verb: str) -> str:
+    lex = load_lexicon()
+    key = verb.lower()
+    meta: dict[str, Any] | None = lex.get("verbs", {}).get(key)
+    if meta is None:
+        available = ", ".join(sorted(lex.get("verbs", {})))
+        raise ValueError(f"unknown verb {verb!r}. available: {available}")
+
+    objects = meta.get("objects", {})
+    lines = [
+        f"KxLang verb: {key}",
+        f"Role:        {meta.get('role', '-')}",
+        f"Family:      {meta.get('family', meta.get('module', '-'))}",
+        f"Default obj: {meta.get('default_object', '-')}",
+        "",
+        "Objects → modules:",
+    ]
+    for obj, module in sorted(objects.items()):
+        lines.append(f"  {obj:<16} → {module}")
+
+    lines.extend(
+        [
+            "",
+            "Usage:",
+            f"  kx {key} <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]",
+            "",
+            "Examples:",
+        ]
+    )
+    default_obj = meta.get("default_object") or next(iter(objects), "obj")
+    if key in {"roast", "breach"}:
+        lines.append(f"  kx {key} {default_obj} --scope lab --realm lab.local --sim")
+    elif key == "nexus":
+        lines.append(f"  kx {key} listen --scope lab --bind 127.0.0.1:4455 --live")
+    elif key == "sweep":
+        lines.append(f"  kx {key} web --scope owned --url http://127.0.0.1/ --live")
+    elif key == "crack":
+        lines.append(f"  kx {key} wifi --scope lab --at LabWiFi --live")
+    else:
+        lines.append(f"  kx {key} {default_obj} --scope lab --sim")
+
+    lines.append("")
+    lines.append("Also: kx /h   |   kx lexicon")
+    return "\n".join(lines) + "\n"

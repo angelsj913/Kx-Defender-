@@ -10,7 +10,19 @@ kx <VERB> <OBJECT> [flags...]
 
 - `VERB`: 대소문자 무시 (권장: 소문자)
 - `OBJECT`: 하이픈/슬래시 허용 (`auth-anomalies`, `web`, `havoc`)
-- 기본 출력: JSON
+- 기본 출력: JSON (도움말은 텍스트)
+
+### 도움말
+
+```bash
+kx /h              # 전체 도움말
+kx /h roast        # 동사별 도움말
+kx roast /h        # 동사별 도움말 (동일)
+kx -h
+kx --help
+kx help
+kx ?
+```
 
 ### 플래그 (KxLang 고유)
 
