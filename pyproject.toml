@@ -18,6 +18,7 @@ dependencies = [
 dev = ["pytest>=7.4"]
 
 [project.scripts]
+kx = "kx_defender.kx_cli:main"
 kxctl = "kx_defender.cli:main"
 
 [tool.setuptools.packages.find]

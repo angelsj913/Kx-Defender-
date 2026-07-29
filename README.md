@@ -1,10 +1,38 @@
 # Kx-Defender
 
-Windows-oriented attack + defense security platform (Phase 1 slice): **self-built modules**, **`kxctl` CLI**, and **Cursor agent skills**.
+Windows-oriented attack + defense security platform (Phase 1 slice): **self-built modules**, proprietary **KxLang/DEFCOM** command language (`kx`), low-level `kxctl`, and **Cursor agent skills**.
 
 > **Authorized & lawful use only.** Attack modules are for systems you own or have explicit written permission to test (lab / CTF / engagement).
 
 License: **Apache-2.0** (not MIT). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+## KxLang (primary interface)
+
+Kx-Defender has its own command grammar — do **not** drive the product with Anthropic skill names.
+
+```bash
+kx lexicon
+kx help roast
+
+kx roast tickets --scope lab --realm lab.local --sim
+kx sentry detect --scope lab --sim
+kx nexus listen --scope lab --bind 127.0.0.1:4455 --live
+kx sweep web --scope owned --url http://127.0.0.1:8080/ --live
+kx probe mind --scope lab --at local-fixture --live
+kx forge sigma-rules --scope lab --sim
+```
+
+Full grammar: [`docs/kxlang.md`](docs/kxlang.md)  
+Lexicon: [`fixtures/catalog/kxlang_lexicon.json`](fixtures/catalog/kxlang_lexicon.json)
+
+| Verb | Meaning |
+|---|---|
+| `sentry` / `trace` / `audit` / `harden` / `triage` / `comply` / `forge` | Defense families |
+| `roast` / `relay` / `loot` / `bait` / `breach` / `crack` | AD / identity / wifi |
+| `nexus` / `graph` / `probe` / `sweep` | C2 listener / Graph mock / LLM / web |
+| `watch` | Process monitor |
+
+Flags: `--scope lab|owned|pact`, `--sim` (default), `--live`, `--at`, `--realm`, `--url`, `--bind`, `--pact-file`
 
 ## What this slice includes
 
@@ -46,24 +74,15 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 python3 -m pip install -e ".[dev]"
 ```
 
-## Agent-friendly CLI
+## Low-level CLI (`kxctl`)
+
+Prefer `kx` (KxLang). `kxctl` remains for debugging/module inspection:
 
 ```bash
 kxctl modules families
 kxctl modules list --family detecting --names-only
-kxctl modules list --prefix testing-for- --names-only
-
-# short alias
-kxctl attack run kerberoasting --authorized-scope lab --mode simulate --domain lab.local
-
-# full catalog skill name
 kxctl skill run attacking-entra-id-with-roadtools --authorized-scope lab --mode simulate --domain contoso.lab.local
-kxctl skill run red-teaming-llms-with-garak --authorized-scope lab --mode execute --target local-fixture
-kxctl defense run detecting-anomalous-authentication-patterns --authorized-scope lab --mode simulate
-kxctl defense run building-detection-rules-with-sigma --authorized-scope lab --mode simulate
-
 kxctl result list
-kxctl result show <run_id>
 ```
 
 ### Authorization rules
@@ -76,8 +95,9 @@ kxctl result show <run_id>
 
 Agent skills live under [`skills/`](skills/):
 
-- Per-module helpers: `skills/kx-attack-*`
+- **Primary:** `skills/kxlang` — use `kx` / KxLang
 - Catalog guides: `skills/kx-catalog-attack`, `skills/kx-catalog-defense`
+- Legacy helpers: `skills/kx-attack-*`
 
 ## Tests
 

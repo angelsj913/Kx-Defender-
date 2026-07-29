@@ -1,0 +1,210 @@
+{
+  "language": "KxLang",
+  "codename": "DEFCOM",
+  "version": "1.0",
+  "verbs": {
+    "sentry": {
+      "role": "detect",
+      "family": "detecting",
+      "objects": {
+        "detect": "detecting-anomalous-authentication-patterns",
+        "auth-anomalies": "detecting-anomalous-authentication-patterns",
+        "api-enum": "detecting-api-enumeration-attacks",
+        "cloudtrail": "detecting-aws-cloudtrail-anomalies",
+        "prompt-inject": "detecting-ai-model-prompt-injection-attacks",
+        "arp": "detecting-arp-poisoning-in-network-traffic",
+        "scada": "detecting-attacks-on-scada-systems"
+      },
+      "default_object": "detect"
+    },
+    "trace": {
+      "role": "analyze",
+      "family": "analyzing",
+      "objects": {
+        "analyze": "analyzing-threat-actor-ttps-with-mitre-attack",
+        "mitre-ttps": "analyzing-threat-actor-ttps-with-mitre-attack",
+        "malware-net": "analyzing-network-traffic-of-malware",
+        "cobalt-c2": "analyzing-cobaltstrike-malleable-c2-profiles",
+        "registry": "analyzing-windows-registry-for-artifacts",
+        "heap-spray": "analyzing-heap-spray-exploitation"
+      },
+      "default_object": "analyze"
+    },
+    "audit": {
+      "role": "audit",
+      "family": "auditing",
+      "objects": {
+        "check": "auditing-cloud-with-cis-benchmarks",
+        "s3": "auditing-aws-s3-bucket-permissions",
+        "entra": "auditing-azure-active-directory-configuration",
+        "k8s-rbac": "auditing-kubernetes-cluster-rbac",
+        "tls-ct": "auditing-tls-certificate-transparency-logs",
+        "terraform": "auditing-terraform-infrastructure-for-security"
+      },
+      "default_object": "check"
+    },
+    "harden": {
+      "role": "secure",
+      "family": "securing",
+      "objects": {
+        "apply": "securing-aws-iam-permissions",
+        "iam": "securing-aws-iam-permissions",
+        "lambda": "securing-aws-lambda-execution-roles",
+        "k8s": "securing-kubernetes-on-cloud",
+        "gha": "securing-github-actions-workflows",
+        "agent-tools": "securing-agentic-ai-tool-invocation"
+      },
+      "default_object": "apply"
+    },
+    "triage": {
+      "role": "triage",
+      "family": "triaging",
+      "objects": {
+        "sort": "triaging-security-incident",
+        "incident": "triaging-security-incident",
+        "splunk": "triaging-security-alerts-in-splunk",
+        "ssvc": "triaging-vulnerabilities-with-ssvc-framework",
+        "kape": "triaging-windows-with-kape"
+      },
+      "default_object": "sort"
+    },
+    "comply": {
+      "role": "compliance",
+      "family": "compliance",
+      "objects": {
+        "map": "achieving-cmmc-level-2-compliance",
+        "cmmc": "achieving-cmmc-level-2-compliance",
+        "pci": "implementing-pci-dss-compliance-controls",
+        "nerc": "implementing-nerc-cip-compliance-controls",
+        "aws-hub": "implementing-aws-security-hub-compliance",
+        "aws-config": "implementing-aws-config-rules-for-compliance"
+      },
+      "default_object": "map"
+    },
+    "forge": {
+      "role": "build_defense",
+      "family": "building_defense",
+      "objects": {
+        "build": "building-detection-rules-with-sigma",
+        "sigma-rules": "building-detection-rules-with-sigma",
+        "splunk-rule": "building-detection-rule-with-splunk-spl",
+        "siem": "building-cloud-siem-with-sentinel",
+        "ir-playbook": "building-incident-response-playbook",
+        "ir-dash": "building-incident-response-dashboard",
+        "misp": "building-threat-feed-aggregation-with-misp",
+        "hunt-hyp": "building-threat-hunt-hypothesis-framework"
+      },
+      "default_object": "build"
+    },
+    "roast": {
+      "role": "kerberoast",
+      "module": "performing-kerberoasting-attack",
+      "objects": {
+        "tickets": "performing-kerberoasting-attack",
+        "spn": "performing-kerberoasting-attack"
+      },
+      "default_object": "tickets"
+    },
+    "relay": {
+      "role": "ntlm_relay",
+      "module": "relaying-ntlm-for-adcs-esc8",
+      "objects": {
+        "esc8": "relaying-ntlm-for-adcs-esc8",
+        "ntlm": "relaying-ntlm-for-adcs-esc8"
+      },
+      "default_object": "esc8"
+    },
+    "loot": {
+      "role": "dpapi",
+      "module": "abusing-dpapi-for-credential-access",
+      "objects": {
+        "vault": "abusing-dpapi-for-credential-access",
+        "dpapi": "abusing-dpapi-for-credential-access"
+      },
+      "default_object": "vault"
+    },
+    "bait": {
+      "role": "device_code",
+      "module": "attacking-oauth-with-device-code-phishing",
+      "objects": {
+        "dcode": "attacking-oauth-with-device-code-phishing",
+        "oauth": "attacking-oauth-with-device-code-phishing"
+      },
+      "default_object": "dcode"
+    },
+    "breach": {
+      "role": "entra",
+      "module": "attacking-entra-id-with-roadtools",
+      "objects": {
+        "entra": "attacking-entra-id-with-roadtools",
+        "aad": "attacking-entra-id-with-roadtools"
+      },
+      "default_object": "entra"
+    },
+    "crack": {
+      "role": "wifi",
+      "module": "performing-wifi-password-cracking-with-aircrack",
+      "objects": {
+        "wifi": "performing-wifi-password-cracking-with-aircrack",
+        "wpa": "performing-wifi-password-cracking-with-aircrack"
+      },
+      "default_object": "wifi"
+    },
+    "nexus": {
+      "role": "c2_listener",
+      "objects": {
+        "listen": "building-red-team-c2-infrastructure-with-havoc",
+        "havoc": "building-red-team-c2-infrastructure-with-havoc",
+        "sliver": "building-c2-infrastructure-with-sliver-framework",
+        "status": "building-red-team-c2-infrastructure-with-havoc"
+      },
+      "default_object": "status",
+      "defaults": {
+        "action": "status"
+      }
+    },
+    "graph": {
+      "role": "graph_mock",
+      "module": "post-exploiting-microsoft-graph-with-graphrunner",
+      "objects": {
+        "pull": "post-exploiting-microsoft-graph-with-graphrunner",
+        "mail": "post-exploiting-microsoft-graph-with-graphrunner",
+        "drive": "post-exploiting-microsoft-graph-with-graphrunner"
+      },
+      "default_object": "pull"
+    },
+    "probe": {
+      "role": "llm_redteam",
+      "module": "red-teaming-llms-with-garak",
+      "objects": {
+        "mind": "red-teaming-llms-with-garak",
+        "llm": "red-teaming-llms-with-garak",
+        "garak": "red-teaming-llms-with-garak"
+      },
+      "default_object": "mind"
+    },
+    "sweep": {
+      "role": "web_test",
+      "objects": {
+        "web": "web_scanner",
+        "xss": "testing-for-xss-vulnerabilities",
+        "sqli": "web_scanner",
+        "jwt": "testing-for-json-web-token-vulnerabilities",
+        "xxe": "testing-for-xxe-injection-vulnerabilities",
+        "redirect": "testing-for-open-redirect-vulnerabilities",
+        "bac": "testing-for-broken-access-control",
+        "prompt-leak": "testing-for-system-prompt-leakage"
+      },
+      "default_object": "web"
+    },
+    "watch": {
+      "role": "process_monitor",
+      "module": "process_monitor",
+      "objects": {
+        "procs": "process_monitor",
+        "process": "process_monitor"
+      },
+      "default_object": "procs"
+    }
+  }
+}
