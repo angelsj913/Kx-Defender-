@@ -24,7 +24,9 @@ kx forge sigma-rules --scope lab --sim
 ```
 
 Full grammar: [`docs/kxlang.md`](docs/kxlang.md)  
-Lexicon: [`fixtures/catalog/kxlang_lexicon.json`](fixtures/catalog/kxlang_lexicon.json)
+Lexicon: [`fixtures/catalog/kxlang_lexicon.json`](fixtures/catalog/kxlang_lexicon.json)  
+**PRD v3:** [`docs/prd/kx-defender-v3.md`](docs/prd/kx-defender-v3.md)  
+**Architecture:** [`docs/architecture.md`](docs/architecture.md)
 
 | Verb | Meaning |
 |---|---|
