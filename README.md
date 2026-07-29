@@ -8,6 +8,8 @@ License: **Apache-2.0** (not MIT). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ## What this slice includes
 
+### Short aliases (legacy)
+
 | Module | Type | Notes |
 |---|---|---|
 | `kerberoasting` | attack | SPN/TGS lab fixtures |
@@ -20,6 +22,22 @@ License: **Apache-2.0** (not MIT). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 | `llm_redteam` | attack | Local payload bank + rule scoring |
 | `process_monitor` | defense | Snapshot stub |
 
+### Full catalog skills (262)
+
+Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
+
+| Family | Count | Examples |
+|---|---|---|
+| `attack_named` | 10 | Entra/ROADtools, OAuth device code, Havoc/Sliver listeners, NTLM ESC8, DPAPI, WiFi, Kerberoasting, GraphRunner mock, Garak-style LLM |
+| `testing_for` | 12 | `testing-for-xss-vulnerabilities`, JWT, XXE, ... |
+| `detecting` | 96 | `detecting-*` |
+| `analyzing` | 76 | `analyzing-*` |
+| `auditing` | 12 | `auditing-*` |
+| `securing` | 13 | `securing-*` |
+| `triaging` | 5 | `triaging-*` |
+| `compliance` | 7 | CMMC, PCI-DSS, NERC CIP, ... |
+| `building_defense` | 31 | defensive `building-*` (Sigma, SIEM, IR playbooks, ...) |
+
 **Not included:** custom C2 implants, AMSI/ETW bypass, real phishing kits, SaaS LLM API calls.
 
 ## Install
@@ -31,16 +49,21 @@ python3 -m pip install -e ".[dev]"
 ## Agent-friendly CLI
 
 ```bash
-kxctl modules list
+kxctl modules families
+kxctl modules list --family detecting --names-only
+kxctl modules list --prefix testing-for- --names-only
 
+# short alias
 kxctl attack run kerberoasting --authorized-scope lab --mode simulate --domain lab.local
-kxctl attack run web_scanner --authorized-scope owned --mode execute --url http://127.0.0.1:8080/
-kxctl attack run llm_redteam --authorized-scope lab --mode execute --target local-fixture
+
+# full catalog skill name
+kxctl skill run attacking-entra-id-with-roadtools --authorized-scope lab --mode simulate --domain contoso.lab.local
+kxctl skill run red-teaming-llms-with-garak --authorized-scope lab --mode execute --target local-fixture
+kxctl defense run detecting-anomalous-authentication-patterns --authorized-scope lab --mode simulate
+kxctl defense run building-detection-rules-with-sigma --authorized-scope lab --mode simulate
 
 kxctl result list
 kxctl result show <run_id>
-
-kxctl defense run process_monitor --authorized-scope lab --mode simulate
 ```
 
 ### Authorization rules
@@ -51,7 +74,10 @@ kxctl defense run process_monitor --authorized-scope lab --mode simulate
 
 ## Cursor skills
 
-Agent skills live under [`skills/`](skills/). Each skill documents the exact `kxctl` invocation for one module.
+Agent skills live under [`skills/`](skills/):
+
+- Per-module helpers: `skills/kx-attack-*`
+- Catalog guides: `skills/kx-catalog-attack`, `skills/kx-catalog-defense`
 
 ## Tests
 

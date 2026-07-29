@@ -10,9 +10,9 @@ Self-built modules callable via `kxctl`, with Cursor agent skills. **No SaaS API
 ### In scope (this PR)
 
 - Common module contract + authorization gate + SQLite run store
-- Attack modules: kerberoasting, ntlm_relay, dpapi, device_code, wifi, c2 (listener only), web_scanner, llm_redteam
+- Short attack aliases + **262 catalog skills** (`detecting-*`, `analyzing-*`, `auditing-*`, `securing-*`, `triaging-*`, compliance, defensive `building-*`, `testing-for-*`, named offensive skills)
 - Defense stub: process_monitor
-- Agent skills under `skills/kx-attack-*`
+- Agent skills under `skills/kx-attack-*` and `skills/kx-catalog-*`
 
 ### Hard exclusions
 

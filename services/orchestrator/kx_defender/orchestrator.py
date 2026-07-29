@@ -15,8 +15,29 @@ class Orchestrator:
         self.registry = build_registry()
         self.store = store or RunStore()
 
-    def list_modules(self) -> list[dict[str, Any]]:
-        return [m.describe() for m in self.registry.values()]
+    def list_modules(
+        self,
+        category: str | None = None,
+        family: str | None = None,
+        prefix: str | None = None,
+    ) -> list[dict[str, Any]]:
+        items = [m.describe() for m in self.registry.values()]
+        if category:
+            items = [i for i in items if i.get("category") == category]
+        if family:
+            items = [i for i in items if i.get("family") == family]
+        if prefix:
+            items = [i for i in items if i.get("name", "").startswith(prefix)]
+        return sorted(items, key=lambda i: i.get("name", ""))
+
+    def families(self) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for mod in self.registry.values():
+            family = getattr(mod, "family", None) or (
+                "legacy_attack" if getattr(mod, "category", "") == "attack" else "legacy_defense"
+            )
+            counts[family] = counts.get(family, 0) + 1
+        return dict(sorted(counts.items()))
 
     def run(self, module_name: str, params: dict[str, Any]) -> ModuleResult:
         module = self.registry.get(module_name)
