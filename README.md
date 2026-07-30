@@ -83,17 +83,24 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 No npm publish needed. Works on any PC with Node.js:
 
 ```bash
-npx -y angelsj913/Kx-Defender-
+npx -y --prefer-online angelsj913/Kx-Defender-
 ```
 
 With skills + global shims:
 
 ```bash
-npx -y angelsj913/Kx-Defender- --all -g
+npx -y --prefer-online angelsj913/Kx-Defender- --all -g
 ```
 
 Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).  
 If Python is missing, a portable CPython is downloaded once to `~/.kx-defender/python` (Node.js required).
+
+If you still see an old “Python 3.9+ not found” error, clear the npx cache and retry:
+
+```powershell
+npx clear-npx-cache
+npx -y --prefer-online angelsj913/Kx-Defender-
+```
 
 Skills only:
 

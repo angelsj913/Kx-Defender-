@@ -1,7 +1,7 @@
 {
   "name": "kx-defender",
-  "version": "0.1.5",
-  "description": "Kx-Defender — run: npx -y angelsj913/Kx-Defender- (auto-bootstraps Python if missing)",
+  "version": "0.1.6",
+  "description": "Kx-Defender — run: npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=16"

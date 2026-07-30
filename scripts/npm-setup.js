@@ -1,12 +1,17 @@
 "use strict";
 
+/**
+ * Kx-Defender runtime setup
+ * - Finds system Python, or downloads portable CPython once
+ * - Fully synchronous (reliable under npx on Windows)
+ */
+
 const { spawnSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const https = require("https");
-const http = require("http");
 
+const SETUP_VERSION = "0.1.6";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");
@@ -51,6 +56,7 @@ function run(cmd, args, opts = {}) {
     cwd: ROOT,
     stdio: "inherit",
     shell: isWin(),
+    windowsHide: true,
     ...opts,
   });
   if (res.error) throw res.error;
@@ -75,11 +81,7 @@ function runCapture(cmd, args) {
 
 function probePython(executable, baseArgs = []) {
   if (!executable) return null;
-  // Skip Microsoft Store stub
-  if (/\\WindowsApps\\/i.test(executable)) return null;
-  if (!fs.existsSync(executable) && !["py", "python", "python3"].includes(executable)) {
-    // bare command names ok
-  }
+  if (/WindowsApps/i.test(String(executable))) return null;
   const out = runCapture(executable, [
     ...baseArgs,
     "-c",
@@ -87,12 +89,8 @@ function probePython(executable, baseArgs = []) {
   ]);
   if (!out) return null;
   const resolved = out.split(/\r?\n/).filter(Boolean).pop();
-  if (!resolved || /\\WindowsApps\\/i.test(resolved)) return null;
-  return {
-    cmd: executable,
-    baseArgs,
-    executable: resolved,
-  };
+  if (!resolved || /WindowsApps/i.test(resolved)) return null;
+  return { cmd: executable, baseArgs, executable: resolved };
 }
 
 function windowsPythonCandidates() {
@@ -101,6 +99,7 @@ function windowsPythonCandidates() {
     process.env.PROGRAMFILES,
     process.env["ProgramFiles(x86)"],
     path.join(os.homedir(), "AppData", "Local"),
+    path.join(os.homedir(), "AppData", "Local", "Programs"),
   ].filter(Boolean);
 
   const found = [];
@@ -127,19 +126,15 @@ function windowsPythonCandidates() {
       if (fs.existsSync(direct)) found.push(direct);
     }
   }
-  // Portable bootstrap location
-  const portable = path.join(PY_HOME, "python.exe");
-  if (fs.existsSync(portable)) found.unshift(portable);
-  const portableUnix = path.join(PY_HOME, "bin", "python3");
-  if (fs.existsSync(portableUnix)) found.unshift(portableUnix);
   return found;
 }
 
 function findPython() {
-  // Already-bootstrapped portable runtime
-  const portableWin = path.join(PY_HOME, "python.exe");
-  const portableUnix = path.join(PY_HOME, "bin", "python3");
-  for (const p of [portableWin, portableUnix, path.join(PY_HOME, "bin", "python")]) {
+  for (const p of [
+    path.join(PY_HOME, "python.exe"),
+    path.join(PY_HOME, "bin", "python3"),
+    path.join(PY_HOME, "bin", "python"),
+  ]) {
     const hit = probePython(p);
     if (hit) return hit;
   }
@@ -170,74 +165,97 @@ function findPython() {
       if (hit) return hit;
     }
   }
-
   return null;
 }
 
 function platformTriple() {
-  const arch = process.arch; // x64, arm64
-  if (isWin()) {
-    if (arch !== "x64" && arch !== "arm64") {
-      throw new Error(`Unsupported Windows arch: ${arch}`);
-    }
-    // windows arm64 build naming may differ; prefer x64 for now
-    return "x86_64-pc-windows-msvc";
-  }
+  const arch = process.arch;
+  if (isWin()) return "x86_64-pc-windows-msvc";
   if (process.platform === "darwin") {
     return arch === "arm64" ? "aarch64-apple-darwin" : "x86_64-apple-darwin";
   }
-  // linux
   return arch === "arm64" ? "aarch64-unknown-linux-gnu" : "x86_64-unknown-linux-gnu";
 }
 
-function downloadFile(url, dest) {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    const get = (u, redirects = 0) => {
-      if (redirects > 10) return reject(new Error("Too many redirects"));
-      const lib = u.startsWith("https") ? https : http;
-      lib
-        .get(u, (res) => {
-          if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-            res.resume();
-            return get(res.headers.location, redirects + 1);
-          }
-          if (res.statusCode !== 200) {
-            res.resume();
-            return reject(new Error(`Download failed HTTP ${res.statusCode}`));
-          }
-          res.pipe(file);
-          file.on("finish", () => file.close(() => resolve(dest)));
-        })
-        .on("error", reject);
-    };
-    get(url);
+function downloadFileSync(url, dest) {
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+
+  if (isWin()) {
+    const ps = [
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-Command",
+      `[Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '${url}' -OutFile '${dest.replace(/'/g, "''")}' -UseBasicParsing`,
+    ];
+    const res = spawnSync("powershell", ps, { stdio: "inherit", windowsHide: true });
+    if (res.status === 0 && fs.existsSync(dest) && fs.statSync(dest).size > 1_000_000) {
+      return dest;
+    }
+  }
+
+  for (const [bin, args] of [
+    ["curl", ["-fsSL", "-L", url, "-o", dest]],
+    ["wget", ["-q", "-O", dest, url]],
+  ]) {
+    const res = spawnSync(bin, args, { stdio: "ignore", shell: isWin(), windowsHide: true });
+    if (res.status === 0 && fs.existsSync(dest) && fs.statSync(dest).size > 1_000_000) {
+      return dest;
+    }
+  }
+
+  const waiter = `
+const https=require('https');const http=require('http');const fs=require('fs');
+const url=${JSON.stringify(url)}; const dest=${JSON.stringify(dest)};
+function get(u,n){return new Promise((resolve,reject)=>{if(n>10)return reject(new Error('redirects'));
+const lib=u.startsWith('https')?https:http;
+lib.get(u,res=>{if(res.statusCode>=300&&res.statusCode<400&&res.headers.location){res.resume();return resolve(get(res.headers.location,n+1));}
+if(res.statusCode!==200){res.resume();return reject(new Error('HTTP '+res.statusCode));}
+const f=fs.createWriteStream(dest);res.pipe(f);f.on('finish',()=>f.close(()=>resolve()));f.on('error',reject);}).on('error',reject);});}
+get(url,0).then(()=>process.exit(0)).catch(e=>{console.error(e);process.exit(1);});
+`;
+  const r2 = spawnSync(process.execPath, ["-e", waiter], {
+    stdio: "inherit",
+    windowsHide: true,
   });
+  if (r2.status !== 0 || !fs.existsSync(dest) || fs.statSync(dest).size < 1_000_000) {
+    throw new Error(`Failed to download Python runtime`);
+  }
+  return dest;
 }
 
 function extractTarGz(archive, destDir) {
   fs.mkdirSync(destDir, { recursive: true });
-  // Windows 10+ ships tar.exe
   const res = spawnSync("tar", ["-xzf", archive, "-C", destDir], {
     stdio: "inherit",
     shell: isWin(),
+    windowsHide: true,
   });
   if (res.status !== 0) {
-    throw new Error("Failed to extract Python archive (tar)");
+    throw new Error(
+      "Failed to extract Python archive. On Windows 10+, tar.exe is required."
+    );
   }
 }
 
-async function bootstrapPortablePython() {
-  log("Python not on PATH — downloading portable CPython (one-time) ...");
+function bootstrapPortablePython() {
+  log(`Python not on PATH — downloading portable CPython once (${SETUP_VERSION}) ...`);
   const triple = platformTriple();
   const asset = `cpython-${PY_VERSION}+${PY_TAG}-${triple}-install_only.tar.gz`;
   const url = `https://github.com/astral-sh/python-build-standalone/releases/download/${PY_TAG}/${asset}`;
   const cacheDir = path.join(os.homedir(), ".kx-defender", "cache");
   fs.mkdirSync(cacheDir, { recursive: true });
   const archive = path.join(cacheDir, asset);
-  if (!fs.existsSync(archive) || fs.statSync(archive).size < 1_000_000) {
-    log(`Fetching ${asset} ...`);
-    await downloadFile(url, archive);
+
+  try {
+    if (!fs.existsSync(archive) || fs.statSync(archive).size < 1_000_000) {
+      log(`Fetching ${asset} ...`);
+      downloadFileSync(url, archive);
+    }
+  } catch (err) {
+    throw new Error(
+      `Could not download Python (${err.message}). Check network access to github.com, then retry.`
+    );
   }
 
   const staging = path.join(os.homedir(), ".kx-defender", "python-staging");
@@ -245,14 +263,18 @@ async function bootstrapPortablePython() {
   fs.mkdirSync(staging, { recursive: true });
   extractTarGz(archive, staging);
 
-  // install_only layout: staging/python/...
   const extracted = path.join(staging, "python");
   if (!fs.existsSync(extracted)) {
     throw new Error("Portable Python archive layout unexpected");
   }
   fs.rmSync(PY_HOME, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(PY_HOME), { recursive: true });
-  fs.renameSync(extracted, PY_HOME);
+  // Windows rename across volumes can fail — copy fallback
+  try {
+    fs.renameSync(extracted, PY_HOME);
+  } catch {
+    fs.cpSync(extracted, PY_HOME, { recursive: true });
+  }
   fs.rmSync(staging, { recursive: true, force: true });
 
   const exe = isWin()
@@ -260,31 +282,36 @@ async function bootstrapPortablePython() {
     : path.join(PY_HOME, "bin", "python3");
   const hit = probePython(exe);
   if (!hit) {
-    throw new Error("Portable Python installed but not runnable");
+    throw new Error(`Portable Python installed but not runnable: ${exe}`);
   }
   log(`Portable Python ready: ${hit.executable}`);
   return hit;
 }
 
-async function ensurePython() {
+function ensurePython() {
   if (process.env.KX_FORCE_PORTABLE === "1") {
     return bootstrapPortablePython();
   }
-  let found = findPython();
+  const found = findPython();
   if (found) return found;
-  found = await bootstrapPortablePython();
-  return found;
+  return bootstrapPortablePython();
 }
 
 function resolveRuntime() {
   const state = readState();
   if (state && state.python && fs.existsSync(state.python)) {
-    return state;
+    if (state.kx || verifyKx(state.python)) return state;
   }
-  if (fs.existsSync(venvPython()) && fs.existsSync(venvKx())) {
-    const runtime = { mode: "venv", python: venvPython(), kx: venvKx() };
-    writeState(runtime);
-    return runtime;
+  if (fs.existsSync(venvPython())) {
+    const runtime = {
+      mode: "venv",
+      python: venvPython(),
+      kx: fs.existsSync(venvKx()) ? venvKx() : null,
+    };
+    if (runtime.kx || verifyKx(runtime.python)) {
+      writeState(runtime);
+      return runtime;
+    }
   }
   return null;
 }
@@ -297,18 +324,17 @@ function verifyKx(pythonPath) {
   return Boolean(out && out.includes("ok"));
 }
 
-async function setup() {
-  log("Kx-Defender npm setup (Self-Built Only)");
+function setup() {
+  log(`Kx-Defender setup v${SETUP_VERSION} (Self-Built Only)`);
   if (!fs.existsSync(path.join(ROOT, "pyproject.toml"))) {
-    throw new Error("pyproject.toml not found. Run npm install from the repo root.");
+    throw new Error("pyproject.toml not found. Re-run: npx -y --prefer-online angelsj913/Kx-Defender-");
   }
 
-  const found = await ensurePython();
+  const found = ensurePython();
   log(`Python: ${found.executable}`);
 
   let runtime = null;
 
-  // Prefer venv
   try {
     if (!fs.existsSync(venvPython())) {
       log("Creating .venv ...");
@@ -317,7 +343,7 @@ async function setup() {
     const py = venvPython();
     log("Installing into .venv ...");
     run(py, ["-m", "pip", "install", "--upgrade", "pip"]);
-    run(py, ["-m", "pip", "install", "-e", ".[dev]"]);
+    run(py, ["-m", "pip", "install", "-e", "."]);
     if (!fs.existsSync(venvKx()) && !verifyKx(py)) {
       throw new Error("kx not importable in venv");
     }
@@ -329,16 +355,17 @@ async function setup() {
   } catch (err) {
     log(`venv install failed (${err.message || err}); falling back to user/site install ...`);
     try {
-      if (fs.existsSync(VENV)) {
-        fs.rmSync(VENV, { recursive: true, force: true });
-      }
+      if (fs.existsSync(VENV)) fs.rmSync(VENV, { recursive: true, force: true });
     } catch (_) {
       /* ignore */
     }
-    // Ensure pip exists on portable builds
-    run(found.executable, ["-m", "ensurepip", "--upgrade"]);
+    try {
+      run(found.executable, ["-m", "ensurepip", "--upgrade"]);
+    } catch (_) {
+      /* ignore */
+    }
     run(found.executable, ["-m", "pip", "install", "--upgrade", "pip"]);
-    run(found.executable, ["-m", "pip", "install", "--user", "-e", ".[dev]"]);
+    run(found.executable, ["-m", "pip", "install", "--user", "-e", "."]);
     if (!verifyKx(found.executable)) {
       throw new Error("kx_defender import failed after fallback install");
     }
@@ -357,31 +384,11 @@ async function setup() {
 function ensureSetup() {
   let runtime = resolveRuntime();
   if (runtime && (runtime.kx || verifyKx(runtime.python))) return runtime;
-  // setup is async — bridge for sync callers
-  const { spawnSync: ss } = require("child_process");
-  // Run setup in-process via deasync-free approach: call async setup with Atomics wait? 
-  // Simpler: expose syncSetup that blocks using child process self-invoke.
-  return setupSync();
+  return setup();
 }
 
 function setupSync() {
-  // Run this file as CLI asynchronously via nested require of async setup using busy wait on promise — use child:
-  const res = spawnSync(process.execPath, [path.join(__dirname, "npm-setup.js"), "--setup"], {
-    cwd: ROOT,
-    stdio: "inherit",
-    env: process.env,
-    shell: false,
-  });
-  if (res.status !== 0) {
-    const err = new Error("Setup failed");
-    err.status = res.status || 1;
-    throw err;
-  }
-  const runtime = resolveRuntime();
-  if (!runtime) {
-    throw new Error("Setup finished but runtime state missing");
-  }
-  return runtime;
+  return setup();
 }
 
 function runKx(args, opts = {}) {
@@ -391,6 +398,7 @@ function runKx(args, opts = {}) {
       cwd: ROOT,
       stdio: "inherit",
       shell: isWin(),
+      windowsHide: true,
       ...opts,
     });
   }
@@ -400,6 +408,7 @@ function runKx(args, opts = {}) {
     cwd: ROOT,
     stdio: "inherit",
     shell: isWin(),
+    windowsHide: true,
     ...opts,
   });
 }
@@ -407,6 +416,7 @@ function runKx(args, opts = {}) {
 module.exports = {
   ROOT,
   VENV,
+  SETUP_VERSION,
   ensureSetup,
   setup,
   setupSync,
@@ -419,15 +429,10 @@ module.exports = {
 };
 
 if (require.main === module) {
-  const args = process.argv.slice(2);
-  (async () => {
-    try {
-      if (args.includes("--setup") || args.length === 0) {
-        await setup();
-      }
-    } catch (err) {
-      console.error(`[Kx] ${err.message || err}`);
-      process.exit(err.status || 1);
-    }
-  })();
+  try {
+    setup();
+  } catch (err) {
+    console.error(`[Kx] ${err.message || err}`);
+    process.exit(err.status || 1);
+  }
 }

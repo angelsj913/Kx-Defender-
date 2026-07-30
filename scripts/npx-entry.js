@@ -135,7 +135,7 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  console.log("[Kx] Starting Kx-Defender...");
+  console.log(`[Kx] Starting Kx-Defender v${require("./npm-setup").SETUP_VERSION}...`);
   setupSync();
   if (flags.global) installGlobalShims();
   if (flags.noServe) {
