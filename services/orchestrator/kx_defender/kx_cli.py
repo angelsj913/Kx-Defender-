@@ -41,7 +41,7 @@ def _print_json(data: object) -> None:
 
 
 def _print_next() -> None:
-    print("next: kx /h", file=sys.stderr)
+    print(t("next: kx /h", "다음: kx /h", get_lang()), file=sys.stderr)
 
 
 def _repo_root() -> Path:
@@ -77,14 +77,17 @@ def _run_update() -> int:
     """kx update — refresh install without full reinstall (via Node updater)."""
     update_js = _find_update_js()
     node = _node_bin()
+    lang = get_lang()
     if update_js is None:
-        print("[Kx] Running: npx -y --prefer-online angelsj913/Kx-Defender- update", flush=True)
+        print(t("[Kx] Running: npx -y --prefer-online angelsj913/Kx-Defender- update",
+                "[Kx] 실행: npx -y --prefer-online angelsj913/Kx-Defender- update", lang), flush=True)
         res = subprocess.run(
             ["npx", "-y", "--prefer-online", "angelsj913/Kx-Defender-", "update"],
             check=False,
         )
         return int(res.returncode or 0)
-    print(f"[Kx] Updating via {update_js} ...", flush=True)
+    print(t(f"[Kx] Updating via {update_js} ...",
+            f"[Kx] {update_js} 로 갱신 중 ...", lang), flush=True)
     res = subprocess.run([node, str(update_js)], check=False)
     return int(res.returncode or 0)
 
@@ -92,8 +95,9 @@ def _run_update() -> int:
 def _run_hud() -> int:
     entry = _find_entry_js()
     node = _node_bin()
+    lang = get_lang()
     if entry is None:
-        print("[Kx] Starting via npx ...", flush=True)
+        print(t("[Kx] Starting via npx ...", "[Kx] npx 로 시작 중 ...", lang), flush=True)
         res = subprocess.run(
             ["npx", "-y", "--prefer-online", "angelsj913/Kx-Defender-"],
             check=False,
@@ -117,7 +121,7 @@ def _emit_help(args: list[str]) -> int:
     try:
         text = render_verb_help(verb) if verb else render_global_help()
     except ValueError as exc:
-        print(f"KxLang error: {exc}", file=sys.stderr)
+        print(t(f"KxLang error: {exc}", f"KxLang 오류: {exc}", get_lang()), file=sys.stderr)
         return 2
     print(text, end="")
     return 0
@@ -134,7 +138,7 @@ def _emit_lang(args: list[str]) -> int:
     try:
         lang = set_lang(rest[0])
     except ValueError as exc:
-        print(f"KxLang error: {exc}", file=sys.stderr)
+        print(t(f"KxLang error: {exc}", f"KxLang 오류: {exc}", get_lang()), file=sys.stderr)
         return 2
     label = "한국어" if lang == "ko" else "English"
     print(t(f"language set to {lang} ({label})", f"언어가 {lang} ({label})(으)로 설정되었습니다."))
@@ -145,7 +149,8 @@ def _emit_form(args: list[str]) -> int:
     """`kx form <verb> [obj]` — print parameter schema as JSON."""
     rest = args[1:]
     if not rest:
-        print("usage: kx form <verb> [object]", file=sys.stderr)
+        print(t("usage: kx form <verb> [object]",
+                "사용법: kx form <verb> [object]", get_lang()), file=sys.stderr)
         return 2
     verb = rest[0]
     obj = rest[1] if len(rest) > 1 else ""
@@ -243,12 +248,15 @@ def _emit_why(args: list[str]) -> int:
     show_tree = "--tree" in rest
     rest = [a for a in rest if a != "--tree"]
     if not rest:
-        print("usage: kx why <pid> [--tree]", file=sys.stderr)
+        print(t("usage: kx why <pid> [--tree]",
+                "사용법: kx why <pid> [--tree]", get_lang()), file=sys.stderr)
         return 2
     try:
         target_pid = int(rest[0])
     except ValueError:
-        print(f"KxLang error: pid must be integer, got {rest[0]!r}", file=sys.stderr)
+        _lg = get_lang()
+        print(t(f"KxLang error: pid must be integer, got {rest[0]!r}",
+                f"KxLang 오류: pid는 정수여야 합니다. 입력값: {rest[0]!r}", _lg), file=sys.stderr)
         return 2
 
     orch = Orchestrator()
@@ -261,8 +269,11 @@ def _emit_why(args: list[str]) -> int:
     by_pid = {p.get("pid"): p for p in procs}
     match = by_pid.get(target_pid)
     if match is None:
-        print(f"KxLang error: pid {target_pid} not found in current snapshot", file=sys.stderr)
-        print(f"(scanned {len(procs)} processes; try `kx watch procs` first)", file=sys.stderr)
+        _lg = get_lang()
+        print(t(f"KxLang error: pid {target_pid} not found in current snapshot",
+                f"KxLang 오류: 현재 스냅샷에서 pid {target_pid}를 찾을 수 없음", _lg), file=sys.stderr)
+        print(t(f"(scanned {len(procs)} processes; try `kx watch procs` first)",
+                f"({len(procs)}개 프로세스 스캔됨; 먼저 `kx watch procs` 실행 권장)", _lg), file=sys.stderr)
         return 2
 
     from kx_defender.render import _color_enabled, _c, render_process_tree  # noqa: PLC0415
@@ -377,18 +388,21 @@ def _emit_report(args: list[str]) -> int:
 
 
 def _emit_daemon(args: list[str]) -> int:
-    """`kx daemon start|stop|status|config`
+    """`kx daemon start|stop|restart|status|config|install-unit`
 
     Manages the background watcher process. All state local (~/.kx-defender).
     """
     from kx_defender.daemon import (  # noqa: PLC0415
-        CONFIG_PATH, PID_PATH, daemon_start, daemon_status, daemon_stop,
-        load_config, save_config,
+        CONFIG_PATH, PID_PATH, daemon_restart, daemon_start, daemon_status,
+        daemon_stop, load_config, render_systemd_user_unit,
+        render_windows_task_xml, save_config,
     )
 
     rest = args[1:]
     if not rest:
-        print("usage: kx daemon start|stop|status|config", file=sys.stderr)
+        print(t("usage: kx daemon start|stop|restart|status|config|install-unit",
+                "사용법: kx daemon start|stop|restart|status|config|install-unit", get_lang()),
+              file=sys.stderr)
         return 2
     sub = rest[0].lower()
 
@@ -400,6 +414,26 @@ def _emit_daemon(args: list[str]) -> int:
         _print_json(daemon_stop())
         return 0
 
+    if sub == "restart":
+        cfg = load_config()
+        overrides = _parse_kv_pairs(rest[1:], cfg)
+        cfg.update(overrides)
+        _print_json(daemon_restart(cfg))
+        return 0
+
+    if sub in {"install-unit", "install_unit", "unit"}:
+        # kx daemon install-unit [systemd|windows]
+        target = rest[1].lower() if len(rest) >= 2 else ("windows" if platform.system() == "Windows" else "systemd")
+        if target in {"systemd", "linux"}:
+            print(render_systemd_user_unit())
+        elif target in {"windows", "win"}:
+            print(render_windows_task_xml())
+        else:
+            print(t(f"unknown unit target: {target}",
+                    f"알 수 없는 unit 대상: {target}", get_lang()), file=sys.stderr)
+            return 2
+        return 0
+
     if sub == "config":
         # `kx daemon config` prints; `kx daemon config KEY VALUE ...` sets.
         cfg = load_config()
@@ -408,12 +442,15 @@ def _emit_daemon(args: list[str]) -> int:
             return 0
         kv = rest[1:]
         if len(kv) % 2 != 0:
-            print("usage: kx daemon config <key> <value> [<key> <value> ...]", file=sys.stderr)
+            print(t("usage: kx daemon config <key> <value> [<key> <value> ...]",
+                    "사용법: kx daemon config <key> <value> [<key> <value> ...]", get_lang()),
+                  file=sys.stderr)
             return 2
         for i in range(0, len(kv), 2):
             key, raw = kv[i], kv[i + 1]
             if key not in cfg:
-                print(f"unknown config key: {key}", file=sys.stderr)
+                print(t(f"unknown config key: {key}",
+                        f"알 수 없는 설정 키: {key}", get_lang()), file=sys.stderr)
                 return 2
             cfg[key] = _coerce_value(cfg[key], raw)
         save_config(cfg)
@@ -436,7 +473,8 @@ def _emit_daemon(args: list[str]) -> int:
         _print_json(result)
         return 0 if result.get("started") else 2
 
-    print(f"unknown daemon subcommand: {sub}", file=sys.stderr)
+    print(t(f"unknown daemon subcommand: {sub}",
+            f"알 수 없는 daemon 서브명령: {sub}", get_lang()), file=sys.stderr)
     return 2
 
 
@@ -453,17 +491,32 @@ def _coerce_value(existing: Any, raw: str) -> Any:
     return raw
 
 
+def _parse_kv_pairs(tokens: list[str], template: dict[str, Any]) -> dict[str, Any]:
+    """Parse ``key value key value ...`` tokens against a config template."""
+    out: dict[str, Any] = {}
+    if len(tokens) % 2 != 0:
+        return out
+    for i in range(0, len(tokens), 2):
+        k, raw = tokens[i], tokens[i + 1]
+        if k in template:
+            out[k] = _coerce_value(template[k], raw)
+    return out
+
+
 def _emit_sig_meta(args: list[str]) -> int:
-    """`kx sig import <path>` / `kx sig list` / `kx sig catalog`."""
+    """`kx sig import <path>` / `kx sig list` / `kx sig catalog` / `kx sig test`."""
     from datetime import datetime, timezone  # noqa: PLC0415
     from pathlib import Path as _Path  # noqa: PLC0415
     from modules.engines.kxsig import (  # noqa: PLC0415
-        import_user_rules, list_user_rule_files, summarize_rule_catalog,
+        import_user_rules, list_user_rule_files, load_rules,
+        summarize_rule_catalog, test_rule,
     )
 
     rest = args[1:]
     if not rest:
-        print("usage: kx sig import <path> | kx sig list | kx sig catalog", file=sys.stderr)
+        print(t("usage: kx sig import <path> | list | catalog | test <rule_id|path> --sample <text>",
+                "사용법: kx sig import <path> | list | catalog | test <rule_id|path> --sample <text>",
+                get_lang()), file=sys.stderr)
         return 2
     sub = rest[0].lower()
 
@@ -475,7 +528,9 @@ def _emit_sig_meta(args: list[str]) -> int:
         return 0
     if sub == "import":
         if len(rest) < 2:
-            print("usage: kx sig import <path> [--name <basename>]", file=sys.stderr)
+            print(t("usage: kx sig import <path> [--name <basename>]",
+                    "사용법: kx sig import <path> [--name <basename>]", get_lang()),
+                  file=sys.stderr)
             return 2
         src = _Path(rest[1]).expanduser().resolve()
         name = None
@@ -486,8 +541,195 @@ def _emit_sig_meta(args: list[str]) -> int:
         _print_json(outcome)
         return 0 if outcome.get("imported") else 2
 
-    print(f"unknown sig subcommand: {sub}", file=sys.stderr)
+    if sub == "test":
+        # kx sig test <rule_id_or_path> --sample "s1" [--sample "s2" ...]
+        if len(rest) < 2:
+            print(t("usage: kx sig test <rule_id|rule_file> --sample <text> [--sample <text> ...]",
+                    "사용법: kx sig test <rule_id|rule_file> --sample <text> [--sample <text> ...]",
+                    get_lang()), file=sys.stderr)
+            return 2
+        target = rest[1]
+        samples: list[str] = []
+        i = 2
+        while i < len(rest):
+            if rest[i] == "--sample" and i + 1 < len(rest):
+                samples.append(rest[i + 1])
+                i += 2
+            else:
+                i += 1
+        if not samples:
+            print(t("no --sample provided", "--sample 값이 없음", get_lang()), file=sys.stderr)
+            return 2
+        # Resolve rule: either an ID from the catalog or a JSON file path.
+        p = _Path(target)
+        rule: dict[str, Any] | None = None
+        if p.is_file():
+            try:
+                data = __import__("json").loads(p.read_text(encoding="utf-8"))
+            except Exception as exc:  # noqa: BLE001
+                print(t(f"failed to parse {p}: {exc}",
+                        f"{p} 파싱 실패: {exc}", get_lang()), file=sys.stderr)
+                return 2
+            candidates = data.get("rules", [data]) if isinstance(data, dict) else data
+            if isinstance(candidates, list) and candidates:
+                rule = candidates[0]
+        else:
+            for r in load_rules():
+                if r.get("id") == target:
+                    rule = r
+                    break
+        if rule is None:
+            print(t(f"rule not found: {target}",
+                    f"룰을 찾을 수 없음: {target}", get_lang()), file=sys.stderr)
+            return 2
+        results = test_rule(rule, samples)
+        _print_json({"rule": {"id": rule.get("id"), "name": rule.get("name")}, "results": results})
+        return 0
+
+    print(t(f"unknown sig subcommand: {sub}",
+            f"알 수 없는 sig 서브명령: {sub}", get_lang()), file=sys.stderr)
     return 2
+
+
+def _emit_ioc(args: list[str]) -> int:
+    """`kx ioc load <path> [--name X] | list | catalog | clear | check <text> | check-file <path>`."""
+    from pathlib import Path as _Path  # noqa: PLC0415
+    from kx_defender.ioc import (  # noqa: PLC0415
+        catalog, check_file, check_text, clear_all, list_indicator_files,
+        load_indicators,
+    )
+
+    rest = args[1:]
+    if not rest:
+        print(t("usage: kx ioc load <path> | list | catalog | clear | check <text> | check-file <path>",
+                "사용법: kx ioc load <path> | list | catalog | clear | check <text> | check-file <path>",
+                get_lang()), file=sys.stderr)
+        return 2
+    sub = rest[0].lower()
+
+    if sub == "catalog":
+        _print_json(catalog())
+        return 0
+    if sub == "list":
+        _print_json({"files": list_indicator_files()})
+        return 0
+    if sub == "clear":
+        n = clear_all()
+        _print_json({"cleared": n})
+        return 0
+    if sub == "load":
+        if len(rest) < 2:
+            print(t("usage: kx ioc load <path> [--name <basename>]",
+                    "사용법: kx ioc load <path> [--name <basename>]", get_lang()),
+                  file=sys.stderr)
+            return 2
+        src = _Path(rest[1]).expanduser().resolve()
+        name = None
+        if len(rest) >= 4 and rest[2] == "--name":
+            name = rest[3]
+        outcome = load_indicators(src, name=name)
+        _print_json(outcome)
+        return 0 if outcome.get("loaded") else 2
+    if sub == "check":
+        if len(rest) < 2:
+            print(t("usage: kx ioc check <text>",
+                    "사용법: kx ioc check <text>", get_lang()), file=sys.stderr)
+            return 2
+        text = " ".join(rest[1:])
+        hits = check_text(text)
+        _print_json({"text_preview": text[:80], "hits": hits, "hit_count": len(hits)})
+        return 0
+    if sub in {"check-file", "check_file"}:
+        if len(rest) < 2:
+            print(t("usage: kx ioc check-file <path>",
+                    "사용법: kx ioc check-file <path>", get_lang()), file=sys.stderr)
+            return 2
+        outcome = check_file(_Path(rest[1]).expanduser().resolve())
+        _print_json(outcome)
+        return 0
+
+    print(t(f"unknown ioc subcommand: {sub}",
+            f"알 수 없는 ioc 서브명령: {sub}", get_lang()), file=sys.stderr)
+    return 2
+
+
+def _emit_export(args: list[str]) -> int:
+    """`kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]`."""
+    from pathlib import Path as _Path  # noqa: PLC0415
+    from kx_defender.exporter import export  # noqa: PLC0415
+
+    rest = args[1:]
+    if not rest:
+        print(t("usage: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]",
+                "사용법: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]",
+                get_lang()), file=sys.stderr)
+        return 2
+    source = rest[0].lower()
+    fmt = "json"
+    out_path = None
+    i = 1
+    while i < len(rest):
+        tok = rest[i]
+        if tok == "--format" and i + 1 < len(rest):
+            fmt = rest[i + 1]
+            i += 2; continue
+        if tok == "--out" and i + 1 < len(rest):
+            out_path = _Path(rest[i + 1]).expanduser().resolve()
+            i += 2; continue
+        i += 1
+    outcome = export(source, fmt=fmt, out_path=out_path)
+    _print_json(outcome)
+    return 0 if outcome.get("exported") else 2
+
+
+def _emit_watch_fs(args: list[str]) -> int:
+    """`kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]`."""
+    from pathlib import Path as _Path  # noqa: PLC0415
+    from kx_defender.fswatch import KxFsWatch  # noqa: PLC0415
+
+    rest = args[2:] if len(args) >= 2 and args[1] == "fs" else []
+    if not rest:
+        print(t("usage: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]",
+                "사용법: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]",
+                get_lang()), file=sys.stderr)
+        return 2
+    root = _Path(rest[0]).expanduser().resolve()
+    if not root.is_dir():
+        print(t(f"KxLang error: not a directory: {root}",
+                f"KxLang 오류: 디렉터리 아님: {root}", get_lang()), file=sys.stderr)
+        return 2
+    interval = 15.0
+    max_iter: int | None = None
+    include = None
+    scan_new = True
+    i = 1
+    while i < len(rest):
+        tok = rest[i]
+        if tok == "--interval" and i + 1 < len(rest):
+            try: interval = float(rest[i + 1])
+            except ValueError: pass
+            i += 2; continue
+        if tok == "--iter" and i + 1 < len(rest):
+            try: max_iter = max(1, int(rest[i + 1]))
+            except ValueError: pass
+            i += 2; continue
+        if tok == "--include" and i + 1 < len(rest):
+            include = rest[i + 1]
+            i += 2; continue
+        if tok == "--no-scan":
+            scan_new = False; i += 1; continue
+        i += 1
+
+    watcher = KxFsWatch(
+        root=root, interval=interval, include_glob=include,
+        scan_new=scan_new, max_iterations=max_iter,
+    )
+    try:
+        stats = watcher.run()
+    except KeyboardInterrupt:
+        stats = {"interrupted": True}
+    _print_json(stats)
+    return 0
 
 
 def _emit_alert(args: list[str]) -> int:
@@ -508,7 +750,8 @@ def _emit_alert(args: list[str]) -> int:
 
     if sub == "clear":
         n = clear_alerts()
-        print(f"cleared {n} alert(s) from {ALERT_LOG_PATH}", file=sys.stderr)
+        print(t(f"cleared {n} alert(s) from {ALERT_LOG_PATH}",
+                f"{ALERT_LOG_PATH} 에서 알람 {n}건 삭제됨", get_lang()), file=sys.stderr)
         return 0
 
     limit = 25
@@ -516,12 +759,14 @@ def _emit_alert(args: list[str]) -> int:
         try:
             limit = max(1, int(rest[1]))
         except ValueError:
-            print(f"limit must be integer, got {rest[1]!r}", file=sys.stderr)
+            print(t(f"limit must be integer, got {rest[1]!r}",
+                    f"limit은 정수여야 합니다. 입력값: {rest[1]!r}", get_lang()), file=sys.stderr)
             return 2
 
     alerts = read_recent_alerts(limit=limit)
     if not alerts:
-        print(f"(no alerts in {ALERT_LOG_PATH})", file=sys.stderr)
+        print(t(f"(no alerts in {ALERT_LOG_PATH})",
+                f"({ALERT_LOG_PATH} 에 알람 없음)", get_lang()), file=sys.stderr)
         return 0
 
     from kx_defender.render import _color_enabled, _c, _SEV_COLOR  # noqa: PLC0415
@@ -610,7 +855,9 @@ def _emit_ask(args: list[str]) -> int:
     """
     rest = args[1:]
     if not rest:
-        print("usage: kx ask <verb> [object] [-- --scope lab --sim ...]", file=sys.stderr)
+        print(t("usage: kx ask <verb> [object] [-- --scope lab --sim ...]",
+                "사용법: kx ask <verb> [object] [-- --scope lab --sim ...]", get_lang()),
+              file=sys.stderr)
         return 2
     verb = rest[0]
     idx = 1
@@ -620,8 +867,11 @@ def _emit_ask(args: list[str]) -> int:
         idx = 2
     extra = rest[idx:]
 
-    print(f"[Kx] Interactive parameters for `{verb}{(' ' + obj) if obj else ''}`", file=sys.stderr)
-    print(f"[Kx] Press Enter to accept default/placeholder; '*' marks required.\n", file=sys.stderr)
+    _lg = get_lang()
+    print(t(f"[Kx] Interactive parameters for `{verb}{(' ' + obj) if obj else ''}`",
+            f"[Kx] `{verb}{(' ' + obj) if obj else ''}` 대화형 파라미터 입력", _lg), file=sys.stderr)
+    print(t("[Kx] Press Enter to accept default/placeholder; '*' marks required.\n",
+            "[Kx] Enter를 누르면 기본값/placeholder 사용; '*' 는 필수 항목.\n", _lg), file=sys.stderr)
 
     argv_base: list[str] = [verb]
     if obj:
@@ -646,7 +896,8 @@ def _emit_ask(args: list[str]) -> int:
         print("[Kx] mode not specified; defaulting to `--sim`", file=sys.stderr)
         augmented.append("--sim")
 
-    print(f"\n[Kx] Executing: kx {' '.join(augmented)}\n", file=sys.stderr)
+    print(t(f"\n[Kx] Executing: kx {' '.join(augmented)}\n",
+            f"\n[Kx] 실행: kx {' '.join(augmented)}\n", get_lang()), file=sys.stderr)
     return _run_parsed(augmented, pretty=True)
 
 
@@ -655,14 +906,14 @@ def _run_parsed(argv: list[str], pretty: bool = False) -> int:
     try:
         cmd = parse_argv(argv)
     except KxLangError as exc:
-        print(f"KxLang error: {exc}", file=sys.stderr)
+        print(t(f"KxLang error: {exc}", f"KxLang 오류: {exc}", get_lang()), file=sys.stderr)
         _print_next()
         return 2
     orch = Orchestrator()
     try:
         result = orch.run(cmd.module, cmd.params)
     except KeyError as exc:
-        print(f"KxLang error: {exc}", file=sys.stderr)
+        print(t(f"KxLang error: {exc}", f"KxLang 오류: {exc}", get_lang()), file=sys.stderr)
         _print_next()
         return 2
     payload = result.to_dict()
@@ -723,20 +974,29 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_report(args))
     if head == "daemon":
         raise SystemExit(_emit_daemon(args))
+    if head in {"ioc", "iocs"}:
+        raise SystemExit(_emit_ioc(args))
+    if head == "export":
+        raise SystemExit(_emit_export(args))
 
-    # `kx sig import|list|catalog` are meta commands. `kx sig scan|file` are
+    # `kx sig import|list|catalog|test` are meta commands. `kx sig scan|file` are
     # KxLang verb.object invocations and must fall through to parse_argv.
-    if head == "sig" and len(args) >= 2 and args[1].lower() in {"import", "list", "catalog"}:
+    if head == "sig" and len(args) >= 2 and args[1].lower() in {"import", "list", "catalog", "test"}:
         raise SystemExit(_emit_sig_meta(args))
 
     # `kx watch procs --continuous [--interval N] [--min-severity high]`
-    # runs the polling loop in-process. All other `kx watch` invocations fall
-    # through to the normal parser (single snapshot).
+    # runs the polling loop in-process.
+    # `kx watch fs <dir> [--interval N] [--include GLOB]` runs the FS watcher.
+    # All other `kx watch` invocations fall through to the normal parser.
+    if head == "watch" and len(args) >= 2 and args[1].lower() == "fs":
+        raise SystemExit(_emit_watch_fs(args))
     if head == "watch" and "--continuous" in args:
         raise SystemExit(_emit_watch_continuous(args))
 
     if head == "serve":
-        print("KxLang error: web console removed. Use native client: kx", file=sys.stderr)
+        print(t("KxLang error: web console removed. Use native client: kx",
+                "KxLang 오류: 웹 콘솔은 제거되었습니다. 네이티브 클라이언트를 사용하세요: kx"),
+              file=sys.stderr)
         raise SystemExit(2)
 
     raise SystemExit(_run_parsed(args, pretty=pretty))

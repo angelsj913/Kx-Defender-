@@ -331,3 +331,90 @@ def _redirect_std_streams() -> None:
         os.dup2(devnull.fileno(), sys.stdin.fileno())
     except (OSError, ValueError):
         pass
+
+
+def daemon_restart(config: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Stop (if running) then start with the given config."""
+    stopped = daemon_stop()
+    started = daemon_start(config)
+    return {"restart": True, "stop_result": stopped, "start_result": started}
+
+
+def render_systemd_user_unit(python_path: str | None = None) -> str:
+    """Emit a systemd --user unit file body.
+
+    Users install it manually (we don't write to /etc). Example install::
+
+        mkdir -p ~/.config/systemd/user
+        kx daemon install-unit systemd > ~/.config/systemd/user/kx-defender.service
+        systemctl --user daemon-reload
+        systemctl --user enable --now kx-defender.service
+    """
+    py = python_path or sys.executable or "python3"
+    return (
+        "[Unit]\n"
+        "Description=Kx-Defender local SOC daemon\n"
+        "After=default.target\n"
+        "\n"
+        "[Service]\n"
+        "Type=simple\n"
+        # We run the daemon in foreground (not detached) under systemd — systemd
+        # is the supervisor and does the double-fork/detach itself.
+        f'ExecStart={py} -c "from kx_defender.daemon import _run_watcher_forever, load_config; _run_watcher_forever(load_config())"\n'
+        "Restart=on-failure\n"
+        "RestartSec=5\n"
+        "\n"
+        "[Install]\n"
+        "WantedBy=default.target\n"
+    )
+
+
+def render_windows_task_xml(python_path: str | None = None) -> str:
+    """Emit a Windows Task Scheduler XML for a user-scope logon task."""
+    py = python_path or sys.executable or "python"
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    # Standard schema Task Scheduler exports; kept minimal and stable.
+    return (
+        '<?xml version="1.0" encoding="UTF-16"?>\n'
+        '<Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">\n'
+        f'  <RegistrationInfo>\n'
+        f'    <Date>{now_iso}</Date>\n'
+        f'    <Author>Kx-Defender</Author>\n'
+        f'    <Description>Kx-Defender local SOC daemon</Description>\n'
+        f'  </RegistrationInfo>\n'
+        f'  <Triggers>\n'
+        f'    <LogonTrigger>\n'
+        f'      <Enabled>true</Enabled>\n'
+        f'    </LogonTrigger>\n'
+        f'  </Triggers>\n'
+        f'  <Principals>\n'
+        f'    <Principal id="Author">\n'
+        f'      <LogonType>InteractiveToken</LogonType>\n'
+        f'      <RunLevel>LeastPrivilege</RunLevel>\n'
+        f'    </Principal>\n'
+        f'  </Principals>\n'
+        f'  <Settings>\n'
+        f'    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\n'
+        f'    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>\n'
+        f'    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>\n'
+        f'    <AllowHardTerminate>true</AllowHardTerminate>\n'
+        f'    <StartWhenAvailable>true</StartWhenAvailable>\n'
+        f'    <Enabled>true</Enabled>\n'
+        f'    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>\n'
+        f'    <RestartOnFailure>\n'
+        f'      <Interval>PT1M</Interval>\n'
+        f'      <Count>5</Count>\n'
+        f'    </RestartOnFailure>\n'
+        f'  </Settings>\n'
+        f'  <Actions Context="Author">\n'
+        f'    <Exec>\n'
+        f'      <Command>{py}</Command>\n'
+        f'      <Arguments>-c "from kx_defender.daemon import _run_watcher_forever, load_config; _run_watcher_forever(load_config())"</Arguments>\n'
+        f'    </Exec>\n'
+        f'  </Actions>\n'
+        f'</Task>\n'
+    )
+
+
+# Import here to avoid pulling datetime at module top if unused.
+from datetime import datetime, timezone  # noqa: E402
