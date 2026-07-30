@@ -4,18 +4,30 @@ Self-built Windows-oriented attack + defense platform (KxLang). Authorized & law
 
 ## Install
 
+`npx kx-defender` needs the package on npmjs.com. Until the first publish you will see **E404**.
+
+### Publish once (owner)
+
+```powershell
+npm login
+git clone https://github.com/angelsj913/Kx-Defender-.git
+cd Kx-Defender-
+.\scripts\publish-npm.ps1
+```
+
+### Then
+
 ```bash
 npx --yes kx-defender add --all -g
 ```
 
-Or from this repo:
+### Without npm publish
 
-```bash
+```powershell
+git clone https://github.com/angelsj913/Kx-Defender-.git
+cd Kx-Defender-
 node scripts/npx-entry.js add --all -g
 ```
-
-Installs bundled skills into `~/.agents/skills` and `~/.cursor/skills`.
-Clean output — no GitHub Source banner, no Eve/PromptScript errors.
 
 Do **not** use third-party `npx skills add …` for this repo.
 
