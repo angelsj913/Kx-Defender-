@@ -78,38 +78,30 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 **금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
-## Install (Windows PowerShell — one command)
+## Install & run (npm — one command)
 
-From a cloned repo:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\Install-Kx.ps1
-```
-
-Or shorter (already in the repo folder):
-
-```powershell
-.\Install-Kx.ps1
-```
-
-No prior clone (download + install + Console):
-
-```powershell
-irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/cursor/kx-attack-modules-7992/Install-Kx.ps1 | iex
-```
-
-Options:
-
-```powershell
-.\Install-Kx.ps1 -NoServe              # install only, print kx /h
-.\Install-Kx.ps1 -Bind 127.0.0.1:9090  # custom Console port
-```
-
-Linux/macOS:
+Requires **Node.js 16+** and **Python 3.9+** on PATH.
 
 ```bash
-python3 -m pip install -e ".[dev]"
-kx serve --bind 127.0.0.1:8787
+npm install && npm start
+```
+
+Windows (PowerShell / cmd, repo root):
+
+```powershell
+npm install && npm start
+```
+
+This creates `.venv`, installs Kx-Defender (self-built Python package), and opens the Console at `http://127.0.0.1:8787/`.
+
+Useful scripts:
+
+```bash
+npm run help          # kx /h
+npm run kx /h
+npm run kx -- roast tickets --scope lab --realm lab.local --sim
+npm test
+KX_BIND=127.0.0.1:9090 npm start
 ```
 
 ## Low-level CLI (`kxctl`)

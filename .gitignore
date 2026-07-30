@@ -8,3 +8,6 @@ build/
 *.egg-info/
 data/*.db
 .DS_Store
+node_modules/
+package-lock.json
+.kx-runtime.json
