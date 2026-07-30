@@ -19,12 +19,17 @@ HELP_TOKENS = {
 EXAMPLES = [
     "kx roast tickets --scope lab --realm lab.local --sim",
     "kx watch procs --scope lab --live",
+    "kx watch procs --continuous --interval 30 --min-severity high",
+    "kx why 4242",
+    "kx alert list",
+    "kx alert clear",
     "kx sig scan --scope lab --sim",
     "kx kill pid --scope lab --pid 4242 --sim",
     "kx nexus listen --scope lab --bind 127.0.0.1:4455 --live",
     "kx sweep web --scope owned --url http://127.0.0.1:8080/ --live",
+    "kx ask sweep web",
+    "kx --pretty roast tickets --scope lab --sim",
     "kx lang ko",
-    "kx lang en",
     "kx update",
 ]
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -231,6 +232,185 @@ def _emit_suggest(args: list[str]) -> int:
     return 0
 
 
+def _emit_why(args: list[str]) -> int:
+    """`kx why <pid>` — explain a process's KxScore reasons.
+
+    Runs the same scoring pipeline as `kx watch procs` but filters to a single
+    PID and renders a focused evidence view. No external tools involved — pure
+    local process inspection via KxWatch + KxScore.
+    """
+    rest = args[1:]
+    if not rest:
+        print("usage: kx why <pid>", file=sys.stderr)
+        return 2
+    try:
+        target_pid = int(rest[0])
+    except ValueError:
+        print(f"KxLang error: pid must be integer, got {rest[0]!r}", file=sys.stderr)
+        return 2
+
+    # Reuse the process_monitor module for consistency
+    orch = Orchestrator()
+    result = orch.run("process_monitor", {
+        "authorized_scope": "lab",
+        "mode": "execute" if platform.system() != "unknown" else "simulate",
+        "limit": 500,
+    })
+    procs = (result.artifacts or {}).get("processes", [])
+    match = next((p for p in procs if p.get("pid") == target_pid), None)
+    if match is None:
+        print(f"KxLang error: pid {target_pid} not found in current snapshot", file=sys.stderr)
+        print(f"(scanned {len(procs)} processes; try `kx watch procs` first)", file=sys.stderr)
+        return 2
+
+    from kx_defender.render import _color_enabled, _c, _dump_evidence  # noqa: PLC0415
+    use_color = _color_enabled(None)
+    reset = _c("reset", use_color)
+    orange = _c("orange", use_color)
+    accent = _c("accent", use_color)
+    muted = _c("muted", use_color)
+    red = _c("red", use_color)
+    yellow = _c("yellow", use_color)
+
+    score = match.get("score", 0)
+    level = match.get("level", "low")
+    reasons = match.get("reasons", []) or []
+    score_c = red if score >= 70 else orange if score >= 45 else yellow if score >= 20 else muted
+
+    print(f"{orange}WHY pid={reset}{accent}{target_pid}{reset}  "
+          f"{muted}name={reset}{match.get('name','?')}  "
+          f"{muted}score={reset}{score_c}{score}{reset}  "
+          f"{muted}level={reset}{level}")
+    print()
+    cmdline = match.get("cmdline") or ""
+    if cmdline:
+        print(f"  {muted}cmdline:{reset} {cmdline}")
+    ppid = match.get("ppid")
+    if ppid:
+        print(f"  {muted}ppid:{reset}    {ppid}")
+    print()
+    if reasons:
+        print(f"  {orange}REASONS ({len(reasons)}){reset}")
+        for r in reasons:
+            print(f"    {red}·{reset} {r}")
+    else:
+        print(f"  {muted}(no elevated-risk reasons — process appears benign){reset}")
+    return 0
+
+
+def _emit_alert(args: list[str]) -> int:
+    """`kx alert list|tail|clear|path` — inspect the local alert JSONL.
+
+    All I/O is local: alerts are appended to ~/.kx-defender/alerts.jsonl.
+    No external channels (no Slack, no email, no HTTP webhooks).
+    """
+    from kx_defender.alerts import (  # noqa: PLC0415
+        ALERT_LOG_PATH, clear_alerts, read_recent_alerts,
+    )
+    rest = args[1:]
+    sub = rest[0].lower() if rest else "list"
+
+    if sub == "path":
+        print(str(ALERT_LOG_PATH))
+        return 0
+
+    if sub == "clear":
+        n = clear_alerts()
+        print(f"cleared {n} alert(s) from {ALERT_LOG_PATH}", file=sys.stderr)
+        return 0
+
+    limit = 25
+    if sub in {"list", "tail"} and len(rest) >= 2:
+        try:
+            limit = max(1, int(rest[1]))
+        except ValueError:
+            print(f"limit must be integer, got {rest[1]!r}", file=sys.stderr)
+            return 2
+
+    alerts = read_recent_alerts(limit=limit)
+    if not alerts:
+        print(f"(no alerts in {ALERT_LOG_PATH})", file=sys.stderr)
+        return 0
+
+    from kx_defender.render import _color_enabled, _c, _SEV_COLOR  # noqa: PLC0415
+    use_color = _color_enabled(None)
+    reset = _c("reset", use_color)
+    muted = _c("muted", use_color)
+    accent = _c("accent", use_color)
+    for a in alerts:
+        sev = str(a.get("severity", "info")).lower()
+        sev_c = _SEV_COLOR.get(sev, "") if use_color else ""
+        ts = a.get("ts", "?")
+        module = a.get("module", "?")
+        title = a.get("title", "")
+        print(f"{muted}{ts}{reset}  {sev_c}[{sev.upper():^8}]{reset}  {accent}{module}{reset}  {title}")
+    return 0
+
+
+def _emit_watch_continuous(args: list[str]) -> int:
+    """`kx watch procs --continuous [--interval N] [--min-severity S] [--iter N]`
+
+    Runs the local polling loop. Zero external I/O — process reads + JSONL
+    alert log only.
+    """
+    from kx_defender.watcher import KxWatcher, DEFAULT_INTERVAL, DEFAULT_MIN_SEV  # noqa: PLC0415
+
+    interval = DEFAULT_INTERVAL
+    min_sev = DEFAULT_MIN_SEV
+    scope = "lab"
+    mode = "execute"
+    limit = 200
+    max_iter: int | None = None
+
+    it = iter(range(len(args)))
+    tokens = list(args)
+    i = 0
+    while i < len(tokens):
+        tok = tokens[i]
+        if tok == "--continuous":
+            i += 1; continue
+        if tok == "--interval" and i + 1 < len(tokens):
+            try: interval = float(tokens[i + 1])
+            except ValueError: pass
+            i += 2; continue
+        if tok == "--min-severity" and i + 1 < len(tokens):
+            min_sev = tokens[i + 1]
+            i += 2; continue
+        if tok == "--iter" and i + 1 < len(tokens):
+            try: max_iter = max(1, int(tokens[i + 1]))
+            except ValueError: pass
+            i += 2; continue
+        if tok == "--scope" and i + 1 < len(tokens):
+            scope = tokens[i + 1].lower()
+            # normalize pact→engagement like KxLang does
+            if scope in {"pact"}: scope = "engagement"
+            i += 2; continue
+        if tok == "--sim":
+            mode = "simulate"; i += 1; continue
+        if tok == "--live":
+            mode = "execute"; i += 1; continue
+        if tok == "--limit" and i + 1 < len(tokens):
+            try: limit = max(1, int(tokens[i + 1]))
+            except ValueError: pass
+            i += 2; continue
+        i += 1
+
+    watcher = KxWatcher(
+        interval=interval,
+        limit=limit,
+        min_severity=min_sev,
+        scope=scope,
+        mode=mode,
+        max_iterations=max_iter,
+    )
+    try:
+        stats = watcher.run()
+    except KeyboardInterrupt:
+        stats = {"iterations": 0, "alerts": 0, "procs_scanned": 0, "interrupted": True}
+    _print_json(stats)
+    return 0
+
+
 def _emit_ask(args: list[str]) -> int:
     """`kx ask <verb> [obj] [-- extra flags]` — interactive parameter prompt.
 
@@ -343,6 +523,16 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_suggest(args))
     if head == "ask":
         raise SystemExit(_emit_ask(args))
+    if head == "why":
+        raise SystemExit(_emit_why(args))
+    if head == "alert" or head == "alerts":
+        raise SystemExit(_emit_alert(args))
+
+    # `kx watch procs --continuous [--interval N] [--min-severity high]`
+    # runs the polling loop in-process. All other `kx watch` invocations fall
+    # through to the normal parser (single snapshot).
+    if head == "watch" and "--continuous" in args:
+        raise SystemExit(_emit_watch_continuous(args))
 
     if head == "serve":
         print("KxLang error: web console removed. Use native client: kx", file=sys.stderr)
