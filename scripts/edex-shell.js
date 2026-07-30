@@ -1,9 +1,9 @@
 "use strict";
 
 /**
- * eDEX-UI inspired Kx TUI (Tron / sci-fi HUD)
- * Runs inside PowerShell / Windows Terminal / any ANSI terminal.
- * Colors from eDEX tron.json — no Electron dependency.
+ * Kx DEFCOM Operator — terminal HUD
+ * Futuristic hacking-console layout (single-width-safe ASCII geometry).
+ * Fixes broken 3-column bleed on Windows Terminal / PowerShell.
  */
 
 const fs = require("fs");
@@ -13,30 +13,98 @@ const readline = require("readline");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
 
-// eDEX tron theme
+/** DEFCOM palette — void + phosphor cyan + amber alert */
 const C = {
   reset: "\x1b[0m",
   bold: "\x1b[1m",
   dim: "\x1b[2m",
-  fg: "\x1b[38;2;170;207;209m", // #aacfd1
-  bg: "\x1b[48;2;5;8;13m", // #05080d
-  panel: "\x1b[48;2;8;12;18m",
-  accent: "\x1b[38;2;0;229;255m",
-  warn: "\x1b[38;2;255;140;0m",
-  ok: "\x1b[38;2;80;255;180m",
-  mute: "\x1b[38;2;70;100;110m",
-  black: "\x1b[38;2;0;0;0m",
+  hide: "\x1b[?25l",
+  show: "\x1b[?25h",
+  fg: "\x1b[38;2;180;220;230m",
+  accent: "\x1b[38;2;0;255;208m", // phosphor
+  warn: "\x1b[38;2;255;176;0m", // amber
+  ok: "\x1b[38;2;0;255;136m",
+  mute: "\x1b[38;2;60;90;100m",
+  danger: "\x1b[38;2;255;64;96m",
+  bg: "\x1b[48;2;2;4;10m",
 };
 
-const { KX_LOGO } = require("./banner");
+/** Single-cell-safe brand mark (no fullwidth blocks — they break Windows column math) */
+const LOGO = [
+  "  _  __          ",
+  " | |/ /__  __    ",
+  " | ' </\\ \\/ /    ",
+  " |_|\\_\\\\_/\\_\\    ",
+];
 
-const LOGO = KX_LOGO.split("\n").filter(Boolean);
+function cols() {
+  return Math.max(60, process.stdout.columns || 100);
+}
+
+function stripAnsi(s) {
+  return String(s).replace(/\x1b\[[0-9;]*m/g, "");
+}
+
+/** Terminal display width (treat most BMP as 1; CJK / fullwidth as 2). */
+function displayWidth(s) {
+  let w = 0;
+  for (const ch of stripAnsi(s)) {
+    const cp = ch.codePointAt(0);
+    if (cp <= 0x1f || (cp >= 0x7f && cp <= 0x9f)) continue;
+    if (
+      (cp >= 0x1100 && cp <= 0x115f) ||
+      cp === 0x2329 ||
+      cp === 0x232a ||
+      (cp >= 0x2e80 && cp <= 0xa4cf) ||
+      (cp >= 0xac00 && cp <= 0xd7a3) ||
+      (cp >= 0xf900 && cp <= 0xfaff) ||
+      (cp >= 0xfe10 && cp <= 0xfe19) ||
+      (cp >= 0xfe30 && cp <= 0xfe6f) ||
+      (cp >= 0xff00 && cp <= 0xff60) ||
+      (cp >= 0xffe0 && cp <= 0xffe6) ||
+      (cp >= 0x1f300 && cp <= 0x1f64f) ||
+      (cp >= 0x1f900 && cp <= 0x1f9ff)
+    ) {
+      w += 2;
+    } else {
+      w += 1;
+    }
+  }
+  return w;
+}
+
+function pad(s, width, align = "left") {
+  const plain = stripAnsi(s);
+  let w = displayWidth(plain);
+  if (w > width) {
+    // truncate by display width
+    let out = "";
+    let used = 0;
+    for (const ch of plain) {
+      const cw = displayWidth(ch);
+      if (used + cw > width - 1) break;
+      out += ch;
+      used += cw;
+    }
+    return out + "…";
+  }
+  const padN = width - w;
+  if (align === "right") return " ".repeat(padN) + s;
+  if (align === "center") {
+    const L = Math.floor(padN / 2);
+    return " ".repeat(L) + s + " ".repeat(padN - L);
+  }
+  return s + " ".repeat(padN);
+}
+
+function hline(width, ch = "─") {
+  return ch.repeat(Math.max(0, width));
+}
 
 function decodeChildText(raw) {
   if (raw == null) return "";
   if (Buffer.isBuffer(raw)) {
     const asUtf8 = raw.toString("utf8");
-    // If UTF-8 decode produced lots of replacement-looking CP misreads, try cp949 on win
     if (isWin() && /[\u00c0-\u00ff]{2,}/.test(asUtf8) && !/[가-힣]/.test(asUtf8)) {
       try {
         return raw.toString("cp949");
@@ -47,7 +115,6 @@ function decodeChildText(raw) {
     return asUtf8;
   }
   const s = String(raw);
-  // Already a string from encoding:'utf8' — if mojibake of Korean, attempt repair
   if (isWin() && /[\u00c0-\u00ff]{2,}/.test(s) && !/[가-힣]/.test(s)) {
     try {
       return Buffer.from(s, "latin1").toString("utf8");
@@ -62,117 +129,59 @@ function containsKx(text) {
   return /kx/i.test(String(text || ""));
 }
 
-function cols() {
-  return process.stdout.columns || 100;
-}
-function rows() {
-  return process.stdout.rows || 30;
-}
-
-function stripAnsi(s) {
-  return String(s).replace(/\x1b\[[0-9;]*m/g, "");
-}
-
-function pad(s, width, align = "left") {
-  const plain = stripAnsi(s);
-  const len = [...plain].length;
-  if (len >= width) return plain.slice(0, width);
-  const padN = width - len;
-  if (align === "right") return " ".repeat(padN) + s;
-  if (align === "center") {
-    const L = Math.floor(padN / 2);
-    return " ".repeat(L) + s + " ".repeat(padN - L);
+function primaryIpv4() {
+  const ifaces = os.networkInterfaces() || {};
+  for (const list of Object.values(ifaces)) {
+    for (const a of list || []) {
+      if (!a.internal && a.family === "IPv4") return a.address;
+    }
   }
-  return s + " ".repeat(padN);
+  return "0.0.0.0";
 }
 
-function hline(width, ch = "─") {
-  return ch.repeat(Math.max(0, width));
+function shortIfaces(limit = 2) {
+  const ifaces = os.networkInterfaces() || {};
+  const out = [];
+  for (const [name, list] of Object.entries(ifaces)) {
+    for (const a of list || []) {
+      if (a.internal || a.family !== "IPv4") continue;
+      const short = name.length > 8 ? name.slice(0, 7) + "…" : name;
+      out.push(`${short} ${a.address}`);
+      if (out.length >= limit) return out;
+    }
+  }
+  return out.length ? out : ["no-link"];
 }
 
-function boxLine(content, width, { left = "│", right = "│" } = {}) {
-  const inner = width - 2;
-  return `${C.fg}${left}${C.reset}${C.fg}${pad(content, inner)}${C.reset}${C.fg}${right}${C.reset}`;
-}
-
-function memBar(usedPct, width = 16) {
+function memBar(usedPct, width = 18) {
   const filled = Math.round((usedPct / 100) * width);
   return (
     C.accent +
-    "█".repeat(Math.max(0, filled)) +
+    "▓".repeat(Math.max(0, filled)) +
     C.mute +
     "░".repeat(Math.max(0, width - filled)) +
     C.reset
   );
 }
 
-function sysPanel(width) {
+function statusStrip(W) {
   const total = os.totalmem();
   const free = os.freemem();
   const usedPct = Math.round(((total - free) / total) * 100);
   const cpus = os.cpus()?.length || 0;
-  const load = os.loadavg?.()?.[0];
-  const lines = [
-    `${C.warn} SYS MONITOR ${C.reset}`,
-    `HOST ${C.accent}${pad(os.hostname(), width - 8)}${C.reset}`,
-    `CPU  ${C.fg}${cpus} threads${C.reset}`,
-    `LOAD ${C.fg}${load != null ? load.toFixed(2) : "n/a"}${C.reset}`,
-    `RAM  ${memBar(usedPct, Math.max(8, width - 10))} ${usedPct}%`,
-    `PLAT ${C.fg}${os.platform()}/${os.arch()}${C.reset}`,
-    `NODE ${C.fg}${process.version}${C.reset}`,
-    `KX   ${C.ok}v${SETUP_VERSION}${C.reset}`,
-  ];
-  return lines;
+  const ip = primaryIpv4();
+  const inner = W - 2;
+  const compact = ` ${C.warn}SYS${C.reset} ${pad(os.hostname(), 14)} ${C.mute}·${C.reset} CPU ${cpus} ${C.mute}·${C.reset} RAM ${usedPct}% ${memBar(usedPct, 10)} ${C.mute}·${C.reset} ${C.ok}LINK${C.reset} ${pad(ip, 15)} ${C.mute}·${C.reset} ${C.accent}KX ${SETUP_VERSION}${C.reset}`;
+  return `${C.fg}║${C.reset}${pad(compact, inner)}${C.fg}║${C.reset}`;
 }
 
-function filesPanel(width) {
-  let names = [];
-  try {
-    names = fs
-      .readdirSync(process.cwd())
-      .filter((n) => !n.startsWith("."))
-      .slice(0, 8);
-  } catch {
-    names = [];
-  }
-  const lines = [`${C.warn} FILESYSTEM ${C.reset}`, `${C.mute}${pad(process.cwd(), width - 2)}${C.reset}`];
-  for (const n of names) {
-    let mark = "·";
-    try {
-      if (fs.statSync(path.join(process.cwd(), n)).isDirectory()) mark = "▸";
-    } catch {
-      /* ignore */
-    }
-    lines.push(`${C.fg}${mark} ${n}${C.reset}`);
-  }
-  while (lines.length < 10) lines.push("");
-  return lines;
-}
-
-function netPanel(width) {
-  const ifaces = os.networkInterfaces() || {};
-  const lines = [`${C.warn} NETLINK ${C.reset}`];
-  let count = 0;
-  for (const [name, list] of Object.entries(ifaces)) {
-    for (const a of list || []) {
-      if (a.internal || a.family !== "IPv4") continue;
-      lines.push(`${C.fg}${pad(name, 8)} ${a.address}${C.reset}`);
-      count++;
-      if (count >= 5) break;
-    }
-    if (count >= 5) break;
-  }
-  if (count === 0) lines.push(`${C.mute}no ipv4${C.reset}`);
-  lines.push(`${C.ok}● LINK UP${C.reset}`);
-  while (lines.length < 8) lines.push("");
-  return lines;
-}
-
-class EdexShell {
+class DefcomShell {
   constructor() {
     this.history = [];
-    this.maxHistory = 12;
+    this.maxHistory = 14;
     this.lang = readLang();
+    this.locked = false;
+    this.tick = 0;
   }
 
   pushOut(text) {
@@ -185,52 +194,70 @@ class EdexShell {
     }
   }
 
-  /** Single-write frame (terminal-ui: batch output). */
   renderFrame() {
     const W = cols();
-    const side = Math.max(22, Math.min(28, Math.floor(W * 0.22)));
-    const mid = Math.max(30, W - side * 2 - 2);
-    const left = sysPanel(side - 2);
-    const right = netPanel(side - 2);
-    const files = filesPanel(W - 4);
-
+    const inner = W - 2;
     const out = [];
-    out.push("\x1b[2J\x1b[H"); // clear + home
+    out.push("\x1b[2J\x1b[H");
     out.push(C.bg);
 
-    // Top brand — ASCII KX logo (not plain "Kx" text)
-    out.push(`${C.fg}╔${hline(W - 2, "═")}╗${C.reset}\n`);
+    // ── Header brand ──
+    out.push(`${C.fg}╔${hline(inner, "═")}╗${C.reset}\n`);
     for (const line of LOGO) {
       out.push(
-        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(line, W - 2, "center")}${C.reset}${C.fg}║${C.reset}\n`
+        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(line, inner, "center")}${C.reset}${C.fg}║${C.reset}\n`
       );
     }
-    out.push(`${C.fg}╠${hline(side, "═")}╦${hline(mid, "═")}╦${hline(side, "═")}╣${C.reset}\n`);
+    const tag = `${C.mute}DEFCOM OPERATOR${C.reset}`;
+    out.push(`${C.fg}║${C.reset}${pad(tag, inner, "center")}${C.fg}║${C.reset}\n`);
+    out.push(`${C.fg}╠${hline(inner, "═")}╣${C.reset}\n`);
 
-    const bodyRows = Math.max(left.length, right.length, this.maxHistory + 2, 10);
-    for (let i = 0; i < bodyRows; i++) {
-      const L = left[i] || "";
-      const R = right[i] || "";
-      let M = "";
-      if (i === 0) {
-        M = `${C.warn} MAIN ${C.reset}`;
-      } else if (i === 1) {
-        M = `${C.mute}${hline(mid - 2, "·")}${C.reset}`;
-      } else {
-        const hi = i - 2;
-        M = this.history[hi] != null ? `${C.fg}${this.history[hi]}${C.reset}` : "";
-      }
-      out.push(
-        `${C.fg}║${C.reset}${pad(L, side)}${C.fg}│${C.reset}${pad(M, mid)}${C.fg}│${C.reset}${pad(R, side)}${C.fg}║${C.reset}\n`
-      );
+    // ── Telemetry strip (one row — no column bleed) ──
+    out.push(statusStrip(W) + "\n");
+    const nets = shortIfaces(2).join(` ${C.mute}|${C.reset} `);
+    out.push(
+      `${C.fg}║${C.reset}${pad(` ${C.mute}NET${C.reset} ${nets}`, inner)}${C.fg}║${C.reset}\n`
+    );
+    out.push(`${C.fg}╠${hline(inner, "═")}╣${C.reset}\n`);
+
+    // ── MAIN feed ──
+    out.push(
+      `${C.fg}║${C.reset}${pad(` ${C.warn}▸ MAIN FEED${C.reset} ${C.mute}// KxLang${C.reset}`, inner)}${C.fg}║${C.reset}\n`
+    );
+    out.push(`${C.fg}║${C.reset}${pad(` ${C.mute}${hline(Math.min(inner - 2, 48), "·")}${C.reset}`, inner)}${C.fg}║${C.reset}\n`);
+
+    const feedRows = Math.max(8, Math.min(this.maxHistory, Math.floor((process.stdout.rows || 30) * 0.35)));
+    for (let i = 0; i < feedRows; i++) {
+      const line = this.history[i] != null ? String(this.history[i]) : "";
+      out.push(`${C.fg}║${C.reset}${pad(" " + line, inner)}${C.fg}║${C.reset}\n`);
     }
 
-    out.push(`${C.fg}╠${hline(W - 2, "═")}╣${C.reset}\n`);
-    // filesystem strip
-    for (let i = 0; i < Math.min(4, files.length); i++) {
-      out.push(`${C.fg}║${C.reset}${pad(files[i], W - 2)}${C.fg}║${C.reset}\n`);
+    out.push(`${C.fg}╠${hline(inner, "═")}╣${C.reset}\n`);
+
+    // ── Filesystem strip ──
+    let cwd = process.cwd();
+    try {
+      cwd = cwd.length > inner - 10 ? "…" + cwd.slice(-(inner - 12)) : cwd;
+    } catch {
+      cwd = ".";
     }
-    out.push(`${C.fg}╚${hline(W - 2, "═")}╝${C.reset}\n`);
+    out.push(
+      `${C.fg}║${C.reset}${pad(` ${C.warn}FS${C.reset} ${C.mute}${cwd}${C.reset}`, inner)}${C.fg}║${C.reset}\n`
+    );
+    let names = [];
+    try {
+      names = fs
+        .readdirSync(process.cwd())
+        .filter((n) => !n.startsWith("."))
+        .slice(0, 4);
+    } catch {
+      names = [];
+    }
+    const fileLine = names.length
+      ? names.map((n) => (n.length > 18 ? n.slice(0, 16) + "…" : n)).join("  ·  ")
+      : "—";
+    out.push(`${C.fg}║${C.reset}${pad(` ${C.mute}${fileLine}${C.reset}`, inner)}${C.fg}║${C.reset}\n`);
+    out.push(`${C.fg}╚${hline(inner, "═")}╝${C.reset}\n`);
 
     process.stdout.write(out.join(""));
   }
@@ -242,7 +269,7 @@ class EdexShell {
 
     const lower = trimmed.toLowerCase();
     if (lower === "exit" || lower === "quit" || lower === "q") {
-      process.stdout.write(`\n${C.ok}[Kx] link closed${C.reset}\n`);
+      process.stdout.write(`\n${C.ok}[Kx] channel closed${C.reset}\n`);
       process.exit(0);
     }
     if (lower === "clear" || lower === "cls") {
@@ -252,7 +279,6 @@ class EdexShell {
 
     let args = splitArgs(trimmed);
     if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
-    // Bare `kx` or empty → English help
     if (!args.length) args = ["/h"];
 
     const head = (args[0] || "").toLowerCase();
@@ -274,7 +300,6 @@ class EdexShell {
       return;
     }
 
-    // Capture kx output (UTF-8 forced for Windows consoles)
     ensureSetup();
     const state = readState();
     const env = {
@@ -283,8 +308,8 @@ class EdexShell {
       PYTHONUTF8: "1",
       PYTHONIOENCODING: "utf-8",
     };
-    let res;
     const { spawnSync } = require("child_process");
+    let res;
     if (state?.kx && fs.existsSync(state.kx)) {
       res = spawnSync(state.kx, args, {
         cwd: ROOT,
@@ -305,15 +330,19 @@ class EdexShell {
       });
     }
     const text = decodeChildText(`${res.stdout || ""}${res.stderr || ""}`).trimEnd();
-    if (text) this.pushOut(text);
-    else if (res.status) this.pushOut(`${C.warn}exit ${res.status}${C.reset}`);
+    if (text) {
+      for (const ln of text.split("\n")) this.pushOut(ln);
+    } else if (res.status) {
+      this.pushOut(`${C.warn}exit ${res.status}${C.reset}`);
+    }
   }
 
   start() {
     ensureSetup();
     this.lang = readLang();
     this.locked = false;
-    // No decorative boot lines — prompt is enough
+    this.pushOut(`${C.ok}DEFCOM link online${C.reset} · Kx ${SETUP_VERSION}`);
+    this.pushOut(`${C.mute}type /h · update · Ctrl+C locks (resume with kx)${C.reset}`);
 
     const rl = readline.createInterface({
       input: process.stdin,
@@ -322,18 +351,16 @@ class EdexShell {
     });
     this._rl = rl;
 
-    const isLogin = (line) => containsKx(line);
-
     let ask = () => {};
     const softLock = () => {
       if (this.locked) {
-        process.stdout.write(`\n${C.warn}[Kx] locked — type anything with kx${C.reset}\n`);
+        process.stdout.write(`\n${C.warn}[Kx] locked — include kx to resume${C.reset}\n`);
         ask();
         return;
       }
       this.locked = true;
       this.history = [];
-      this.pushOut("locked (Ctrl+C)");
+      this.pushOut(`${C.warn}channel locked${C.reset}`);
       this.pushOut("resume: type anything containing kx");
       ask();
     };
@@ -341,26 +368,20 @@ class EdexShell {
     ask = () => {
       this.renderFrame();
       const prompt = this.locked
-        ? `${C.warn}${C.bold} [login kx]>${C.reset} `
+        ? `${C.warn}${C.bold} lock>${C.reset} `
         : `${C.accent}${C.bold} kx>${C.reset} `;
       rl.question(prompt, (line) => {
         try {
           if (this.locked) {
-            if (isLogin(line)) {
+            if (containsKx(line)) {
               this.locked = false;
               this.history = [];
-              this.pushOut(
-                this.lang === "ko" ? "로그인 성공 · HUD 재개" : "login ok · HUD resumed"
-              );
+              this.pushOut(`${C.ok}channel restored${C.reset}`);
             } else if ((line || "").trim().toLowerCase() === "exit") {
-              process.stdout.write(`\n${C.ok}[Kx] link closed${C.reset}\n`);
+              process.stdout.write(`\n${C.ok}[Kx] channel closed${C.reset}\n`);
               process.exit(0);
             } else {
-              this.pushOut(
-                this.lang === "ko"
-                  ? "잠금 — 입력에 kx 를 포함하세요."
-                  : "locked — include kx in your input"
-              );
+              this.pushOut(`${C.mute}locked — include kx${C.reset}`);
             }
             ask();
             return;
@@ -369,12 +390,11 @@ class EdexShell {
           const trimmed = (line || "").trim();
           const low = trimmed.toLowerCase();
           if (low === "update" || low === "kx update" || low === "upgrade") {
-            this.pushOut(this.lang === "ko" ? "업데이트 중..." : "updating...");
+            this.pushOut("updating…");
             this.renderFrame();
             try {
-              const { updateKx } = require("./kx-update");
-              updateKx();
-              this.pushOut(this.lang === "ko" ? "업데이트 완료" : "update complete");
+              require("./kx-update").updateKx();
+              this.pushOut(`${C.ok}update complete${C.reset}`);
             } catch (err) {
               this.pushOut(`[update] ${err.message || err}`);
             }
@@ -390,20 +410,18 @@ class EdexShell {
       });
     };
 
-    // readline owns Ctrl+C when terminal:true — soft-lock instead of exit
     rl.on("SIGINT", softLock);
-
-    process.stdout.write("\x1b[?25h");
+    process.stdout.write(C.show);
     ask();
   }
 }
 
 function startEdexShell() {
-  const ui = new EdexShell();
+  const ui = new DefcomShell();
   ui.start();
 }
 
-module.exports = { startEdexShell, EdexShell };
+module.exports = { startEdexShell, EdexShell: DefcomShell, DefcomShell };
 
 if (require.main === module) {
   try {
