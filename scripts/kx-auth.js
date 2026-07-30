@@ -43,7 +43,7 @@ function save(store) {
 
 function init() {
   if (fs.existsSync(USERS_FILE)) return null;
-  const password = process.env.KX_INITIAL_ADMIN_PASSWORD || crypto.randomBytes(18).toString("base64url");
+  const password = process.env.KX_INITIAL_ADMIN_PASSWORD || "admin";
   save({ users: [{ username: "admin", passwordHash: hash(password), role: "admin" }] });
   return process.env.KX_INITIAL_ADMIN_PASSWORD ? null : password;
 }
@@ -95,7 +95,7 @@ async function login() {
   const RESET = "\x1b[0m";
 
   if (initialPassword) {
-    process.stdout.write(`${WARN}  First-run admin password (save it now): ${initialPassword}${RESET}\n`);
+    process.stdout.write(`${WARN}  First-run login: admin / ${initialPassword} (change it after login)${RESET}\n`);
   }
 
   for (let i = 0; i < 3; i++) {
