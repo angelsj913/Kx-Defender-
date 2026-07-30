@@ -4,14 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from kx_defender.base import AttackModule
+from kx_defender.base import DefenseModule
 from kx_defender.result import Finding, ModuleResult
 from modules.engines.kxaction import terminate
 
 
-class ProcessKillModule(AttackModule):
+class ProcessKillModule(DefenseModule):
     name = "process_kill"
-    category = "defense"
     description = "Terminate a process by PID using self-built KxAction."
 
     def run(self, params: dict[str, Any]) -> ModuleResult:

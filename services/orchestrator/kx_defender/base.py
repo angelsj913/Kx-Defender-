@@ -9,7 +9,7 @@ from kx_defender.auth import validate_params
 from kx_defender.result import ModuleResult
 
 
-class AttackModule(ABC):
+class BaseModule(ABC):
     name: str = "base"
     category: str = "attack"
     description: str = ""
@@ -36,3 +36,11 @@ class AttackModule(ABC):
         if result.finished_at is None:
             result.finish()
         return result
+
+
+class AttackModule(BaseModule):
+    category: str = "attack"
+
+
+class DefenseModule(BaseModule):
+    category: str = "defense"
