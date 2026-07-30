@@ -19,7 +19,7 @@ const {
   installAgentSkills,
   listSkillDirs,
 } = require("./install-agent-skills");
-const { setup, ensureSetup, runKx, log, ROOT, isWin } = require("./npm-setup");
+const { setupSync, ensureSetup, runKx, log, ROOT, isWin } = require("./npm-setup");
 
 function printHelp() {
   console.log(`Kx-Defender
@@ -136,7 +136,7 @@ function runProgram(flags, { withSkills = false } = {}) {
     }
   }
   console.log("[Kx] Starting Kx-Defender...");
-  setup();
+  setupSync();
   if (flags.global) installGlobalShims();
   if (flags.noServe) {
     log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
@@ -177,7 +177,7 @@ function main() {
   }
 
   if (cmd === "setup") {
-    setup();
+    setupSync();
     if (flags.global) installGlobalShims();
     log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
     return;

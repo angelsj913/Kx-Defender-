@@ -92,7 +92,8 @@ With skills + global shims:
 npx -y angelsj913/Kx-Defender- --all -g
 ```
 
-Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).
+Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).  
+If Python is missing, a portable CPython is downloaded once to `~/.kx-defender/python` (Node.js required).
 
 Skills only:
 
