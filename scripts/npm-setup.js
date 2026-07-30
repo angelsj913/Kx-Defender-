@@ -1,9 +1,9 @@
 "use strict";
 
 /**
- * Kx-Defender runtime setup
+ * Kx-Defender runtime setup (sync, Windows PowerShell friendly)
  * - Finds system Python, or downloads portable CPython once
- * - Fully synchronous (reliable under npx on Windows)
+ * - Unblocks Mark-of-the-Web on Windows so python.exe can run
  */
 
 const { spawnSync } = require("child_process");
@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const SETUP_VERSION = "0.1.6";
+const SETUP_VERSION = "0.1.7";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");
@@ -51,14 +51,30 @@ function writeState(state) {
   fs.writeFileSync(STATE, JSON.stringify(state, null, 2));
 }
 
-function run(cmd, args, opts = {}) {
-  const res = spawnSync(cmd, args, {
-    cwd: ROOT,
-    stdio: "inherit",
-    shell: isWin(),
+/** Prefer shell:false for absolute .exe paths (Windows cmd mangling breaks them). */
+function spawnOpts(cmd, extra = {}) {
+  const absolute = path.isAbsolute(cmd) || /\.(exe|bat|cmd)$/i.test(String(cmd));
+  const env = { ...process.env, ...(extra.env || {}) };
+  if (absolute && isWin()) {
+    const dir = path.dirname(cmd);
+    env.PATH = `${dir}${path.delimiter}${env.PATH || ""}`;
+    // Only pin PYTHONHOME for the portable install root (not venv Scripts)
+    if (path.resolve(dir) === path.resolve(PY_HOME)) {
+      env.PYTHONHOME = PY_HOME;
+    }
+  }
+  return {
+    cwd: extra.cwd || ROOT,
+    encoding: extra.encoding,
+    stdio: extra.stdio || "inherit",
+    shell: absolute ? false : isWin(),
     windowsHide: true,
-    ...opts,
-  });
+    env,
+  };
+}
+
+function run(cmd, args, opts = {}) {
+  const res = spawnSync(cmd, args, spawnOpts(cmd, { ...opts, stdio: "inherit" }));
   if (res.error) throw res.error;
   if (res.status !== 0) {
     const err = new Error(`Command failed (${res.status}): ${cmd} ${args.join(" ")}`);
@@ -68,25 +84,47 @@ function run(cmd, args, opts = {}) {
   return res;
 }
 
-function runCapture(cmd, args) {
-  const res = spawnSync(cmd, args, {
-    cwd: ROOT,
-    encoding: "utf8",
-    shell: isWin(),
-    windowsHide: true,
-  });
+function runCapture(cmd, args, opts = {}) {
+  const res = spawnSync(
+    cmd,
+    args,
+    spawnOpts(cmd, {
+      ...opts,
+      stdio: ["pipe", "pipe", "pipe"],
+      encoding: "utf8",
+    })
+  );
   if (res.status !== 0) return null;
   return (res.stdout || "").trim();
+}
+
+function unblockWindowsTree(targetPath) {
+  if (!isWin() || !fs.existsSync(targetPath)) return;
+  const ps = [
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    `if (Test-Path -LiteralPath '${targetPath.replace(/'/g, "''")}') { Get-ChildItem -LiteralPath '${targetPath.replace(/'/g, "''")}' -Recurse -Force -ErrorAction SilentlyContinue | Unblock-File -ErrorAction SilentlyContinue; Unblock-File -LiteralPath '${targetPath.replace(/'/g, "''")}' -ErrorAction SilentlyContinue }`,
+  ];
+  spawnSync("powershell", ps, { stdio: "ignore", windowsHide: true });
 }
 
 function probePython(executable, baseArgs = []) {
   if (!executable) return null;
   if (/WindowsApps/i.test(String(executable))) return null;
-  const out = runCapture(executable, [
-    ...baseArgs,
-    "-c",
-    "import sys; assert sys.version_info[:2] >= (3, 9); print(sys.executable)",
-  ]);
+  if (path.isAbsolute(executable) && !fs.existsSync(executable)) return null;
+
+  if (isWin() && path.isAbsolute(executable)) {
+    unblockWindowsTree(path.dirname(executable));
+  }
+
+  const cwd = path.isAbsolute(executable) ? path.dirname(executable) : ROOT;
+  const out = runCapture(
+    executable,
+    [...baseArgs, "-c", "import sys; assert sys.version_info[:2] >= (3, 9); print(sys.executable)"],
+    { cwd }
+  );
   if (!out) return null;
   const resolved = out.split(/\r?\n/).filter(Boolean).pop();
   if (!resolved || /WindowsApps/i.test(resolved)) return null;
@@ -190,6 +228,7 @@ function downloadFileSync(url, dest) {
     ];
     const res = spawnSync("powershell", ps, { stdio: "inherit", windowsHide: true });
     if (res.status === 0 && fs.existsSync(dest) && fs.statSync(dest).size > 1_000_000) {
+      unblockWindowsTree(dest);
       return dest;
     }
   }
@@ -269,7 +308,6 @@ function bootstrapPortablePython() {
   }
   fs.rmSync(PY_HOME, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(PY_HOME), { recursive: true });
-  // Windows rename across volumes can fail — copy fallback
   try {
     fs.renameSync(extracted, PY_HOME);
   } catch {
@@ -277,10 +315,54 @@ function bootstrapPortablePython() {
   }
   fs.rmSync(staging, { recursive: true, force: true });
 
+  // Critical on Windows: clear Mark-of-the-Web so python.exe can run in PowerShell
+  unblockWindowsTree(PY_HOME);
+  unblockWindowsTree(archive);
+
   const exe = isWin()
     ? path.join(PY_HOME, "python.exe")
     : path.join(PY_HOME, "bin", "python3");
-  const hit = probePython(exe);
+
+  if (!fs.existsSync(exe)) {
+    const listing = fs.existsSync(PY_HOME)
+      ? fs.readdirSync(PY_HOME).slice(0, 30).join(", ")
+      : "(missing)";
+    throw new Error(`Portable Python missing exe. Contents: ${listing}`);
+  }
+
+  let hit = probePython(exe);
+  if (!hit && isWin()) {
+    // Retry after PATH-style probe with explicit env
+    log("Retrying portable Python with DLL path ...");
+    unblockWindowsTree(PY_HOME);
+    const res = spawnSync(
+      exe,
+      ["-c", "import sys; print(sys.executable)"],
+      {
+        cwd: PY_HOME,
+        encoding: "utf8",
+        shell: false,
+        windowsHide: true,
+        env: {
+          ...process.env,
+          PATH: `${PY_HOME}${path.delimiter}${process.env.PATH || ""}`,
+          PYTHONHOME: PY_HOME,
+        },
+      }
+    );
+    if (res.status === 0 && res.stdout) {
+      hit = {
+        cmd: exe,
+        baseArgs: [],
+        executable: res.stdout.toString().trim().split(/\r?\n/).filter(Boolean).pop(),
+      };
+    } else {
+      const errText = ((res.stderr || res.stdout || res.error || "") + "").slice(0, 400);
+      throw new Error(
+        `Portable Python installed but not runnable: ${exe}${errText ? ` (${errText})` : ""}`
+      );
+    }
+  }
   if (!hit) {
     throw new Error(`Portable Python installed but not runnable: ${exe}`);
   }
@@ -327,7 +409,9 @@ function verifyKx(pythonPath) {
 function setup() {
   log(`Kx-Defender setup v${SETUP_VERSION} (Self-Built Only)`);
   if (!fs.existsSync(path.join(ROOT, "pyproject.toml"))) {
-    throw new Error("pyproject.toml not found. Re-run: npx -y --prefer-online angelsj913/Kx-Defender-");
+    throw new Error(
+      "pyproject.toml not found. Re-run: npx -y --prefer-online angelsj913/Kx-Defender-"
+    );
   }
 
   const found = ensurePython();
@@ -341,6 +425,7 @@ function setup() {
       run(found.executable, ["-m", "venv", VENV]);
     }
     const py = venvPython();
+    if (isWin()) unblockWindowsTree(path.join(VENV, "Scripts"));
     log("Installing into .venv ...");
     run(py, ["-m", "pip", "install", "--upgrade", "pip"]);
     run(py, ["-m", "pip", "install", "-e", "."]);
@@ -394,23 +479,16 @@ function setupSync() {
 function runKx(args, opts = {}) {
   const runtime = ensureSetup();
   if (runtime.kx && fs.existsSync(runtime.kx)) {
-    return spawnSync(runtime.kx, args, {
-      cwd: ROOT,
-      stdio: "inherit",
-      shell: isWin(),
-      windowsHide: true,
-      ...opts,
-    });
+    if (isWin()) unblockWindowsTree(path.dirname(runtime.kx));
+    return spawnSync(runtime.kx, args, spawnOpts(runtime.kx, { ...opts, stdio: "inherit" }));
   }
   const code =
     "import sys; from kx_defender.kx_cli import main; sys.argv=['kx']+sys.argv[1:]; main()";
-  return spawnSync(runtime.python, ["-c", code, ...args], {
-    cwd: ROOT,
-    stdio: "inherit",
-    shell: isWin(),
-    windowsHide: true,
-    ...opts,
-  });
+  return spawnSync(
+    runtime.python,
+    ["-c", code, ...args],
+    spawnOpts(runtime.python, { ...opts, stdio: "inherit" })
+  );
 }
 
 module.exports = {
@@ -426,6 +504,7 @@ module.exports = {
   readState,
   findPython,
   ensurePython,
+  unblockWindowsTree,
 };
 
 if (require.main === module) {

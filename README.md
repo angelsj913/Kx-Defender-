@@ -80,7 +80,19 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 ## Install & run (any PC — short command)
 
-No npm publish needed. Works on any PC with Node.js:
+### PowerShell (Windows)
+
+```powershell
+irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
+```
+
+Or:
+
+```powershell
+npx -y --prefer-online angelsj913/Kx-Defender-
+```
+
+### Any shell
 
 ```bash
 npx -y --prefer-online angelsj913/Kx-Defender-
@@ -93,12 +105,13 @@ npx -y --prefer-online angelsj913/Kx-Defender- --all -g
 ```
 
 Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).  
-If Python is missing, a portable CPython is downloaded once to `~/.kx-defender/python` (Node.js required).
+If Python is missing, a portable CPython is downloaded once to `~/.kx-defender/python` (Node.js required). On Windows, downloaded files are Unblock-File’d so they run inside PowerShell.
 
-If you still see an old “Python 3.9+ not found” error, clear the npx cache and retry:
+If you still see a stale error, clear the npx cache and retry:
 
 ```powershell
 npx clear-npx-cache
+Remove-Item -Recurse -Force "$env:USERPROFILE\.kx-defender\python" -ErrorAction SilentlyContinue
 npx -y --prefer-online angelsj913/Kx-Defender-
 ```
 

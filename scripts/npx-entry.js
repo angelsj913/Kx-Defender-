@@ -19,22 +19,28 @@ const {
   installAgentSkills,
   listSkillDirs,
 } = require("./install-agent-skills");
-const { setupSync, ensureSetup, runKx, log, ROOT, isWin } = require("./npm-setup");
+const { setupSync, ensureSetup, runKx, log, ROOT, isWin, SETUP_VERSION } = require("./npm-setup");
+const { printKxBanner } = require("./banner");
 
 function printHelp() {
+  printKxBanner();
   console.log(`Kx-Defender
 
-Run (any PC, short — no npm publish):
-  npx -y angelsj913/Kx-Defender-
-  npx -y angelsj913/Kx-Defender- --all -g
+PowerShell:
+  irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
+  npx -y --prefer-online angelsj913/Kx-Defender-
+
+Run:
+  npx -y --prefer-online angelsj913/Kx-Defender-
+  npx -y --prefer-online angelsj913/Kx-Defender- --all -g
 
 Skills only:
-  npx -y angelsj913/Kx-Defender- add --all -g
+  npx -y --prefer-online angelsj913/Kx-Defender- add --all -g
 
 Other:
-  npx -y angelsj913/Kx-Defender- setup
-  npx -y angelsj913/Kx-Defender- serve [--bind host:port]
-  npx -y angelsj913/Kx-Defender- kx <KxLang args...>
+  npx -y --prefer-online angelsj913/Kx-Defender- setup
+  npx -y --prefer-online angelsj913/Kx-Defender- serve [--bind host:port]
+  npx -y --prefer-online angelsj913/Kx-Defender- kx <KxLang args...>
 
 Flags:
   --all           Install all bundled agent skills
@@ -128,6 +134,7 @@ function doSkillInstall(flags) {
 }
 
 function runProgram(flags, { withSkills = false } = {}) {
+  printKxBanner();
   if (withSkills || flags.all || flags.global) {
     try {
       doSkillInstall(flags);
@@ -135,11 +142,11 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  console.log(`[Kx] Starting Kx-Defender v${require("./npm-setup").SETUP_VERSION}...`);
+  console.log(`[Kx] Starting Kx-Defender v${SETUP_VERSION}...`);
   setupSync();
   if (flags.global) installGlobalShims();
   if (flags.noServe) {
-    log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
+    log("Ready. Try: npx -y --prefer-online angelsj913/Kx-Defender- kx /h");
     return;
   }
   startServe(flags.bind);
