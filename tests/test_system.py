@@ -81,6 +81,6 @@ def test_api_kx_endpoint():
         conn.request("GET", "/")
         res = conn.getresponse()
         html = res.read().decode()
-        assert "KX-DEFENDER" in html
+        assert "DEFCOM" in html
     finally:
         httpd.shutdown()
