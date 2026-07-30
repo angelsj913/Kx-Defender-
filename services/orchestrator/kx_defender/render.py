@@ -308,12 +308,15 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
             parts.append(f"  {red}✗{reset} {e}")
         parts.append("")
 
-    # Specialized widgets vs generic artifacts
+    # Specialized widgets vs generic artifacts.
+    # Match module name exactly (not substring) so future modules whose names
+    # incidentally contain "process_monitor" or "sig_scan" don't get pushed
+    # through the wrong renderer.
     artifacts = payload.get("artifacts") or {}
-    lower_mod = module.lower()
+    module_key = module.lower()
     rendered_widget = False
 
-    if "process_monitor" in lower_mod and isinstance(artifacts.get("processes"), list):
+    if module_key == "process_monitor" and isinstance(artifacts.get("processes"), list):
         parts.append(render_process_tree(
             processes=artifacts["processes"],
             alert_count=artifacts.get("alert_count", 0),
@@ -321,7 +324,7 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
             color=color,
         ))
         rendered_widget = True
-    elif "sig_scan" in lower_mod and (artifacts.get("sample_hits") or artifacts.get("file")):
+    elif module_key == "sig_scan" and (artifacts.get("sample_hits") or artifacts.get("file")):
         hits = artifacts.get("sample_hits")
         if hits is None and isinstance(artifacts.get("file"), dict):
             hits = artifacts["file"].get("hits", [])

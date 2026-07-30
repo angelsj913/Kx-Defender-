@@ -121,8 +121,16 @@ def collect_from_prompts(
     already_set: set[str],
     stream_in: TextIO,
     stream_out: TextIO,
+    is_live: bool = False,
 ) -> list[tuple[str, str]]:
-    """Ask the user for each schema field not already in the command."""
+    """Ask the user for each schema field not already in the command.
+
+    ``is_live`` controls what happens when a *required* field is left blank:
+      - simulate  → the schema's placeholder is substituted (lab-safe demo value)
+      - live      → the field is skipped, the required-missing marker is left
+        for the module to raise; we never inject a placeholder value into
+        real network / process operations.
+    """
     collected: list[tuple[str, str]] = []
     for field in schema:
         flag = field.get("flag")
@@ -149,7 +157,12 @@ def collect_from_prompts(
         if not value and default:
             value = default
         if not value and required:
-            stream_out.write("    (required — using placeholder default in simulate)\n")
+            if is_live:
+                stream_out.write(
+                    "    (required, blank in --live → not injecting placeholder; module will error)\n"
+                )
+                continue
+            stream_out.write("    (required, blank in --sim → using placeholder for demo)\n")
             value = placeholder or "auto"
         if value:
             collected.append((flag, value))

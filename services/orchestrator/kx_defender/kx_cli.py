@@ -170,8 +170,7 @@ def _emit_suggest(args: list[str]) -> int:
     verb_l = parsed["verb"].lower()
     obj_l = parsed["obj"].lower()
     last = tokens[-1]
-    is_new_token = tokens[-1].endswith(" ")  # rare; caller can pre-add empty token
-    # Convention: caller sends the full raw line; last token is the prefix
+    # Convention: caller sends the full raw line; last token is the completion prefix
 
     # If exactly one token → verb prefix
     if len(tokens) == 1 and not last.startswith("-"):
@@ -259,13 +258,21 @@ def _emit_ask(args: list[str]) -> int:
 
     fields, key = schema_for(verb, obj, lexicon_verbs=list_verbs())
     parsed = parse_command_form(argv_base)
-    additions = collect_from_prompts(fields, parsed["flags_set"], sys.stdin, sys.stderr)
+    is_live = "--live" in parsed["flags_set"]
+    additions = collect_from_prompts(
+        fields, parsed["flags_set"], sys.stdin, sys.stderr, is_live=is_live
+    )
     augmented = augment_argv(argv_base, additions)
 
-    # Ensure scope flag exists — required by the parser
+    # Ensure scope flag exists — required by the parser. Only add --sim if the
+    # user hasn't already picked a mode (--sim / --live); otherwise their choice
+    # would be silently overridden by a trailing --sim.
     if "--scope" not in augmented:
-        print("[Kx] --scope not provided; defaulting to `lab --sim`", file=sys.stderr)
-        augmented.extend(["--scope", "lab", "--sim"])
+        print("[Kx] --scope not provided; defaulting to `lab`", file=sys.stderr)
+        augmented.extend(["--scope", "lab"])
+    if "--sim" not in augmented and "--live" not in augmented:
+        print("[Kx] mode not specified; defaulting to `--sim`", file=sys.stderr)
+        augmented.append("--sim")
 
     print(f"\n[Kx] Executing: kx {' '.join(augmented)}\n", file=sys.stderr)
     return _run_parsed(augmented, pretty=True)
