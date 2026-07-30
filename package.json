@@ -31,7 +31,8 @@
     "kx": "node scripts/npm-kx.js",
     "help": "node scripts/npm-kx.js /h",
     "test": "node scripts/npm-test.js",
-    "skills": "node scripts/install-agent-skills.js --all -g"
+    "skills": "node scripts/install-agent-skills.js --all -g",
+    "publish:public": "npm publish --access public"
   },
   "repository": {
     "type": "git",

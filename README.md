@@ -80,21 +80,37 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 ## Install
 
+`npx kx-defender` needs the package on **npmjs.com**. It is **not published yet**, so you will see `E404` until you publish once.
+
+### 1) Publish once (repo owner — Windows)
+
+```powershell
+npm login
+git clone https://github.com/angelsj913/Kx-Defender-.git
+cd Kx-Defender-
+git checkout cursor/kx-attack-modules-7992
+.\scripts\publish-npm.ps1
+```
+
+Or: `npm publish --access public` from the repo root after `npm login`.
+
+### 2) Install skills (after publish)
+
 ```bash
 npx --yes kx-defender add --all -g
 ```
 
-Installs bundled agent skills into `~/.agents/skills` and `~/.cursor/skills`.  
-Quiet output — no GitHub Source banner, no Eve/PromptScript errors.
+Installs into `~/.agents/skills` and `~/.cursor/skills` (quiet — no Eve/PromptScript noise).
 
-Equivalents:
+### Works right now (no npm publish)
 
-```bash
-npx --yes kx-defender --all -g
+```powershell
+git clone https://github.com/angelsj913/Kx-Defender-.git
+cd Kx-Defender-
 node scripts/npx-entry.js add --all -g
 ```
 
-> Do **not** use the third-party `npx skills add …` CLI for this repo — it always prints a GitHub Source line and fails on agents that lack global skill support (Eve, PromptScript).
+> Do **not** use third-party `npx skills add …` for this repo.
 
 ### Platform runtime (optional)
 
