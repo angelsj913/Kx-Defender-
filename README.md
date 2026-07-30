@@ -73,14 +73,17 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 ```powershell
 npx clear-npx-cache; npx -y --prefer-online angelsj913/Kx-Defender-
+# after first install, refresh without reinstall:
+npx -y --prefer-online angelsj913/Kx-Defender- update
 ```
 
-Tron/eDEX-style multi-panel HUD inside the terminal (SYS / MAIN / NET + filesystem strip).
+CLI stability PRD: [`docs/prd/kx-cli-stability.md`](docs/prd/kx-cli-stability.md)
 
 ```
  kx> /h
  kx> lang ko
- kx> roast tickets --scope lab --sim
+ kx> sentry
+ kx> roast tickets --realm lab.local
  kx> update
  kx> exit
 ```

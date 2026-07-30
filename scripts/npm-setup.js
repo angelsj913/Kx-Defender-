@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const SETUP_VERSION = "0.2.2";
+const SETUP_VERSION = "0.2.3";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");
@@ -54,7 +54,12 @@ function writeState(state) {
 /** Prefer shell:false for absolute .exe paths (Windows cmd mangling breaks them). */
 function spawnOpts(cmd, extra = {}) {
   const absolute = path.isAbsolute(cmd) || /\.(exe|bat|cmd)$/i.test(String(cmd));
-  const env = { ...process.env, ...(extra.env || {}) };
+  const env = {
+    ...process.env,
+    PYTHONUTF8: "1",
+    PYTHONIOENCODING: "utf-8",
+    ...(extra.env || {}),
+  };
   if (absolute && isWin()) {
     const dir = path.dirname(cmd);
     env.PATH = `${dir}${path.delimiter}${env.PATH || ""}`;

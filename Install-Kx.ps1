@@ -44,7 +44,7 @@ function Show-KxBanner {
 ██╔═██╗  ██╔██╗
 ██║  ██╗██╔╝ ██╗
 ╚═╝  ╚═╝╚═╝  ╚═╝
-  DEFENDER  ·  eDEX HUD  ·  TRON LINK
+  DEFENDER
 ────────────────────────────────────────
 
 "@
@@ -156,6 +156,16 @@ function Enter-KxLoginLoop {
 Enable-KxConsoleTheme
 Show-KxBanner
 
+# UTF-8 console so Korean KxLang messages do not mojibake
+try {
+    chcp 65001 | Out-Null
+    $OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    [Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false)
+    [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    $env:PYTHONUTF8 = "1"
+    $env:PYTHONIOENCODING = "utf-8"
+} catch { }
+
 if ($Fresh) {
     Write-Host "[Kx] Fresh: clearing npx cache / broken portable Python ..." -ForegroundColor DarkCyan
     try { & npx clear-npx-cache 2>$null } catch { }
@@ -170,7 +180,7 @@ if (Test-Path -LiteralPath $binDir) {
     $env:PATH = "$binDir;$env:PATH"
 }
 
-Write-Host "[Kx] Tips: Ctrl+C locks HUD → type [login kx]  |  update refreshes without reinstall" -ForegroundColor DarkCyan
+Write-Host "[Kx] Ctrl+C → [login kx]  |  update" -ForegroundColor DarkCyan
 Write-Host ""
 
 if ($SkillsOnly) {

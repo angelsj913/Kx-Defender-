@@ -3,7 +3,21 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
+
+
+def _force_utf8_stdio() -> None:
+    os.environ.setdefault("PYTHONUTF8", "1")
+    os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+    for stream in (sys.stdout, sys.stderr, sys.stdin):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[attr-defined]
+        except Exception:
+            pass
+
+
+_force_utf8_stdio()
 
 from kx_defender.helptext import is_help_token, render_global_help, render_verb_help
 from kx_defender.i18n import get_lang, set_lang, t
@@ -13,6 +27,10 @@ from kx_defender.orchestrator import Orchestrator
 
 def _print_json(data: object) -> None:
     print(json.dumps(data, indent=2, ensure_ascii=False))
+
+
+def _print_next() -> None:
+    print(t("next: kx /h", "next: kx /h"), file=sys.stderr)
 
 
 def _emit_help(args: list[str]) -> int:
@@ -102,7 +120,7 @@ def main(argv: list[str] | None = None) -> None:
         cmd = parse_argv(args)
     except KxLangError as exc:
         print(f"KxLang error: {exc}", file=sys.stderr)
-        print(t("Try: kx /h", "시도: kx /h"), file=sys.stderr)
+        _print_next()
         raise SystemExit(2) from exc
 
     orch = Orchestrator()
@@ -110,7 +128,7 @@ def main(argv: list[str] | None = None) -> None:
         result = orch.run(cmd.module, cmd.params)
     except KeyError as exc:
         print(f"KxLang error: {exc}", file=sys.stderr)
-        print(t("Try: kx /h", "시도: kx /h"), file=sys.stderr)
+        _print_next()
         raise SystemExit(2) from exc
 
     payload = result.to_dict()

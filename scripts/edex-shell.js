@@ -28,14 +28,33 @@ const C = {
   black: "\x1b[38;2;0;0;0m",
 };
 
-const LOGO = [
-  "██╗  ██╗██╗  ██╗",
-  "██║ ██╔╝╚██╗██╔╝",
-  "█████╔╝  ╚███╔╝ ",
-  "██╔═██╗  ██╔██╗ ",
-  "██║  ██╗██╔╝ ██╗",
-  "╚═╝  ╚═╝╚═╝  ╚═╝",
-];
+const LOGO = []; // reserved for Claude design track — no decorative logo in system HUD
+
+function decodeChildText(raw) {
+  if (raw == null) return "";
+  if (Buffer.isBuffer(raw)) {
+    const asUtf8 = raw.toString("utf8");
+    // If UTF-8 decode produced lots of replacement-looking CP misreads, try cp949 on win
+    if (isWin() && /[\u00c0-\u00ff]{2,}/.test(asUtf8) && !/[가-힣]/.test(asUtf8)) {
+      try {
+        return raw.toString("cp949");
+      } catch {
+        return asUtf8;
+      }
+    }
+    return asUtf8;
+  }
+  const s = String(raw);
+  // Already a string from encoding:'utf8' — if mojibake of Korean, attempt repair
+  if (isWin() && /[\u00c0-\u00ff]{2,}/.test(s) && !/[가-힣]/.test(s)) {
+    try {
+      return Buffer.from(s, "latin1").toString("utf8");
+    } catch {
+      return s;
+    }
+  }
+  return s;
+}
 
 function cols() {
   return process.stdout.columns || 100;
@@ -173,10 +192,10 @@ class EdexShell {
     out.push("\x1b[2J\x1b[H"); // clear + home
     out.push(C.bg);
 
-    // Top title bar
+    // Top title bar — brand only (no decorative tagline)
     out.push(
       `${C.fg}╔${hline(W - 2, "═")}╗${C.reset}\n` +
-        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(" Kx-DEFENDER  ·  eDEX HUD  ·  TRON LINK ", W - 2, "center")}${C.reset}${C.fg}║${C.reset}\n` +
+        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(" Kx ", W - 2, "center")}${C.reset}${C.fg}║${C.reset}\n` +
         `${C.fg}╠${hline(side, "═")}╦${hline(mid, "═")}╦${hline(side, "═")}╣${C.reset}\n`
     );
 
@@ -186,7 +205,7 @@ class EdexShell {
       const R = right[i] || "";
       let M = "";
       if (i === 0) {
-        M = `${C.warn} MAIN TERMINAL ${C.mute}// DEFCOM${C.reset}`;
+        M = `${C.warn} MAIN ${C.reset}`;
       } else if (i === 1) {
         M = `${C.mute}${hline(mid - 2, "·")}${C.reset}`;
       } else {
@@ -204,17 +223,6 @@ class EdexShell {
       out.push(`${C.fg}║${C.reset}${pad(files[i], W - 2)}${C.fg}║${C.reset}\n`);
     }
     out.push(`${C.fg}╚${hline(W - 2, "═")}╝${C.reset}\n`);
-
-    // logo whisper
-    for (const line of LOGO) {
-      out.push(`${C.dim}${C.accent}${pad(line, W, "center")}${C.reset}\n`);
-    }
-
-    const tip =
-      this.lang === "ko"
-        ? "명령 입력 · lang ko|en · /h · exit"
-        : "enter command · lang ko|en · /h · exit";
-    out.push(`${C.mute}${pad(tip, W, "center")}${C.reset}\n`);
 
     process.stdout.write(out.join(""));
   }
@@ -250,15 +258,21 @@ class EdexShell {
         else {
           writeLang(next);
           this.lang = next;
-          this.pushOut(next === "ko" ? "언어 → ko (한국어)" : "language → en (English)");
+          this.pushOut(next === "ko" ? "언어 → ko" : "language → en");
         }
       }
       return;
     }
 
-    // Capture kx output
+    // Capture kx output (UTF-8 forced for Windows consoles)
     ensureSetup();
     const state = readState();
+    const env = {
+      ...process.env,
+      KX_LANG: this.lang,
+      PYTHONUTF8: "1",
+      PYTHONIOENCODING: "utf-8",
+    };
     let res;
     const { spawnSync } = require("child_process");
     if (state?.kx && fs.existsSync(state.kx)) {
@@ -267,7 +281,7 @@ class EdexShell {
         encoding: "utf8",
         shell: false,
         windowsHide: true,
-        env: { ...process.env, KX_LANG: this.lang },
+        env,
       });
     } else {
       const code =
@@ -277,10 +291,10 @@ class EdexShell {
         encoding: "utf8",
         shell: isWin(),
         windowsHide: true,
-        env: { ...process.env, KX_LANG: this.lang },
+        env,
       });
     }
-    const text = `${res.stdout || ""}${res.stderr || ""}`.trimEnd();
+    const text = decodeChildText(`${res.stdout || ""}${res.stderr || ""}`).trimEnd();
     if (text) this.pushOut(text);
     else if (res.status) this.pushOut(`${C.warn}exit ${res.status}${C.reset}`);
   }
@@ -289,12 +303,7 @@ class EdexShell {
     ensureSetup();
     this.lang = readLang();
     this.locked = false;
-    this.pushOut(this.lang === "ko" ? "트론 링크 수립 · Kx HUD 온라인" : "tron link established · Kx HUD online");
-    this.pushOut(
-      this.lang === "ko"
-        ? "Ctrl+C → 잠금 · [login kx] 로 재접속 · update 로 갱신"
-        : "Ctrl+C → lock · [login kx] to resume · update to refresh"
-    );
+    // No decorative boot lines — prompt is enough
 
     const rl = readline.createInterface({
       input: process.stdin,

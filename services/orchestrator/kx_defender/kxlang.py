@@ -22,6 +22,33 @@ class KxLangError(ValueError):
     """Invalid KxLang grammar or unknown verb/object."""
 
 
+def _suggest_verbs(bad: str, verbs: dict[str, Any], limit: int = 3) -> list[str]:
+    """Closest lexicon verbs (simple edit-distance)."""
+    scored: list[tuple[int, str]] = []
+    for name in verbs:
+        dist = _edit_distance(bad, name)
+        if dist <= 2:
+            scored.append((dist, name))
+    scored.sort()
+    return [n for _, n in scored[:limit]]
+
+
+def _edit_distance(a: str, b: str) -> int:
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
 @dataclass
 class KxCommand:
     verb: str
@@ -68,7 +95,9 @@ def resolve_module(verb: str, obj: str, lexicon: dict[str, Any] | None = None) -
     verbs = lex.get("verbs", {})
     key = verb.lower()
     if key not in verbs:
-        raise KxLangError(f"unknown verb {verb!r}. try: kx lexicon")
+        suggestions = _suggest_verbs(key, verbs)
+        hint = f" did you mean: {', '.join(suggestions)}?" if suggestions else " try: kx lexicon"
+        raise KxLangError(f"unknown verb {verb!r}.{hint}")
     meta = verbs[key]
     objects = meta.get("objects", {})
     object_key = (obj or "").lower()
@@ -190,7 +219,8 @@ def parse_argv(argv: list[str], lexicon: dict[str, Any] | None = None) -> KxComm
         i += 1
 
     if scope is None:
-        raise KxLangError("--scope is required (lab|owned|pact)")
+        # Default lab/simulate so interactive `kx sentry` works; live still requires explicit flags.
+        scope = SCOPE_MAP["lab"]
     params["authorized_scope"] = scope
 
     # nexus listen convenience

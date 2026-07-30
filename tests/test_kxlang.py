@@ -11,9 +11,17 @@ def test_lexicon_has_core_verbs():
         assert v in verbs
 
 
-def test_parse_requires_scope():
-    with pytest.raises(KxLangError):
-        parse_argv(["roast", "tickets", "--sim"])
+def test_parse_defaults_scope_to_lab():
+    cmd = parse_argv(["roast", "tickets", "--sim"])
+    assert cmd.params["authorized_scope"] == "lab"
+    assert cmd.params["mode"] == "simulate"
+
+
+def test_parse_sentry_without_flags():
+    cmd = parse_argv(["sentry"])
+    assert cmd.verb == "sentry"
+    assert cmd.params["authorized_scope"] == "lab"
+    assert cmd.params["mode"] == "simulate"
 
 
 def test_parse_roast_and_run():
