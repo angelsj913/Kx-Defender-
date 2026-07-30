@@ -73,7 +73,7 @@ function installGlobal() {
   const userPrefix = path.join(os.homedir(), ".local");
   const attempts = [
     ["install", "-g", ROOT],
-    ["install", "-g", "--prefix", userPrefix, ROOT],
+    ["install", "-g", "--force", "--prefix", userPrefix, ROOT],
   ];
   for (const args of attempts) {
     const res = spawnSync("npm", args, {

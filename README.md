@@ -78,36 +78,23 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 **금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
-## Install & run (npx — one command)
-
-Requires **Node.js 16+** and **Python 3.9+** on PATH.
-
-Image-style one-liner (`npx --yes <pkg> add <name> --all -g`):
+## Install (agent skills — one short command)
 
 ```bash
-npx --yes github:angelsj913/Kx-Defender-#cursor/kx-attack-modules-7992 --all -g
+npx skills add angelsj913/Kx-Defender- --all -g
 ```
 
-```bash
-npx --yes github:angelsj913/Kx-Defender-#cursor/kx-attack-modules-7992 add . --all -g
-```
+Same shape as `npx skills add vercel-labs/portless`.  
+Installs Kx-Defender agent skills globally (`--all -g`). List without installing: `npx skills add angelsj913/Kx-Defender- -l`
 
-Same CLI shape as common skill installers — **this repo only**. Any `<name>` after `add` is format sugar; third-party skill packs are never downloaded.
+### Platform runtime (optional)
 
-What it does: Python env + package install → optional global `kx` / `kx-defender` shims → Console at `http://127.0.0.1:8787/`.
-
-Local clone:
+Requires **Node.js 16+** and **Python 3.9+**. From a clone:
 
 ```bash
 npm install && npm start
-```
-
-Useful:
-
-```bash
-npx --yes github:angelsj913/Kx-Defender-#cursor/kx-attack-modules-7992 --all -g --no-serve
-npx --yes github:angelsj913/Kx-Defender-#cursor/kx-attack-modules-7992 kx /h
-npx --yes github:angelsj913/Kx-Defender-#cursor/kx-attack-modules-7992 serve --bind 127.0.0.1:9090
+# Console: http://127.0.0.1:8787/
+kx /h
 npm test
 ```
 
