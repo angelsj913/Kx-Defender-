@@ -82,12 +82,18 @@ function Invoke-KxNode {
 function global:kx {
     param([Parameter(ValueFromRemainingArguments = $true)]$CommandArgs)
     if (-not $CommandArgs -or $CommandArgs.Count -eq 0) {
-        Invoke-KxNode kx /h
+        # Bare `kx` starts the program (HUD)
+        Invoke-KxNode
         return
     }
     # kx update → updater
     if ($CommandArgs.Count -ge 1 -and ($CommandArgs[0] -eq "update" -or $CommandArgs[0] -eq "upgrade")) {
         Invoke-KxNode update
+        return
+    }
+    # kx login → re-enter HUD
+    if ($CommandArgs.Count -ge 1 -and $CommandArgs[0] -eq "login") {
+        Invoke-KxNode login kx
         return
     }
     Invoke-KxNode kx @CommandArgs

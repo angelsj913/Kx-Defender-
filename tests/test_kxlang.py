@@ -124,8 +124,9 @@ def test_lang_get_set(capsys, tmp_path, monkeypatch):
         kx_main(["/h"])
     assert exc.value.code == 0
     help_out = capsys.readouterr().out
-    assert "사용법:" in help_out
+    assert "Usage:" in help_out
     assert "kx lang" in help_out
+    assert "사용법:" not in help_out
 
     with pytest.raises(SystemExit) as exc:
         kx_main(["lang", "en"])

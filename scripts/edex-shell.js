@@ -244,6 +244,8 @@ class EdexShell {
 
     let args = splitArgs(trimmed);
     if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
+    // Bare `kx` or empty → English help
+    if (!args.length) args = ["/h"];
 
     const head = (args[0] || "").toLowerCase();
     if (head === "lang" || head === "language" || head === "locale" || args[0] === "언어") {

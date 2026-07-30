@@ -35,9 +35,10 @@ function printHelp() {
   console.log(`Kx-Defender (eDEX HUD in PowerShell)
 
 PowerShell:
+  kx                          # start Kx-Defender (HUD)
   npx -y --prefer-online angelsj913/Kx-Defender-
-  login kx                  # re-enter after Ctrl+C / exit
-  [login kx]                # same (PowerShell function)
+  login kx                    # re-enter after Ctrl+C / exit
+  [login kx]                  # same
 
 HUD:
   Ctrl+C           lock session → type [login kx]
@@ -45,7 +46,8 @@ HUD:
   /h | lang ko|en | exit
 
 One-shot:
-  npx -y --prefer-online angelsj913/Kx-Defender- kx /h
+  kx /h
+  kx roast tickets --scope lab --sim
   npx -y --prefer-online angelsj913/Kx-Defender- update
 
 Optional:
@@ -240,9 +242,19 @@ function main() {
   }
 
   if (cmd === "kx") {
-    // Support: kx update | kx lang ...
+    // Bare: kx → already handled; here positional was "kx" with rest
+    if (rest.length === 0) {
+      runProgram(flags);
+      return;
+    }
     if ((rest[0] || "").toLowerCase() === "update" || (rest[0] || "").toLowerCase() === "upgrade") {
       require("./kx-update").updateKx();
+      return;
+    }
+    if ((rest[0] || "").toLowerCase() === "login") {
+      setupSync();
+      installUserShims();
+      startEdexShell();
       return;
     }
     ensureSetup();
