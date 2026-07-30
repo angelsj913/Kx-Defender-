@@ -618,11 +618,19 @@ def _emit_ioc(args: list[str]) -> int:
         _print_json({"cleared": n})
         return 0
     if sub == "load":
+        _lg = get_lang()
         if len(rest) < 2:
-            print(t("usage: kx ioc load <path> [--name <basename>]",
-                    "사용법: kx ioc load <path> [--name <basename>]", get_lang()),
-                  file=sys.stderr)
-            return 2
+            print(t("IOC file path", "IOC 파일 경로", _lg), end=": ", file=sys.stderr)
+            sys.stderr.flush()
+            try:
+                path_input = sys.stdin.readline().strip()
+            except (EOFError, KeyboardInterrupt):
+                return 2
+            if not path_input:
+                print(t("usage: kx ioc load <path> [--name <basename>]",
+                        "사용법: kx ioc load <path> [--name <basename>]", _lg), file=sys.stderr)
+                return 2
+            rest.append(path_input)
         src = _Path(rest[1]).expanduser().resolve()
         name = None
         if len(rest) >= 4 and rest[2] == "--name":
@@ -659,11 +667,20 @@ def _emit_export(args: list[str]) -> int:
     from kx_defender.exporter import export  # noqa: PLC0415
 
     rest = args[1:]
+    _lg = get_lang()
     if not rest:
-        print(t("usage: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]",
-                "사용법: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]",
-                get_lang()), file=sys.stderr)
-        return 2
+        print(t("Export source (alerts|runs|all)", "내보낼 데이터 (alerts|runs|all)", _lg), end=": ", file=sys.stderr)
+        sys.stderr.flush()
+        try:
+            source_input = sys.stdin.readline().strip()
+        except (EOFError, KeyboardInterrupt):
+            return 2
+        if not source_input or source_input.lower() not in {"alerts", "runs", "all"}:
+            print(t("usage: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]",
+                    "사용법: kx export <alerts|runs|all> [--format json|jsonl|csv] [--out <path>]", _lg),
+                  file=sys.stderr)
+            return 2
+        rest.append(source_input)
     source = rest[0].lower()
     fmt = "json"
     out_path = None
@@ -687,12 +704,21 @@ def _emit_watch_fs(args: list[str]) -> int:
     from pathlib import Path as _Path  # noqa: PLC0415
     from kx_defender.fswatch import KxFsWatch  # noqa: PLC0415
 
-    rest = args[2:] if len(args) >= 2 and args[1] == "fs" else []
+    rest = args[2:] if len(args) >= 2 and args[1].lower() == "fs" else []
+    _lg = get_lang()
     if not rest:
-        print(t("usage: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]",
-                "사용법: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]",
-                get_lang()), file=sys.stderr)
-        return 2
+        print(t("Directory to watch", "감시할 디렉터리", _lg), end=": ", file=sys.stderr)
+        sys.stderr.flush()
+        try:
+            dir_input = sys.stdin.readline().strip()
+        except (EOFError, KeyboardInterrupt):
+            return 2
+        if not dir_input:
+            print(t("usage: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]",
+                    "사용법: kx watch fs <dir> [--interval N] [--iter N] [--include GLOB] [--no-scan]", _lg),
+                  file=sys.stderr)
+            return 2
+        rest.append(dir_input)
     root = _Path(rest[0]).expanduser().resolve()
     if not root.is_dir():
         print(t(f"KxLang error: not a directory: {root}",
@@ -707,11 +733,17 @@ def _emit_watch_fs(args: list[str]) -> int:
         tok = rest[i]
         if tok == "--interval" and i + 1 < len(rest):
             try: interval = float(rest[i + 1])
-            except ValueError: pass
+            except ValueError:
+                print(t(f"warning: invalid interval value {rest[i + 1]!r}, using default {15.0}",
+                        f"경고: 잘못된 interval 값 {rest[i + 1]!r}, 기본값 {15.0} 사용",
+                        get_lang()), file=sys.stderr)
             i += 2; continue
         if tok == "--iter" and i + 1 < len(rest):
             try: max_iter = max(1, int(rest[i + 1]))
-            except ValueError: pass
+            except ValueError:
+                print(t(f"warning: invalid iter value {rest[i + 1]!r}, ignoring",
+                        f"경고: 잘못된 iter 값 {rest[i + 1]!r}, 무시됨",
+                        get_lang()), file=sys.stderr)
             i += 2; continue
         if tok == "--include" and i + 1 < len(rest):
             include = rest[i + 1]
@@ -897,7 +929,7 @@ def _emit_ask(args: list[str]) -> int:
         augmented.append("--sim")
 
     print(t(f"\n[Kx] Executing: kx {' '.join(augmented)}\n",
-            f"\n[Kx] 실행: kx {' '.join(augmented)}\n", get_lang()), file=sys.stderr)
+            f"\n[Kx] 실행: kx {' '.join(augmented)}\n", _lg), file=sys.stderr)
     return _run_parsed(augmented, pretty=True)
 
 
@@ -995,7 +1027,7 @@ def main(argv: list[str] | None = None) -> None:
 
     if head == "serve":
         print(t("KxLang error: web console removed. Use native client: kx",
-                "KxLang 오류: 웹 콘솔은 제거되었습니다. 네이티브 클라이언트를 사용하세요: kx"),
+                "KxLang 오류: 웹 콘솔은 제거되었습니다. 네이티브 클라이언트를 사용하세요: kx", get_lang()),
               file=sys.stderr)
         raise SystemExit(2)
 
