@@ -233,15 +233,17 @@ def _emit_suggest(args: list[str]) -> int:
 
 
 def _emit_why(args: list[str]) -> int:
-    """`kx why <pid>` — explain a process's KxScore reasons.
+    """`kx why <pid> [--tree]` — explain a process's KxScore reasons.
 
     Runs the same scoring pipeline as `kx watch procs` but filters to a single
-    PID and renders a focused evidence view. No external tools involved — pure
-    local process inspection via KxWatch + KxScore.
+    PID and renders a focused evidence view. With --tree, also shows the
+    ancestor chain and direct children.
     """
     rest = args[1:]
+    show_tree = "--tree" in rest
+    rest = [a for a in rest if a != "--tree"]
     if not rest:
-        print("usage: kx why <pid>", file=sys.stderr)
+        print("usage: kx why <pid> [--tree]", file=sys.stderr)
         return 2
     try:
         target_pid = int(rest[0])
@@ -249,21 +251,21 @@ def _emit_why(args: list[str]) -> int:
         print(f"KxLang error: pid must be integer, got {rest[0]!r}", file=sys.stderr)
         return 2
 
-    # Reuse the process_monitor module for consistency
     orch = Orchestrator()
     result = orch.run("process_monitor", {
         "authorized_scope": "lab",
         "mode": "execute" if platform.system() != "unknown" else "simulate",
-        "limit": 500,
+        "limit": 1000,
     })
     procs = (result.artifacts or {}).get("processes", [])
-    match = next((p for p in procs if p.get("pid") == target_pid), None)
+    by_pid = {p.get("pid"): p for p in procs}
+    match = by_pid.get(target_pid)
     if match is None:
         print(f"KxLang error: pid {target_pid} not found in current snapshot", file=sys.stderr)
         print(f"(scanned {len(procs)} processes; try `kx watch procs` first)", file=sys.stderr)
         return 2
 
-    from kx_defender.render import _color_enabled, _c, _dump_evidence  # noqa: PLC0415
+    from kx_defender.render import _color_enabled, _c, render_process_tree  # noqa: PLC0415
     use_color = _color_enabled(None)
     reset = _c("reset", use_color)
     orange = _c("orange", use_color)
@@ -295,7 +297,197 @@ def _emit_why(args: list[str]) -> int:
             print(f"    {red}·{reset} {r}")
     else:
         print(f"  {muted}(no elevated-risk reasons — process appears benign){reset}")
+
+    if show_tree:
+        # Ancestors: walk ppid up to root (bounded to avoid cycles).
+        ancestors: list[dict] = []
+        seen = {target_pid}
+        cursor = match
+        for _ in range(20):
+            parent_pid = cursor.get("ppid")
+            if not parent_pid or parent_pid in seen:
+                break
+            parent = by_pid.get(parent_pid)
+            if parent is None:
+                break
+            ancestors.append(parent)
+            seen.add(parent_pid)
+            cursor = parent
+        # Children: direct only.
+        children = [p for p in procs if p.get("ppid") == target_pid]
+
+        print()
+        print(f"  {orange}ANCESTOR CHAIN{reset}  ({len(ancestors)})")
+        for i, a in enumerate(reversed(ancestors), start=1):
+            indent = "  " * (i - 1)
+            print(f"    {indent}pid={accent}{a.get('pid')}{reset}  {a.get('name','?')}")
+        # Show target itself as the last leaf of the chain
+        indent = "  " * len(ancestors)
+        print(f"    {indent}pid={red}{target_pid}{reset}  {match.get('name','?')}  {muted}(target){reset}")
+
+        print()
+        print(f"  {orange}DIRECT CHILDREN{reset}  ({len(children)})")
+        if not children:
+            print(f"    {muted}(none){reset}")
+        else:
+            focus_pids = {target_pid} | {c.get("pid") for c in children}
+            focus_procs = [p for p in procs if p.get("pid") in focus_pids]
+            # Reuse the widget: renders target as root, children indented.
+            sub_text = render_process_tree(focus_procs, alert_count=0, color=use_color)
+            for line in sub_text.splitlines()[1:]:  # skip the header line
+                print(f"  {line}")
     return 0
+
+
+def _emit_report(args: list[str]) -> int:
+    """`kx report [daily|weekly|hours N] [--json|--text|--markdown]`
+
+    Aggregates the local alerts.jsonl over a time window. All I/O local.
+    """
+    from kx_defender.report import (  # noqa: PLC0415
+        load_alerts, render_markdown, render_text, summarize,
+    )
+
+    rest = args[1:]
+    hours = 24.0
+    fmt = "text"
+    i = 0
+    while i < len(rest):
+        tok = rest[i].lower()
+        if tok == "daily": hours = 24.0
+        elif tok == "weekly": hours = 24.0 * 7
+        elif tok == "hourly": hours = 1.0
+        elif tok == "hours" and i + 1 < len(rest):
+            try: hours = max(0.1, float(rest[i + 1]))
+            except ValueError: pass
+            i += 1
+        elif tok == "--json": fmt = "json"
+        elif tok == "--text": fmt = "text"
+        elif tok in {"--markdown", "--md"}: fmt = "markdown"
+        i += 1
+
+    summary = summarize(load_alerts(), hours=hours)
+    if fmt == "json":
+        _print_json(summary)
+    elif fmt == "markdown":
+        print(render_markdown(summary))
+    else:
+        print(render_text(summary))
+    return 0
+
+
+def _emit_daemon(args: list[str]) -> int:
+    """`kx daemon start|stop|status|config`
+
+    Manages the background watcher process. All state local (~/.kx-defender).
+    """
+    from kx_defender.daemon import (  # noqa: PLC0415
+        CONFIG_PATH, PID_PATH, daemon_start, daemon_status, daemon_stop,
+        load_config, save_config,
+    )
+
+    rest = args[1:]
+    if not rest:
+        print("usage: kx daemon start|stop|status|config", file=sys.stderr)
+        return 2
+    sub = rest[0].lower()
+
+    if sub == "status":
+        _print_json(daemon_status())
+        return 0
+
+    if sub == "stop":
+        _print_json(daemon_stop())
+        return 0
+
+    if sub == "config":
+        # `kx daemon config` prints; `kx daemon config KEY VALUE ...` sets.
+        cfg = load_config()
+        if len(rest) == 1:
+            _print_json({"path": str(CONFIG_PATH), "config": cfg})
+            return 0
+        kv = rest[1:]
+        if len(kv) % 2 != 0:
+            print("usage: kx daemon config <key> <value> [<key> <value> ...]", file=sys.stderr)
+            return 2
+        for i in range(0, len(kv), 2):
+            key, raw = kv[i], kv[i + 1]
+            if key not in cfg:
+                print(f"unknown config key: {key}", file=sys.stderr)
+                return 2
+            cfg[key] = _coerce_value(cfg[key], raw)
+        save_config(cfg)
+        _print_json({"path": str(CONFIG_PATH), "config": cfg})
+        return 0
+
+    if sub == "start":
+        # Optional inline overrides: `kx daemon start interval 60 min_severity high`
+        overrides: dict[str, Any] = {}
+        kv = rest[1:]
+        if len(kv) % 2 == 0:
+            base = load_config()
+            for i in range(0, len(kv), 2):
+                key, raw = kv[i], kv[i + 1]
+                if key in base:
+                    overrides[key] = _coerce_value(base[key], raw)
+        cfg = load_config()
+        cfg.update(overrides)
+        result = daemon_start(cfg)
+        _print_json(result)
+        return 0 if result.get("started") else 2
+
+    print(f"unknown daemon subcommand: {sub}", file=sys.stderr)
+    return 2
+
+
+def _coerce_value(existing: Any, raw: str) -> Any:
+    """Coerce CLI string to the type of the existing config value."""
+    if isinstance(existing, bool):
+        return raw.strip().lower() in {"1", "true", "yes", "on"}
+    if isinstance(existing, int) and not isinstance(existing, bool):
+        try: return int(raw)
+        except ValueError: return existing
+    if isinstance(existing, float):
+        try: return float(raw)
+        except ValueError: return existing
+    return raw
+
+
+def _emit_sig_meta(args: list[str]) -> int:
+    """`kx sig import <path>` / `kx sig list` / `kx sig catalog`."""
+    from datetime import datetime, timezone  # noqa: PLC0415
+    from pathlib import Path as _Path  # noqa: PLC0415
+    from modules.engines.kxsig import (  # noqa: PLC0415
+        import_user_rules, list_user_rule_files, summarize_rule_catalog,
+    )
+
+    rest = args[1:]
+    if not rest:
+        print("usage: kx sig import <path> | kx sig list | kx sig catalog", file=sys.stderr)
+        return 2
+    sub = rest[0].lower()
+
+    if sub == "catalog":
+        _print_json(summarize_rule_catalog())
+        return 0
+    if sub == "list":
+        _print_json({"user_files": list_user_rule_files()})
+        return 0
+    if sub == "import":
+        if len(rest) < 2:
+            print("usage: kx sig import <path> [--name <basename>]", file=sys.stderr)
+            return 2
+        src = _Path(rest[1]).expanduser().resolve()
+        name = None
+        if len(rest) >= 4 and rest[2] == "--name":
+            name = rest[3]
+        os.environ["KX_IMPORT_TS"] = datetime.now(timezone.utc).isoformat()
+        outcome = import_user_rules(src, name=name)
+        _print_json(outcome)
+        return 0 if outcome.get("imported") else 2
+
+    print(f"unknown sig subcommand: {sub}", file=sys.stderr)
+    return 2
 
 
 def _emit_alert(args: list[str]) -> int:
@@ -527,6 +719,15 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_why(args))
     if head == "alert" or head == "alerts":
         raise SystemExit(_emit_alert(args))
+    if head == "report":
+        raise SystemExit(_emit_report(args))
+    if head == "daemon":
+        raise SystemExit(_emit_daemon(args))
+
+    # `kx sig import|list|catalog` are meta commands. `kx sig scan|file` are
+    # KxLang verb.object invocations and must fall through to parse_argv.
+    if head == "sig" and len(args) >= 2 and args[1].lower() in {"import", "list", "catalog"}:
+        raise SystemExit(_emit_sig_meta(args))
 
     # `kx watch procs --continuous [--interval N] [--min-severity high]`
     # runs the polling loop in-process. All other `kx watch` invocations fall
