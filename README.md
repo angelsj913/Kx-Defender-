@@ -78,22 +78,32 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 **금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
-## Install (agent skills — one short command)
+## Install
 
 ```bash
-npx skills add angelsj913/Kx-Defender- --all -g
+npx --yes kx-defender add --all -g
 ```
 
-Same shape as `npx skills add vercel-labs/portless`.  
-Installs Kx-Defender agent skills globally (`--all -g`). List without installing: `npx skills add angelsj913/Kx-Defender- -l`
+Installs bundled agent skills into `~/.agents/skills` and `~/.cursor/skills`.  
+Quiet output — no GitHub Source banner, no Eve/PromptScript errors.
+
+Equivalents:
+
+```bash
+npx --yes kx-defender --all -g
+node scripts/npx-entry.js add --all -g
+```
+
+> Do **not** use the third-party `npx skills add …` CLI for this repo — it always prints a GitHub Source line and fails on agents that lack global skill support (Eve, PromptScript).
 
 ### Platform runtime (optional)
 
-Requires **Node.js 16+** and **Python 3.9+**. From a clone:
+Requires **Node.js 16+** and **Python 3.9+**:
 
 ```bash
+npx --yes kx-defender setup
+# or from a clone:
 npm install && npm start
-# Console: http://127.0.0.1:8787/
 kx /h
 npm test
 ```

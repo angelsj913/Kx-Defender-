@@ -1,7 +1,7 @@
 {
   "name": "kx-defender",
-  "version": "0.1.2",
-  "description": "Kx-Defender — self-built attack/defense platform (KxLang). Install skills: npx skills add angelsj913/Kx-Defender- --all -g",
+  "version": "0.1.3",
+  "description": "Kx-Defender — self-built attack/defense platform (KxLang). Install: npx --yes kx-defender add --all -g",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=16"
@@ -24,13 +24,14 @@
     "LICENSE",
     "NOTICE"
   ],
+  "preferGlobal": true,
   "scripts": {
-    "postinstall": "node scripts/npm-setup.js",
     "setup": "node scripts/npm-setup.js",
     "start": "node scripts/npm-start.js",
     "kx": "node scripts/npm-kx.js",
     "help": "node scripts/npm-kx.js /h",
-    "test": "node scripts/npm-test.js"
+    "test": "node scripts/npm-test.js",
+    "skills": "node scripts/install-agent-skills.js --all -g"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,7 @@
     "kxlang",
     "security",
     "self-built",
-    "npx"
+    "npx",
+    "skills"
   ]
 }
