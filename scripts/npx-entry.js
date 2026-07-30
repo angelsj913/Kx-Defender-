@@ -32,27 +32,24 @@ const { startKxShell } = require("./kx-shell");
 
 function printHelp() {
   printKxBanner();
-  console.log(`Kx-Defender (eDEX HUD in PowerShell)
+  console.log(`Kx DEFCOM — native Operator Client (PowerShell / terminal)
 
-PowerShell:
-  kx                          # start Kx-Defender (HUD)
+  kx                              start client
   npx -y --prefer-online angelsj913/Kx-Defender-
-  login kx                    # re-enter after Ctrl+C / exit
-  [login kx]                  # same
 
-HUD:
-  Ctrl+C           lock session → type [login kx]
-  update           pull latest without full reinstall
-  /h | lang ko|en | exit
+Client:
+  Ctrl+C     lock · type kx to resume
+  update     refresh without reinstall
+  /h         help · exit
 
 One-shot:
   kx /h
   kx roast tickets --scope lab --sim
-  npx -y --prefer-online angelsj913/Kx-Defender- update
+  kx update
 
-Optional:
-  --serve     Web Console
-  --classic   Plain shell
+Optional (not the primary UI):
+  --serve    minimal local page pointing you back to the client
+  --classic  plain shell
 `);
 }
 
@@ -132,11 +129,13 @@ function installUserShims() {
   const entry = path.join(root, "scripts", "npx-entry.js");
   const kxJs = path.join(root, "scripts", "npm-kx.js");
   const shellJs = path.join(root, "scripts", "kx-shell.js");
+  const edexJs = path.join(root, "scripts", "kx-client.js");
   const updateJs = path.join(root, "scripts", "kx-update.js");
 
   if (isWin()) {
     fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${kxJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-defender.cmd"), `@node "${entry}" %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-client.cmd"), `@node "${edexJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-shell.cmd"), `@node "${shellJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "login-kx.cmd"), `@node "${entry}" login kx %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-update.cmd"), `@node "${updateJs}" %*\r\n`);
@@ -144,6 +143,7 @@ function installUserShims() {
     for (const [name, target, prefix] of [
       ["kx", kxJs, ""],
       ["kx-defender", entry, ""],
+      ["kx-client", edexJs, ""],
       ["kx-shell", shellJs, ""],
       ["login-kx", entry, "login kx "],
       ["kx-update", updateJs, ""],
@@ -220,7 +220,7 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  console.log(`[Kx] Starting Kx-Defender v${SETUP_VERSION} (CLI shell)...`);
+  console.log(`[Kx] Starting DEFCOM Operator Client v${SETUP_VERSION}...`);
   setupSync();
   installUserShims();
   if (flags.serve) {

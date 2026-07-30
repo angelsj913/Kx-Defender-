@@ -69,51 +69,15 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 | `compliance` | 7 | CMMC, PCI-DSS, NERC CIP, ... |
 | `building_defense` | 31 | defensive `building-*` blueprints |
 
-## Install & run (PowerShell eDEX HUD)
+## Install & run (native Operator Client)
 
 ```powershell
-npx clear-npx-cache; npx -y --prefer-online angelsj913/Kx-Defender-
-# after first install, refresh without reinstall:
+npx clear-npx-cache
 npx -y --prefer-online angelsj913/Kx-Defender- update
+kx
 ```
 
-CLI stability PRD: [`docs/prd/kx-cli-stability.md`](docs/prd/kx-cli-stability.md)
-
-```
- kx> /h
- kx> lang ko
- kx> sentry
- kx> roast tickets --realm lab.local
- kx> update
- kx> exit
-```
-
-### Session lock & re-login
-
-| Action | Command |
-|---|---|
-| Lock session | `Ctrl+C` |
-| Re-enter HUD | `login kx` or `[login kx]` |
-| Update without reinstall | `update` / `kx update` / `npx -y --prefer-online angelsj913/Kx-Defender- update` |
-
-Persistent install lives under `~/.kx-defender/app`. Shims: `login-kx`, `kx-update` (PATH: `%LOCALAPPDATA%\Kx-Defender\bin`).
-
-Plain shell: `--classic` · Web Console: `serve`
-
-One-shot:
-
-```powershell
-npx -y --prefer-online angelsj913/Kx-Defender- kx /h
-npx -y --prefer-online angelsj913/Kx-Defender- kx roast tickets --scope lab --sim
-npx -y --prefer-online angelsj913/Kx-Defender- update
-npx -y --prefer-online angelsj913/Kx-Defender- login kx
-```
-
-Optional web Console (only when requested):
-
-```powershell
-npx -y --prefer-online angelsj913/Kx-Defender- serve
-```
+Primary UI is the **terminal client** (not a web app). Window title: `Kx DEFCOM Client`.
 
 Also: `irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex`
 

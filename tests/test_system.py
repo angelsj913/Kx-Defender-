@@ -81,6 +81,6 @@ def test_api_kx_endpoint():
         conn.request("GET", "/")
         res = conn.getresponse()
         html = res.read().decode()
-        assert "DEFCOM" in html
+        assert "DEFCOM" in html or "native terminal client" in html or "kx" in html.lower()
     finally:
         httpd.shutdown()

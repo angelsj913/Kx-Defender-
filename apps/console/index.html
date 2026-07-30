@@ -3,100 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kx DEFCOM Operator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Orbitron:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/console.css" />
+  <title>Kx DEFCOM — use the client</title>
+  <style>
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      background: #02040a; color: #00ffd0;
+      font-family: Consolas, "Cascadia Mono", monospace;
+    }
+    main { max-width: 36rem; padding: 2rem; text-align: center; }
+    h1 { letter-spacing: 0.2em; font-size: 1.1rem; }
+    p { color: #8ab; line-height: 1.6; }
+    code { color: #ffb000; }
+  </style>
 </head>
 <body>
-  <div class="atmosphere" aria-hidden="true">
-    <div class="grid-floor"></div>
-    <div class="scan"></div>
-    <div class="vignette"></div>
-  </div>
-
-  <header class="mast">
-    <div class="brand-block">
-      <pre class="logo" aria-label="KX">  _  __
- | |/ /__  __
- | ' &lt;/\\ \\/ /
- |_|\\_\\\\_/\\_\\</pre>
-      <div class="brand-meta">
-        <h1>DEFCOM</h1>
-        <p class="sub">OPERATOR CONSOLE</p>
-      </div>
-    </div>
-    <div class="mast-right">
-      <label class="field">SCOPE
-        <select id="scope">
-          <option value="lab">LAB</option>
-          <option value="owned">OWNED</option>
-          <option value="pact">PACT</option>
-        </select>
-      </label>
-      <label class="field">MODE
-        <select id="mode">
-          <option value="sim">SIM</option>
-          <option value="live">LIVE</option>
-        </select>
-      </label>
-      <span id="health" class="pulse">OFFLINE</span>
-    </div>
-  </header>
-
-  <section class="cli-bar">
-    <div class="prompt">kx&gt;</div>
-    <input id="cmd" autocomplete="off" spellcheck="false"
-      placeholder="roast tickets --realm lab.local  ·  /h  ·  sentry" />
-    <button id="run" type="button">EXECUTE</button>
-  </section>
-
-  <main class="ops">
-    <section class="module" id="panel-sentry">
-      <header><span class="mod-id">01</span><h2>SENTRY</h2></header>
-      <div class="actions">
-        <button data-cmd="watch procs">watch procs</button>
-        <button data-cmd="sentry detect">sentry detect</button>
-        <button data-cmd="sig scan">sig scan</button>
-      </div>
-      <pre class="out" id="out-sentry">standby</pre>
-    </section>
-    <section class="module" id="panel-strike">
-      <header><span class="mod-id">02</span><h2>STRIKE</h2></header>
-      <div class="actions">
-        <button data-cmd="roast tickets --realm lab.local">roast</button>
-        <button data-cmd="relay esc8 --at adcs.lab.local">relay</button>
-        <button data-cmd="breach entra --realm contoso.lab.local">breach</button>
-        <button data-cmd="probe mind --at local-fixture">probe</button>
-      </div>
-      <pre class="out" id="out-strike">standby</pre>
-    </section>
-    <section class="module" id="panel-sweep">
-      <header><span class="mod-id">03</span><h2>SWEEP</h2></header>
-      <div class="actions">
-        <button data-cmd="sweep web --url http://127.0.0.1/">sweep web</button>
-      </div>
-      <pre class="out" id="out-sweep">standby</pre>
-    </section>
-    <section class="module" id="panel-nexus">
-      <header><span class="mod-id">04</span><h2>NEXUS</h2></header>
-      <div class="actions">
-        <button data-cmd="nexus status">status</button>
-        <button data-cmd="nexus listen --bind 127.0.0.1:4455">listen</button>
-      </div>
-      <pre class="out" id="out-nexus">standby</pre>
-    </section>
-    <section class="module wide" id="panel-ledger">
-      <header>
-        <span class="mod-id">05</span>
-        <h2>LEDGER</h2>
-        <button id="refresh" type="button" class="ghost">REFRESH</button>
-      </header>
-      <pre class="out" id="out-ledger">loading…</pre>
-    </section>
+  <main>
+    <h1>KX DEFCOM</h1>
+    <p>The product UI is the <strong>native terminal client</strong>, not this page.</p>
+    <p>In PowerShell run:</p>
+    <p><code>kx</code></p>
+    <p>or</p>
+    <p><code>npx -y --prefer-online angelsj913/Kx-Defender-</code></p>
   </main>
-
-  <script src="/assets/console.js"></script>
 </body>
 </html>

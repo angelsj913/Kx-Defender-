@@ -38,14 +38,12 @@ function Enable-KxConsoleTheme {
 function Show-KxBanner {
     $banner = @"
 
-██╗  ██╗██╗  ██╗
-██║ ██╔╝╚██╗██╔╝
-█████╔╝  ╚███╔╝
-██╔═██╗  ██╔██╗
-██║  ██╗██╔╝ ██╗
-╚═╝  ╚═╝╚═╝  ╚═╝
-  DEFENDER
-────────────────────────────────────────
+  _  __
+ | |/ /__  __
+ | ' </\ \/ /
+ |_|\_\\_/\_\
+  DEFCOM OPERATOR CLIENT
+----------------------------------------
 
 "@
     Write-Host $banner -ForegroundColor Cyan
@@ -197,7 +195,7 @@ if (Test-Path -LiteralPath $binDir) {
     $env:PATH = "$binDir;$env:PATH"
 }
 
-Write-Host "[Kx] Ctrl+C → type anything with kx to resume  |  update" -ForegroundColor DarkCyan
+Write-Host "[Kx] Native operator client  ·  Ctrl+C → type kx to resume  ·  update" -ForegroundColor DarkCyan
 Write-Host ""
 
 if ($SkillsOnly) {
