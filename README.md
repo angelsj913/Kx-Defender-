@@ -81,8 +81,19 @@ Tron/eDEX-style multi-panel HUD inside the terminal (SYS / MAIN / NET + filesyst
  kx> /h
  kx> lang ko
  kx> roast tickets --scope lab --sim
+ kx> update
  kx> exit
 ```
+
+### Session lock & re-login
+
+| Action | Command |
+|---|---|
+| Lock session | `Ctrl+C` |
+| Re-enter HUD | `login kx` or `[login kx]` |
+| Update without reinstall | `update` / `kx update` / `npx -y --prefer-online angelsj913/Kx-Defender- update` |
+
+Persistent install lives under `~/.kx-defender/app`. Shims: `login-kx`, `kx-update` (PATH: `%LOCALAPPDATA%\Kx-Defender\bin`).
 
 Plain shell: `--classic` · Web Console: `serve`
 
@@ -91,6 +102,8 @@ One-shot:
 ```powershell
 npx -y --prefer-online angelsj913/Kx-Defender- kx /h
 npx -y --prefer-online angelsj913/Kx-Defender- kx roast tickets --scope lab --sim
+npx -y --prefer-online angelsj913/Kx-Defender- update
+npx -y --prefer-online angelsj913/Kx-Defender- login kx
 ```
 
 Optional web Console (only when requested):

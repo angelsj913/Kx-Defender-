@@ -18,7 +18,9 @@ param(
     [switch]$Classic,
     [string]$Bind = "127.0.0.1:8787",
     [switch]$SkillsOnly,
-    [switch]$Fresh
+    [switch]$Fresh,
+    [switch]$Update,
+    [switch]$LoginOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,10 +33,6 @@ function Enable-KxConsoleTheme {
     } catch {
         # Windows Terminal / non-classic hosts may ignore RawUI colors
     }
-    # Enable VT sequences on Windows 10+ when possible
-    try {
-        $null = & cmd /c "echo." 2>$null
-    } catch { }
 }
 
 function Show-KxBanner {
@@ -53,6 +51,108 @@ function Show-KxBanner {
     Write-Host $banner -ForegroundColor Cyan
 }
 
+function Get-KxRepoRoot {
+    if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "package.json"))) {
+        return $PSScriptRoot
+    }
+    if ($PSScriptRoot) {
+        $parent = Split-Path -Parent $PSScriptRoot
+        if (Test-Path (Join-Path $parent "package.json")) { return $parent }
+    }
+    $app = Join-Path $env:USERPROFILE ".kx-defender\app"
+    if (Test-Path (Join-Path $app "package.json")) { return $app }
+    return $null
+}
+
+function Invoke-KxNode {
+    param([Parameter(ValueFromRemainingArguments = $true)]$NodeArgs)
+    $repoRoot = Get-KxRepoRoot
+    $binDir = Join-Path $env:LOCALAPPDATA "Kx-Defender\bin"
+    if (Test-Path -LiteralPath $binDir) {
+        $env:PATH = "$binDir;$env:PATH"
+    }
+    if ($repoRoot -and (Test-Path (Join-Path $repoRoot "scripts\npx-entry.js"))) {
+        & node (Join-Path $repoRoot "scripts\npx-entry.js") @NodeArgs
+        return $LASTEXITCODE
+    }
+    & npx -y --prefer-online angelsj913/Kx-Defender- @NodeArgs
+    return $LASTEXITCODE
+}
+
+function global:kx {
+    param([Parameter(ValueFromRemainingArguments = $true)]$CommandArgs)
+    if (-not $CommandArgs -or $CommandArgs.Count -eq 0) {
+        Invoke-KxNode kx /h
+        return
+    }
+    # kx update → updater
+    if ($CommandArgs.Count -ge 1 -and ($CommandArgs[0] -eq "update" -or $CommandArgs[0] -eq "upgrade")) {
+        Invoke-KxNode update
+        return
+    }
+    Invoke-KxNode kx @CommandArgs
+}
+
+function global:login {
+    param(
+        [Parameter(Position = 0)]
+        [string]$Target = "kx",
+        [Parameter(ValueFromRemainingArguments = $true)]$Rest
+    )
+    if ($Target -match '^(kx|\[kx\]|kx\])$' -or $Target -eq "" -or $null -eq $Target) {
+        Write-Host "[Kx] login kx — re-entering HUD..." -ForegroundColor DarkCyan
+        Invoke-KxNode login kx
+        return
+    }
+    Write-Host "[Kx] use: login kx   or   [login kx]" -ForegroundColor Yellow
+}
+
+# Allow typing: [login kx]  (PowerShell parses [login as a command name in some hosts)
+Set-Item -Path "function:global:[login" -Value {
+    param([Parameter(ValueFromRemainingArguments = $true)]$Rest)
+    $joined = (@($Rest) -join " ").Trim()
+    if ($joined -match '^kx\]?$' -or $joined -eq "" -or $joined -match '^kx') {
+        login kx
+        return
+    }
+    Write-Host "[Kx] use: [login kx]" -ForegroundColor Yellow
+} -Force -ErrorAction SilentlyContinue
+
+function global:Update-Kx {
+    Write-Host "[Kx] Updating (no full reinstall)..." -ForegroundColor DarkCyan
+    Invoke-KxNode update
+}
+
+Set-Alias -Name update -Value Update-Kx -Scope Global -Force -ErrorAction SilentlyContinue
+
+function Test-KxLoginLine {
+    param([string]$Line)
+    $s = ($Line -replace '[\[\]]', ' ').Trim().ToLower() -replace '\s+', ' '
+    return ($s -eq "login kx" -or $s -eq "login-kx" -or $s -eq "loginkx")
+}
+
+function Enter-KxLoginLoop {
+    Write-Host ""
+    Write-Host "[Kx] Session ended. Type [login kx] to re-enter, update to refresh, or exit." -ForegroundColor DarkCyan
+    while ($true) {
+        Write-Host -NoNewline "[login kx]> "
+        $line = Read-Host
+        if ($null -eq $line) { break }
+        $t = $line.Trim()
+        if ($t -match '^(exit|quit|q)$') { break }
+        if ($t -match '^(update|upgrade|kx update)$') {
+            Update-Kx
+            continue
+        }
+        if (Test-KxLoginLine $t) {
+            Invoke-KxNode login kx
+            Write-Host "[Kx] Session ended. Type [login kx] to re-enter, or exit." -ForegroundColor DarkCyan
+            continue
+        }
+        Write-Host "  locked out — type [login kx]  |  update  |  exit" -ForegroundColor Yellow
+    }
+}
+
 Enable-KxConsoleTheme
 Show-KxBanner
 
@@ -65,35 +165,28 @@ if ($Fresh) {
     }
 }
 
-$repoRoot = $null
-if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "package.json"))) {
-    $repoRoot = $PSScriptRoot
-} elseif ($PSScriptRoot) {
-    $parent = Split-Path -Parent $PSScriptRoot
-    if (Test-Path (Join-Path $parent "package.json")) { $repoRoot = $parent }
-}
-
-function global:kx {
-    param([Parameter(ValueFromRemainingArguments = $true)]$CommandArgs)
-    if (-not $CommandArgs -or $CommandArgs.Count -eq 0) {
-        & npx -y --prefer-online angelsj913/Kx-Defender- kx /h
-        return
-    }
-    & npx -y --prefer-online angelsj913/Kx-Defender- kx @CommandArgs
-}
-
 $binDir = Join-Path $env:LOCALAPPDATA "Kx-Defender\bin"
 if (Test-Path -LiteralPath $binDir) {
     $env:PATH = "$binDir;$env:PATH"
 }
 
+Write-Host "[Kx] Tips: Ctrl+C locks HUD → type [login kx]  |  update refreshes without reinstall" -ForegroundColor DarkCyan
+Write-Host ""
+
 if ($SkillsOnly) {
-    if ($repoRoot -and (Test-Path (Join-Path $repoRoot "scripts\npx-entry.js"))) {
-        & node (Join-Path $repoRoot "scripts\npx-entry.js") add --all -g
-    } else {
-        & npx -y --prefer-online angelsj913/Kx-Defender- add --all -g
-    }
+    Invoke-KxNode add --all -g
     exit $LASTEXITCODE
+}
+
+if ($Update) {
+    Update-Kx
+    exit $LASTEXITCODE
+}
+
+if ($LoginOnly) {
+    login kx
+    Enter-KxLoginLoop
+    exit 0
 }
 
 $launchArgs = @()
@@ -106,14 +199,10 @@ if ($Serve) {
 }
 
 Write-Host "[Kx] eDEX HUD launching in this PowerShell window..." -ForegroundColor DarkCyan
-Write-Host "[Kx] Commands: /h | lang ko|en | roast tickets --scope lab --sim | exit" -ForegroundColor DarkCyan
 Write-Host ""
 
-if ($repoRoot -and (Test-Path (Join-Path $repoRoot "scripts\npx-entry.js"))) {
-    Write-Host "[Kx] Local launch: $repoRoot" -ForegroundColor DarkCyan
-    & node (Join-Path $repoRoot "scripts\npx-entry.js") @launchArgs
-    exit $LASTEXITCODE
-}
+Invoke-KxNode @launchArgs
 
-& npx -y --prefer-online angelsj913/Kx-Defender- @launchArgs
-exit $LASTEXITCODE
+# After HUD exits (Ctrl+C kill / exit), offer [login kx] re-entry without reinstall
+Enter-KxLoginLoop
+exit 0

@@ -288,29 +288,104 @@ class EdexShell {
   start() {
     ensureSetup();
     this.lang = readLang();
+    this.locked = false;
     this.pushOut(this.lang === "ko" ? "트론 링크 수립 · Kx HUD 온라인" : "tron link established · Kx HUD online");
-    this.pushOut(this.lang === "ko" ? "예: roast tickets --scope lab --sim" : "try: roast tickets --scope lab --sim");
+    this.pushOut(
+      this.lang === "ko"
+        ? "Ctrl+C → 잠금 · [login kx] 로 재접속 · update 로 갱신"
+        : "Ctrl+C → lock · [login kx] to resume · update to refresh"
+    );
 
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
       terminal: true,
     });
+    this._rl = rl;
 
-    const loop = () => {
+    const isLogin = (line) => {
+      const s = String(line || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\[\]]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return s === "login kx" || s === "login-kx" || s === "loginkx";
+    };
+
+    let ask = () => {};
+    const softLock = () => {
+      if (this.locked) {
+        process.stdout.write(
+          `\n${C.warn}[Kx] still locked — type [login kx]${C.reset}\n`
+        );
+        ask();
+        return;
+      }
+      this.locked = true;
+      this.history = [];
+      this.pushOut(this.lang === "ko" ? "링크 잠금 (Ctrl+C)" : "link locked (Ctrl+C)");
+      this.pushOut(this.lang === "ko" ? "재접속: [login kx]" : "resume: [login kx]");
+      ask();
+    };
+
+    ask = () => {
       this.renderFrame();
-      rl.question(`${C.accent}${C.bold} kx>${C.reset} `, (line) => {
+      const prompt = this.locked
+        ? `${C.warn}${C.bold} [login kx]>${C.reset} `
+        : `${C.accent}${C.bold} kx>${C.reset} `;
+      rl.question(prompt, (line) => {
         try {
+          if (this.locked) {
+            if (isLogin(line)) {
+              this.locked = false;
+              this.history = [];
+              this.pushOut(
+                this.lang === "ko" ? "로그인 성공 · HUD 재개" : "login ok · HUD resumed"
+              );
+            } else if ((line || "").trim().toLowerCase() === "exit") {
+              process.stdout.write(`\n${C.ok}[Kx] link closed${C.reset}\n`);
+              process.exit(0);
+            } else {
+              this.pushOut(
+                this.lang === "ko"
+                  ? "잠금 상태입니다. [login kx] 를 입력하세요."
+                  : "locked — type [login kx]"
+              );
+            }
+            ask();
+            return;
+          }
+
+          const trimmed = (line || "").trim();
+          const low = trimmed.toLowerCase();
+          if (low === "update" || low === "kx update" || low === "upgrade") {
+            this.pushOut(this.lang === "ko" ? "업데이트 중..." : "updating...");
+            this.renderFrame();
+            try {
+              const { updateKx } = require("./kx-update");
+              updateKx();
+              this.pushOut(this.lang === "ko" ? "업데이트 완료" : "update complete");
+            } catch (err) {
+              this.pushOut(`[update] ${err.message || err}`);
+            }
+            ask();
+            return;
+          }
+
           this.runCommand(line);
         } catch (err) {
           this.pushOut(`[err] ${err.message || err}`);
         }
-        loop();
+        ask();
       });
     };
 
-    process.stdout.write("\x1b[?25h"); // show cursor
-    loop();
+    // readline owns Ctrl+C when terminal:true — soft-lock instead of exit
+    rl.on("SIGINT", softLock);
+
+    process.stdout.write("\x1b[?25h");
+    ask();
   }
 }
 

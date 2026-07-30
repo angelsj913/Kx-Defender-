@@ -32,25 +32,25 @@ const { startKxShell } = require("./kx-shell");
 
 function printHelp() {
   printKxBanner();
-  console.log(`Kx-Defender (eDEX HUD in PowerShell — no server by default)
+  console.log(`Kx-Defender (eDEX HUD in PowerShell)
 
 PowerShell:
   npx -y --prefer-online angelsj913/Kx-Defender-
-  irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
+  login kx                  # re-enter after Ctrl+C / exit
+  [login kx]                # same (PowerShell function)
 
-HUD commands:
-  /h
-  lang ko | lang en
-  roast tickets --scope lab --realm lab.local --sim
-  exit
+HUD:
+  Ctrl+C           lock session → type [login kx]
+  update           pull latest without full reinstall
+  /h | lang ko|en | exit
 
 One-shot:
   npx -y --prefer-online angelsj913/Kx-Defender- kx /h
+  npx -y --prefer-online angelsj913/Kx-Defender- update
 
 Optional:
-  --serve     Web Console (eDEX-styled)
-  --classic   Plain shell (no HUD panels)
-  edex|hud    Force eDEX HUD
+  --serve     Web Console
+  --classic   Plain shell
 `);
 }
 
@@ -83,29 +83,72 @@ function parseArgs(argv) {
   return { flags, positional };
 }
 
+function preferPersistentApp() {
+  if (process.env.KX_FROM_APP === "1" || process.env.KX_DEV === "1") return false;
+  // Local git clone: stay on the working tree (avoid surprising redirects)
+  if (fs.existsSync(path.join(ROOT, ".git"))) return false;
+  try {
+    const { getAppRoot } = require("./kx-update");
+    const app = getAppRoot();
+    if (!app || path.resolve(app) === path.resolve(ROOT)) return false;
+    const entry = path.join(app, "scripts", "npx-entry.js");
+    if (!fs.existsSync(entry)) return false;
+    const res = spawnSync(process.execPath, [entry, ...process.argv.slice(2)], {
+      stdio: "inherit",
+      env: { ...process.env, KX_FROM_APP: "1" },
+      windowsHide: true,
+    });
+    process.exit(res.status == null ? 0 : res.status);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 function installUserShims() {
+  try {
+    const { ensurePersistentInstall } = require("./kx-update");
+    ensurePersistentInstall(ROOT);
+  } catch (_) {
+    /* ignore */
+  }
   const binDir = isWin()
     ? path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local"), "Kx-Defender", "bin")
     : path.join(os.homedir(), ".local", "bin");
   fs.mkdirSync(binDir, { recursive: true });
-  const entry = path.join(ROOT, "scripts", "npx-entry.js");
-  const kxJs = path.join(ROOT, "scripts", "npm-kx.js");
-  const shellJs = path.join(ROOT, "scripts", "kx-shell.js");
+  let root = ROOT;
+  try {
+    const { getAppRoot } = require("./kx-update");
+    const app = getAppRoot();
+    if (app) root = app;
+  } catch (_) {
+    /* ignore */
+  }
+  const entry = path.join(root, "scripts", "npx-entry.js");
+  const kxJs = path.join(root, "scripts", "npm-kx.js");
+  const shellJs = path.join(root, "scripts", "kx-shell.js");
+  const updateJs = path.join(root, "scripts", "kx-update.js");
 
   if (isWin()) {
     fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${kxJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-defender.cmd"), `@node "${entry}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-shell.cmd"), `@node "${shellJs}" %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "login-kx.cmd"), `@node "${entry}" login kx %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-update.cmd"), `@node "${updateJs}" %*\r\n`);
   } else {
-    for (const [name, target] of [
-      ["kx", kxJs],
-      ["kx-defender", entry],
-      ["kx-shell", shellJs],
+    for (const [name, target, prefix] of [
+      ["kx", kxJs, ""],
+      ["kx-defender", entry, ""],
+      ["kx-shell", shellJs, ""],
+      ["login-kx", entry, "login kx "],
+      ["kx-update", updateJs, ""],
     ]) {
       const dest = path.join(binDir, name);
-      fs.writeFileSync(dest, `#!/bin/sh\nexec node ${JSON.stringify(target)} "$@"\n`, {
-        mode: 0o755,
-      });
+      fs.writeFileSync(
+        dest,
+        `#!/bin/sh\nexec node ${JSON.stringify(target)} ${prefix}"$@"\n`,
+        { mode: 0o755 }
+      );
       try {
         fs.chmodSync(dest, 0o755);
       } catch (_) {
@@ -120,6 +163,19 @@ function installUserShims() {
     log(`Ensure ${binDir} is on PATH`);
   }
   return binDir;
+}
+
+function isLoginCommand(cmd, rest) {
+  const joined = [cmd, ...rest]
+    .join(" ")
+    .toLowerCase()
+    .replace(/[\[\]]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (/^login\s*kx$/.test(joined) || joined === "login-kx" || joined === "loginkx") return true;
+  if (cmd === "login" || cmd === "login-kx" || cmd === "loginkx" || cmd === "[login") return true;
+  if (/^\[?login\s+kx\]?$/.test(String(cmd || "").toLowerCase().replace(/\s+/g, " ").trim())) return true;
+  return false;
 }
 
 function startServe(bind) {
@@ -167,6 +223,9 @@ function runProgram(flags, { withSkills = false } = {}) {
 }
 
 function main() {
+  // After `update`, prefer ~/.kx-defender/app so npx cache is not required
+  preferPersistentApp();
+
   const { flags, positional } = parseArgs(process.argv.slice(2));
   if (flags.help && positional.length === 0) {
     printHelp();
@@ -181,9 +240,27 @@ function main() {
   }
 
   if (cmd === "kx") {
+    // Support: kx update | kx lang ...
+    if ((rest[0] || "").toLowerCase() === "update" || (rest[0] || "").toLowerCase() === "upgrade") {
+      require("./kx-update").updateKx();
+      return;
+    }
     ensureSetup();
     const res = runKx(rest.length ? rest : ["/h"]);
     process.exit(res.status == null ? 1 : res.status);
+  }
+
+  if (cmd === "update" || cmd === "upgrade") {
+    require("./kx-update").updateKx();
+    return;
+  }
+
+  // login / [login kx] / login-kx → start HUD (re-entry)
+  if (isLoginCommand(cmd, rest)) {
+    setupSync();
+    installUserShims();
+    startEdexShell();
+    return;
   }
 
   if (cmd === "shell" || cmd === "repl" || cmd === "cli") {
