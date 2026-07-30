@@ -1,7 +1,7 @@
 {
   "name": "kx-defender",
   "version": "0.1.2",
-  "description": "Kx-Defender — self-built attack/defense platform (KxLang). Install via: npx --yes github:angelsj913/Kx-Defender- --all -g",
+  "description": "Kx-Defender — self-built attack/defense platform (KxLang). Install skills: npx skills add angelsj913/Kx-Defender- --all -g",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=16"
