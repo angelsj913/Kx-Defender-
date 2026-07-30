@@ -219,8 +219,8 @@ kx/
 | **Attack** | 7 | roast, relay, breach | 공격 시뮬레이션 |
 | **Defense** | 10 | sentry, audit, watch | 방어 및 모니터링 |
 | **Infrastructure** | 4 | nexus, sweep, graph | 네트워크 관리 |
-| **Utility** | 7 | lexicon, lang, uninstall | 도구 관리 |
-| **Total** | **28** | - | - |
+| **Utility** | 6 | lexicon, lang, help | 도구 관리 |
+| **Total** | **27** | - | - |
 
 ---
 
