@@ -46,6 +46,7 @@ def render_global_help(lang: str | None = None) -> str:
         "  kx <VERB> <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]",
         "  kx /h                 Show this help",
         "  kx /h <VERB>          Show help for one verb",
+        "  kx update             Update install (no full reinstall)",
         "  kx lang [en|ko]       Get/set UI language",
         "  kx lexicon            Dump verb/object lexicon (JSON)",
         "  kx serve [--bind host:port]  Start Console UI (optional)",

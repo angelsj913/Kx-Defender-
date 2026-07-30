@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
+import subprocess
 import sys
+from pathlib import Path
 
 
 def _force_utf8_stdio() -> None:
@@ -30,7 +33,66 @@ def _print_json(data: object) -> None:
 
 
 def _print_next() -> None:
-    print(t("next: kx /h", "next: kx /h"), file=sys.stderr)
+    print("next: kx /h", file=sys.stderr)
+
+
+def _repo_root() -> Path:
+    # services/orchestrator/kx_defender/kx_cli.py → repo root
+    return Path(__file__).resolve().parents[3]
+
+
+def _find_update_js() -> Path | None:
+    home = Path.home() / ".kx-defender" / "app" / "scripts" / "kx-update.js"
+    if home.is_file():
+        return home
+    local = _repo_root() / "scripts" / "kx-update.js"
+    if local.is_file():
+        return local
+    return None
+
+
+def _find_entry_js() -> Path | None:
+    home = Path.home() / ".kx-defender" / "app" / "scripts" / "npx-entry.js"
+    if home.is_file():
+        return home
+    local = _repo_root() / "scripts" / "npx-entry.js"
+    if local.is_file():
+        return local
+    return None
+
+
+def _node_bin() -> str:
+    return shutil.which("node") or "node"
+
+
+def _run_update() -> int:
+    """kx update — refresh install without full reinstall (via Node updater)."""
+    update_js = _find_update_js()
+    node = _node_bin()
+    if update_js is None:
+        print("[Kx] Running: npx -y --prefer-online angelsj913/Kx-Defender- update", flush=True)
+        res = subprocess.run(
+            ["npx", "-y", "--prefer-online", "angelsj913/Kx-Defender-", "update"],
+            check=False,
+        )
+        return int(res.returncode or 0)
+    print(f"[Kx] Updating via {update_js} ...", flush=True)
+    res = subprocess.run([node, str(update_js)], check=False)
+    return int(res.returncode or 0)
+
+
+def _run_hud() -> int:
+    entry = _find_entry_js()
+    node = _node_bin()
+    if entry is None:
+        print("[Kx] Starting via npx ...", flush=True)
+        res = subprocess.run(
+            ["npx", "-y", "--prefer-online", "angelsj913/Kx-Defender-"],
+            check=False,
+        )
+        return int(res.returncode or 0)
+    res = subprocess.run([node, str(entry)], check=False)
+    return int(res.returncode or 0)
 
 
 def _emit_help(args: list[str]) -> int:
@@ -54,7 +116,6 @@ def _emit_help(args: list[str]) -> int:
 
 
 def _emit_lang(args: list[str]) -> int:
-    # kx lang | kx lang ko | kx lang en | kx language korean
     rest = args[1:]
     if not rest:
         lang = get_lang()
@@ -75,9 +136,17 @@ def _emit_lang(args: list[str]) -> int:
 def main(argv: list[str] | None = None) -> None:
     args = list(sys.argv[1:] if argv is None else argv)
 
+    # Meta commands (must not go through KxLang verb parser)
+    if args and args[0].lower() in {"update", "upgrade"}:
+        raise SystemExit(_run_update())
+    if args and args[0].lower() in {"login", "hud", "edex"}:
+        raise SystemExit(_run_hud())
+    if not args:
+        # Bare `kx` → interactive program
+        raise SystemExit(_run_hud())
+
     if (
-        not args
-        or is_help_token(args[0])
+        is_help_token(args[0])
         or (len(args) >= 2 and is_help_token(args[1]))
         or args[0].lower() == "help"
     ):

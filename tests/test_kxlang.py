@@ -134,6 +134,38 @@ def test_lang_get_set(capsys, tmp_path, monkeypatch):
     assert i18n.get_lang() == "en"
 
 
+def test_update_is_meta_not_verb(monkeypatch):
+    calls = []
+
+    def fake_run(cmd, check=False):
+        calls.append(cmd)
+
+        class R:
+            returncode = 0
+
+        return R()
+
+    monkeypatch.setattr("kx_defender.kx_cli.subprocess.run", fake_run)
+    monkeypatch.setattr(
+        "kx_defender.kx_cli._find_update_js",
+        lambda: __import__("pathlib").Path("/tmp/fake-kx-update.js"),
+    )
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["update"])
+    assert exc.value.code == 0
+    assert calls and "fake-kx-update.js" in str(calls[0][-1])
+
+
+def test_upgrade_alias(monkeypatch):
+    monkeypatch.setattr(
+        "kx_defender.kx_cli._run_update",
+        lambda: 0,
+    )
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["upgrade"])
+    assert exc.value.code == 0
+
+
 def test_lang_rejects_unknown(capsys, tmp_path, monkeypatch):
     monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
     with pytest.raises(SystemExit) as exc:

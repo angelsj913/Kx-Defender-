@@ -3,7 +3,8 @@
 
 /**
  * `kx` launcher:
- *   kx / anything containing only entry intent → HUD
+ *   kx              → HUD
+ *   kx update       → updater (not a KxLang verb)
  *   kx /h | kx <verb> … → one-shot KxLang
  */
 
@@ -13,28 +14,35 @@ const { runKx, ensureSetup } = require("./npm-setup");
 
 const args = process.argv.slice(2);
 
+function isUpdate(argv) {
+  if (!argv.length) return false;
+  const a0 = String(argv[0]).toLowerCase();
+  if (a0 === "update" || a0 === "upgrade") return true;
+  if (a0 === "kx" && argv[1]) {
+    const a1 = String(argv[1]).toLowerCase();
+    return a1 === "update" || a1 === "upgrade";
+  }
+  return false;
+}
+
 function containsKx(text) {
   return /kx/i.test(String(text || ""));
 }
 
 function shouldEnterProgram(argv) {
   if (!argv.length) return true;
-  const joined = argv.join(" ").toLowerCase();
-  // update stays a system command
-  if (argv[0] === "update" || argv[0] === "upgrade") return false;
-  if (argv[0] === "/h" || argv[0] === "-h" || argv[0] === "--help" || argv[0] === "help") return false;
-  // kx <verb> … one-shot (verb is not login/hud/…)
-  if (argv[0].toLowerCase() === "kx") {
+  if (isUpdate(argv)) return false;
+  const a0 = String(argv[0]).toLowerCase();
+  if (a0 === "/h" || a0 === "-h" || a0 === "--help" || a0 === "help") return false;
+  if (a0 === "kx") {
     const rest = argv.slice(1);
     if (!rest.length) return true;
-    const head = rest[0].toLowerCase();
+    const head = String(rest[0]).toLowerCase();
     if (["login", "hud", "edex", "shell", "repl", "cli"].includes(head)) return true;
-    if (head === "update" || head === "upgrade") return false;
-    return false; // kx roast … etc.
+    return false; // kx roast …
   }
-  // login kx / [login kx] / loginkx / any token with kx and no KxLang verb path
-  if (containsKx(joined)) {
-    const first = argv[0].toLowerCase().replace(/[\[\]]/g, "");
+  if (containsKx(argv.join(" "))) {
+    const first = a0.replace(/[\[\]]/g, "");
     const kxLangVerbs = new Set([
       "sentry", "trace", "audit", "harden", "triage", "comply", "forge",
       "roast", "relay", "loot", "bait", "breach", "crack", "nexus", "graph",
@@ -44,6 +52,16 @@ function shouldEnterProgram(argv) {
     return true;
   }
   return false;
+}
+
+if (isUpdate(args)) {
+  try {
+    require("./kx-update").updateKx();
+    process.exit(0);
+  } catch (err) {
+    console.error(`[Kx] ${err.message || err}`);
+    process.exit(err.status || 1);
+  }
 }
 
 if (shouldEnterProgram(args)) {
@@ -56,12 +74,7 @@ if (shouldEnterProgram(args)) {
   process.exit(res.status == null ? 0 : res.status);
 }
 
-if (args[0] && args[0].toLowerCase() === "update") {
-  require("./kx-update").updateKx();
-  process.exit(0);
-}
-
 ensureSetup();
-const forward = args[0] && args[0].toLowerCase() === "kx" ? args.slice(1) : args;
+const forward = args[0] && String(args[0]).toLowerCase() === "kx" ? args.slice(1) : args;
 const res = runKx(forward);
 process.exit(res.status == null ? 1 : res.status);
