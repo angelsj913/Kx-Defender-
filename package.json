@@ -1,16 +1,29 @@
 {
   "name": "kx-defender",
-  "version": "0.1.1",
-  "description": "Kx-Defender — self-built attack/defense platform (KxLang). No third-party security tools.",
-  "private": true,
+  "version": "0.1.2",
+  "description": "Kx-Defender — self-built attack/defense platform (KxLang). Install via: npx --yes github:angelsj913/Kx-Defender- --all -g",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=16"
   },
   "bin": {
-    "kx-defender": "scripts/npm-cli.js",
+    "kx-defender": "scripts/npx-entry.js",
     "kx": "scripts/npm-kx.js"
   },
+  "files": [
+    "scripts/**",
+    "services/**",
+    "modules/**",
+    "apps/**",
+    "fixtures/**",
+    "rules/**",
+    "skills/**",
+    "docs/**",
+    "pyproject.toml",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "scripts": {
     "postinstall": "node scripts/npm-setup.js",
     "setup": "node scripts/npm-setup.js",
@@ -21,12 +34,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/angelsj913/Kx-Defender-.git"
+    "url": "git+https://github.com/angelsj913/Kx-Defender-.git"
   },
+  "bugs": {
+    "url": "https://github.com/angelsj913/Kx-Defender-/issues"
+  },
+  "homepage": "https://github.com/angelsj913/Kx-Defender-#readme",
   "keywords": [
     "kx-defender",
     "kxlang",
     "security",
-    "self-built"
+    "self-built",
+    "npx"
   ]
 }
