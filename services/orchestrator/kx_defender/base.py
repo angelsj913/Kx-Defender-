@@ -9,7 +9,7 @@ from kx_defender.auth import validate_params
 from kx_defender.result import ModuleResult
 
 
-class AttackModule(ABC):
+class BaseModule(ABC):
     name: str = "base"
     category: str = "attack"
     description: str = ""
@@ -36,3 +36,17 @@ class AttackModule(ABC):
         if result.finished_at is None:
             result.finish()
         return result
+
+
+class AttackModule(BaseModule):
+    """Base class for offensive modules (kerberoasting, NTLM relay, etc.)."""
+    category: str = "attack"
+
+
+class DefenseModule(BaseModule):
+    """Base class for defensive modules (watch procs, sig scan, kill pid, etc.).
+
+    Semantically identical to ``AttackModule`` but subclasses no longer need to
+    override ``category = "defense"`` on every module.
+    """
+    category: str = "defense"

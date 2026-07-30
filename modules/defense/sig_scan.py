@@ -5,14 +5,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from kx_defender.base import AttackModule
+from kx_defender.base import DefenseModule
 from kx_defender.result import Finding, ModuleResult
 from modules.engines.kxsig import load_rules, scan_file, scan_text
 
 
-class SigScanModule(AttackModule):
+class SigScanModule(DefenseModule):
     name = "sig_scan"
-    category = "defense"
     description = "Scan text/files with self-built KxSig rules."
 
     def run(self, params: dict[str, Any]) -> ModuleResult:
