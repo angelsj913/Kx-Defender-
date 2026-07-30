@@ -82,8 +82,7 @@ def render_global_help(lang: str | None = None) -> str:
             *[f"  {ex}" for ex in EXAMPLES],
             "",
             "Language: kx lang ko  |  kx lang en",
-            "Docs: docs/kxlang.md · Policy: docs/policy-self-built.md",
-            "Note: Self-built engines only. Authorized use only.",
+            "Docs: docs/kxlang.md",
         ]
     )
     return "\n".join(lines) + "\n"

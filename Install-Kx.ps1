@@ -105,23 +105,24 @@ function global:login {
         [string]$Target = "kx",
         [Parameter(ValueFromRemainingArguments = $true)]$Rest
     )
-    if ($Target -match '^(kx|\[kx\]|kx\])$' -or $Target -eq "" -or $null -eq $Target) {
-        Write-Host "[Kx] login kx — re-entering HUD..." -ForegroundColor DarkCyan
-        Invoke-KxNode login kx
+    if ($Target -match 'kx' -or $Target -eq "" -or $null -eq $Target) {
+        Write-Host "[Kx] entering..." -ForegroundColor DarkCyan
+        Invoke-KxNode
         return
     }
-    Write-Host "[Kx] use: login kx   or   [login kx]" -ForegroundColor Yellow
+    # Any remaining args that mention kx
+    $joined = (@($Target) + @($Rest)) -join " "
+    if ($joined -match 'kx') {
+        Invoke-KxNode
+        return
+    }
+    Write-Host "[Kx] include kx in the command to enter" -ForegroundColor Yellow
 }
 
 # Allow typing: [login kx]  (PowerShell parses [login as a command name in some hosts)
 Set-Item -Path "function:global:[login" -Value {
     param([Parameter(ValueFromRemainingArguments = $true)]$Rest)
-    $joined = (@($Rest) -join " ").Trim()
-    if ($joined -match '^kx\]?$' -or $joined -eq "" -or $joined -match '^kx') {
-        login kx
-        return
-    }
-    Write-Host "[Kx] use: [login kx]" -ForegroundColor Yellow
+    Invoke-KxNode
 } -Force -ErrorAction SilentlyContinue
 
 function global:Update-Kx {
@@ -131,31 +132,41 @@ function global:Update-Kx {
 
 Set-Alias -Name update -Value Update-Kx -Scope Global -Force -ErrorAction SilentlyContinue
 
-function Test-KxLoginLine {
+function Test-KxEntryLine {
     param([string]$Line)
-    $s = ($Line -replace '[\[\]]', ' ').Trim().ToLower() -replace '\s+', ' '
-    return ($s -eq "login kx" -or $s -eq "login-kx" -or $s -eq "loginkx")
+    # Any input containing "kx" enters the program (except exit)
+    return ($Line -match 'kx')
 }
 
 function Enter-KxLoginLoop {
     Write-Host ""
-    Write-Host "[Kx] Session ended. Type [login kx] to re-enter, update to refresh, or exit." -ForegroundColor DarkCyan
+    Write-Host "[Kx] Session ended. Type anything with kx to re-enter, update, or exit." -ForegroundColor DarkCyan
     while ($true) {
-        Write-Host -NoNewline "[login kx]> "
+        Write-Host -NoNewline "kx> "
         $line = Read-Host
         if ($null -eq $line) { break }
         $t = $line.Trim()
         if ($t -match '^(exit|quit|q)$') { break }
-        if ($t -match '^(update|upgrade|kx update)$') {
+        if ($t -match '^(update|upgrade)$' -or $t -match '(?i)kx\s+update') {
             Update-Kx
             continue
         }
-        if (Test-KxLoginLine $t) {
-            Invoke-KxNode login kx
-            Write-Host "[Kx] Session ended. Type [login kx] to re-enter, or exit." -ForegroundColor DarkCyan
+        if (Test-KxEntryLine $t) {
+            Invoke-KxNode
+            Write-Host "[Kx] Session ended. Type anything with kx to re-enter, or exit." -ForegroundColor DarkCyan
             continue
         }
-        Write-Host "  locked out — type [login kx]  |  update  |  exit" -ForegroundColor Yellow
+        Write-Host "  include kx to enter  |  update  |  exit" -ForegroundColor Yellow
+    }
+}
+
+# Any unknown PowerShell command whose name contains "kx" launches the program
+$ExecutionContext.InvokeCommand.CommandNotFoundAction = {
+    param($CommandName, $CommandLookupEventArgs)
+    if ($CommandName -match 'kx') {
+        Invoke-KxNode
+        $CommandLookupEventArgs.CommandScriptBlock = { }
+        $CommandLookupEventArgs.StopSearch = $true
     }
 }
 
@@ -186,7 +197,7 @@ if (Test-Path -LiteralPath $binDir) {
     $env:PATH = "$binDir;$env:PATH"
 }
 
-Write-Host "[Kx] Ctrl+C → [login kx]  |  update" -ForegroundColor DarkCyan
+Write-Host "[Kx] Ctrl+C → type anything with kx to resume  |  update" -ForegroundColor DarkCyan
 Write-Host ""
 
 if ($SkillsOnly) {

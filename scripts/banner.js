@@ -15,7 +15,7 @@ function printKxBanner(stream = process.stdout) {
   const line = "─".repeat(40);
   stream.write("\n");
   stream.write(KX_LOGO + "\n");
-  stream.write(`  DEFENDER  ·  Self-Built Only\n`);
+  stream.write(`  DEFENDER\n`);
   stream.write(`${line}\n\n`);
 }
 

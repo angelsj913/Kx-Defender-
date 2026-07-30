@@ -167,17 +167,25 @@ function installUserShims() {
   return binDir;
 }
 
+function containsKx(text) {
+  return /kx/i.test(String(text || ""));
+}
+
 function isLoginCommand(cmd, rest) {
-  const joined = [cmd, ...rest]
-    .join(" ")
+  const joined = [cmd, ...rest].join(" ");
+  // Any argv that mentions kx (login kx, [login kx], loginkx, …) enters the program
+  // unless it is clearly a one-shot KxLang call handled elsewhere (cmd === "kx" + verb).
+  if (!containsKx(joined) && !containsKx(cmd)) return false;
+  const norm = joined
     .toLowerCase()
     .replace(/[\[\]]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-  if (/^login\s*kx$/.test(joined) || joined === "login-kx" || joined === "loginkx") return true;
-  if (cmd === "login" || cmd === "login-kx" || cmd === "loginkx" || cmd === "[login") return true;
-  if (/^\[?login\s+kx\]?$/.test(String(cmd || "").toLowerCase().replace(/\s+/g, " ").trim())) return true;
-  return false;
+  // One-shot: kx <verb> … → not a login
+  if (/^kx\s+\S+/.test(norm) && !/^kx\s+(login|hud|shell|edex|repl|cli)\b/.test(norm)) {
+    return false;
+  }
+  return true;
 }
 
 function startServe(bind) {
@@ -320,6 +328,12 @@ function main() {
   // Bare / --all / -g → CLI shell (not web server)
   if (!cmd || flags.all || flags.global || flags.serve) {
     runProgram(flags, { withSkills: Boolean(flags.all || flags.global) });
+    return;
+  }
+
+  // Any leftover argv that mentions kx → enter the program
+  if (containsKx([cmd, ...rest].join(" "))) {
+    runProgram(flags);
     return;
   }
 

@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const SETUP_VERSION = "0.2.4";
+const SETUP_VERSION = "0.2.5";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");
@@ -441,7 +441,7 @@ function verifyKx(pythonPath) {
 }
 
 function setup() {
-  log(`Kx-Defender setup v${SETUP_VERSION} (Self-Built Only)`);
+  log(`Kx-Defender setup v${SETUP_VERSION}`);
   if (!fs.existsSync(path.join(ROOT, "pyproject.toml"))) {
     throw new Error(
       "pyproject.toml not found. Re-run: npx -y --prefer-online angelsj913/Kx-Defender-"

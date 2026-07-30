@@ -56,6 +56,10 @@ function decodeChildText(raw) {
   return s;
 }
 
+function containsKx(text) {
+  return /kx/i.test(String(text || ""));
+}
+
 function cols() {
   return process.stdout.columns || 100;
 }
@@ -314,29 +318,19 @@ class EdexShell {
     });
     this._rl = rl;
 
-    const isLogin = (line) => {
-      const s = String(line || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\[\]]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-      return s === "login kx" || s === "login-kx" || s === "loginkx";
-    };
+    const isLogin = (line) => containsKx(line);
 
     let ask = () => {};
     const softLock = () => {
       if (this.locked) {
-        process.stdout.write(
-          `\n${C.warn}[Kx] still locked — type [login kx]${C.reset}\n`
-        );
+        process.stdout.write(`\n${C.warn}[Kx] locked — type anything with kx${C.reset}\n`);
         ask();
         return;
       }
       this.locked = true;
       this.history = [];
-      this.pushOut(this.lang === "ko" ? "링크 잠금 (Ctrl+C)" : "link locked (Ctrl+C)");
-      this.pushOut(this.lang === "ko" ? "재접속: [login kx]" : "resume: [login kx]");
+      this.pushOut("locked (Ctrl+C)");
+      this.pushOut("resume: type anything containing kx");
       ask();
     };
 
@@ -360,8 +354,8 @@ class EdexShell {
             } else {
               this.pushOut(
                 this.lang === "ko"
-                  ? "잠금 상태입니다. [login kx] 를 입력하세요."
-                  : "locked — type [login kx]"
+                  ? "잠금 — 입력에 kx 를 포함하세요."
+                  : "locked — include kx in your input"
               );
             }
             ask();
