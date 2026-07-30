@@ -27,7 +27,7 @@ const {
   SETUP_VERSION,
 } = require("./npm-setup");
 const { printKxBanner } = require("./banner");
-const { startEdexShell } = require("./operator-shell");
+const { startOperatorShell } = require("./operator-shell");
 const { startKxShell } = require("./kx-shell");
 const { isLoginCommand } = require("./kx-routing");
 

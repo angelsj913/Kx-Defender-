@@ -420,17 +420,17 @@ class KxClient {
   }
 }
 
-function startEdexShell() {
+function startOperatorShell() {
   // Keep export name for npx-entry / shims — this IS the native client
   const ui = new KxClient();
   ui.start();
 }
 
 function startKxClient() {
-  startEdexShell();
+  startOperatorShell();
 }
 
-module.exports = { startEdexShell, startKxClient, KxClient, EdexShell: KxClient };
+module.exports = { startOperatorShell, startKxClient, KxClient };
 
 if (require.main === module) {
   try {

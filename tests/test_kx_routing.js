@@ -41,5 +41,10 @@ assert.strictEqual(stripUnlockPrefix("loginkx"), "");
 assert.strictEqual(stripUnlockPrefix("host-kx-01"), "host-kx-01");
 assert.strictEqual(looksLikeKxCommand("host-kx-01"), false);
 assert.strictEqual(looksLikeKxCommand("login_kx"), false);
+assert.strictEqual(isUnlockToken("kx"), true);
+assert.strictEqual(isUnlockToken("login_kx"), true);
+assert.strictEqual(isUnlockToken("sentry"), true);
+assert.strictEqual(isUnlockToken("host-kx-01"), false);
+assert.strictEqual(isUnlockToken("asdf"), false);
 
 console.log("test_kx_routing.js OK");
