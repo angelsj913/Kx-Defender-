@@ -656,7 +656,7 @@ func (s *C2Server) ExecuteCommand(sessionID string, command string) {
 
 ## Phase 5: UI 통합 & 완성 (주차 12)
 
-### Week 12: eDEX-UI 대시보드 & 테스트
+### Week 12: terminal UI 대시보드 & 테스트
 
 #### Task 12.1: Electron UI
 
@@ -664,7 +664,7 @@ func (s *C2Server) ExecuteCommand(sessionID string, command string) {
 // src/ui/main.ts
 
 // Electron 앱 생성
-// eDEX-UI CSS 적용
+// terminal UI CSS 적용
 // 대시보드 렌더링
 ```
 
@@ -715,7 +715,7 @@ def test_attack_tools():
 - [ ] LLM Red Teaming 기본
 
 ### Phase 5: 통합 (주차 12)
-- [ ] eDEX-UI 대시보드
+- [ ] terminal UI 대시보드
 - [ ] 엔드-투-엔드 통합 테스트
 - [ ] 성능 최적화
 - [ ] 보안 감사

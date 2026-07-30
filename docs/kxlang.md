@@ -1,6 +1,6 @@
 # KxLang (DEFCOM) — Kx-Defender Command Language
 
-Kx-Defender 전용 명령 언어입니다. Anthropic 스킬 이름이나 일반 보안 도구 CLI를 그대로 쓰지 않고, **고유 동사(verb) + 대상(object) + 플래그**로 동작합니다.
+Kx-Defender 전용 명령 언어입니다. third-party LLM SaaS 스킬 이름이나 일반 보안 도구 CLI를 그대로 쓰지 않고, **고유 동사(verb) + 대상(object) + 플래그**로 동작합니다.
 
 ## 문법
 

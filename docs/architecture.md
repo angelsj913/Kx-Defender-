@@ -46,7 +46,7 @@ fixtures/ data/
 
 웹 콘솔(`apps/console`, `kx serve`)은 **제거됨**.
 
-**금지**: `vendor/impacket`, `tools/aircrack`, `bin/havoc` 같은 외부 툴 트리.
+**금지**: 외부 보안 바이너리/툴 트리를 vendor로  bundling 하지 않음.
 
 ---
 

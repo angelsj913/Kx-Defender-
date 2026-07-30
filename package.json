@@ -1,7 +1,7 @@
 {
   "name": "kx-defender",
-  "version": "0.3.3",
-  "description": "Kx DEFCOM — npx -y --prefer-online angelsj913/Kx-Defender-",
+  "version": "0.3.4",
+  "description": "Kx DEFCOM \u2014 npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
   "main": "scripts/npx-entry.js",
   "engines": {

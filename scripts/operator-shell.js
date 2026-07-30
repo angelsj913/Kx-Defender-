@@ -12,7 +12,7 @@ const readline = require("readline");
 const { spawnSync } = require("child_process");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
-const { looksLikeKxCommand, stripUnlockPrefix } = require("./kx-routing");
+const { looksLikeKxCommand, stripUnlockPrefix, isUnlockToken } = require("./kx-routing");
 
 const C = {
   reset: "\x1b[0m",
@@ -27,7 +27,14 @@ const C = {
   bg: "\x1b[48;2;2;4;10m",
 };
 
-const LOGO = ["  _  __", " | |/ /__  __", " | ' </\\ \\/ /", " |_|\\_\\\\_/\\_\\"];
+const LOGO = [
+  "██╗  ██╗██╗  ██╗",
+  "██║ ██╔╝╚██╗██╔╝",
+  "█████╔╝  ╚███╔╝ ",
+  "██╔═██╗  ██╔██╗ ",
+  "██║  ██╗██╔╝ ██╗",
+  "╚═╝  ╚═╝╚═╝  ╚═╝",
+];
 
 function cols() {
   return Math.max(64, process.stdout.columns || 100);
@@ -120,10 +127,6 @@ function decodeChildText(raw) {
     }
   }
   return s;
-}
-
-function containsKx(text) {
-  return /kx/i.test(String(text || ""));
 }
 
 function primaryIpv4() {
@@ -357,10 +360,9 @@ class KxClient {
               process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
               process.exit(0);
             }
-            // Unlock on "kx" OR a real command like sentry.
-            // Only auto-run when the leftover text is a real KxLang/meta head —
-            // never spawn garbage like "login_kx" or "host-kx-01".
-            if (containsKx(trimmed) || looksLikeKxCommand(trimmed)) {
+            // Unlock only on explicit unlock tokens or real KxLang/meta heads.
+            // Do NOT unlock on arbitrary text that merely contains "kx".
+            if (isUnlockToken(trimmed)) {
               this.locked = false;
               this.history = [];
               this.pushOut(`${C.ok}client resumed${C.reset}`);

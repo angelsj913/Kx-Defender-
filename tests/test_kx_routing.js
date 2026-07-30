@@ -6,6 +6,7 @@ const {
   isClientOnlyArgv,
   looksLikeKxCommand,
   stripUnlockPrefix,
+  isUnlockToken,
 } = require("../scripts/kx-routing");
 
 assert.strictEqual(isLoginCommand("login", []), true);

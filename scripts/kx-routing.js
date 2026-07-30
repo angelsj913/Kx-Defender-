@@ -114,11 +114,20 @@ function stripUnlockPrefix(line) {
   return s;
 }
 
+function isUnlockToken(line) {
+  const raw = String(line || "").trim();
+  if (!raw) return false;
+  const low = raw.toLowerCase().replace(/[\[\]]/g, "");
+  if (low === "kx" || low === "login kx" || /^login[-_]?kx$/.test(low)) return true;
+  return looksLikeKxCommand(raw);
+}
+
 module.exports = {
   isLoginCommand,
   isClientOnlyArgv,
   lowerToken,
   looksLikeKxCommand,
   stripUnlockPrefix,
+  isUnlockToken,
   KX_COMMAND_HEADS,
 };

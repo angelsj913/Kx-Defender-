@@ -1016,7 +1016,7 @@ func (s *C2Server) HandleAgentCheckIn(agentID string) {
 2. ⭐⭐ C2 기본 구현
 
 ### Phase 4 (주차 12): 통합 + UI
-1. ⭐⭐⭐ UI 통합 (eDEX-UI)
+1. ⭐⭐⭐ UI 통합 (terminal UI)
 2. ⭐⭐ 테스트 + 최적화
 
 ---

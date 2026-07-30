@@ -17,4 +17,4 @@ kx lang en
 kx update
 ```
 
-Docs: [`docs/kxlang.md`](docs/kxlang.md) · PRD: [`docs/prd/kx-vs-malware-zero.md`](docs/prd/kx-vs-malware-zero.md)
+Docs: [`docs/kxlang.md`](docs/kxlang.md) · PRD: [`docs/prd/kx-defender-v4.md`](docs/prd/kx-defender-v4.md)

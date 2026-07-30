@@ -5,7 +5,7 @@ description: Local LLM red-team probes with payload bank and rule evaluator (zer
 
 # Kx Attack — LLM Red Team
 
-No OpenAI/Claude/Gemini API keys. Uses `fixtures/llm/` payloads + responses.
+No third-party LLM SaaS/third-party LLM SaaS API keys. Uses `fixtures/llm/` payloads + responses.
 
 ## Command
 
