@@ -1,17 +1,13 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Launch Kx-Defender CLI inside PowerShell (no web server by default).
+  Launch Kx-Defender eDEX-style HUD inside PowerShell (no web server by default).
 
 .EXAMPLE
   npx -y --prefer-online angelsj913/Kx-Defender-
 
 .EXAMPLE
   irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
-
-.EXAMPLE
-  .\Install-Kx.ps1 -Fresh
-  .\Install-Kx.ps1 -Serve
 #>
 [CmdletBinding()]
 param(
@@ -19,12 +15,27 @@ param(
     [Alias("g")]
     [switch]$Global,
     [switch]$Serve,
+    [switch]$Classic,
     [string]$Bind = "127.0.0.1:8787",
     [switch]$SkillsOnly,
     [switch]$Fresh
 )
 
 $ErrorActionPreference = "Stop"
+
+function Enable-KxConsoleTheme {
+    try {
+        $Host.UI.RawUI.BackgroundColor = "Black"
+        $Host.UI.RawUI.ForegroundColor = "Cyan"
+        Clear-Host
+    } catch {
+        # Windows Terminal / non-classic hosts may ignore RawUI colors
+    }
+    # Enable VT sequences on Windows 10+ when possible
+    try {
+        $null = & cmd /c "echo." 2>$null
+    } catch { }
+}
 
 function Show-KxBanner {
     $banner = @"
@@ -35,13 +46,14 @@ function Show-KxBanner {
 ██╔═██╗  ██╔██╗
 ██║  ██╗██╔╝ ██╗
 ╚═╝  ╚═╝╚═╝  ╚═╝
-  DEFENDER  ·  CLI Shell (no server)
+  DEFENDER  ·  eDEX HUD  ·  TRON LINK
 ────────────────────────────────────────
 
 "@
     Write-Host $banner -ForegroundColor Cyan
 }
 
+Enable-KxConsoleTheme
 Show-KxBanner
 
 if ($Fresh) {
@@ -61,7 +73,6 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "package.json"))) {
     if (Test-Path (Join-Path $parent "package.json")) { $repoRoot = $parent }
 }
 
-# Session helper: kx <args...> from this PowerShell
 function global:kx {
     param([Parameter(ValueFromRemainingArguments = $true)]$CommandArgs)
     if (-not $CommandArgs -or $CommandArgs.Count -eq 0) {
@@ -88,13 +99,14 @@ if ($SkillsOnly) {
 $launchArgs = @()
 if ($All) { $launchArgs += "--all" }
 if ($Global) { $launchArgs += "-g" }
+if ($Classic) { $launchArgs += "--classic" }
 if ($Serve) {
     $launchArgs += "--serve"
     if ($Bind) { $launchArgs += @("--bind", $Bind) }
 }
 
-Write-Host "[Kx] PowerShell CLI ready. After launch, type commands at Kx> prompt." -ForegroundColor DarkCyan
-Write-Host "[Kx] Examples: /h   |   roast tickets --scope lab --sim   |   exit" -ForegroundColor DarkCyan
+Write-Host "[Kx] eDEX HUD launching in this PowerShell window..." -ForegroundColor DarkCyan
+Write-Host "[Kx] Commands: /h | lang ko|en | roast tickets --scope lab --sim | exit" -ForegroundColor DarkCyan
 Write-Host ""
 
 if ($repoRoot -and (Test-Path (Join-Path $repoRoot "scripts\npx-entry.js"))) {

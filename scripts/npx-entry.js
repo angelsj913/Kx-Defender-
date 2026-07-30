@@ -27,33 +27,30 @@ const {
   SETUP_VERSION,
 } = require("./npm-setup");
 const { printKxBanner } = require("./banner");
+const { startEdexShell } = require("./edex-shell");
 const { startKxShell } = require("./kx-shell");
 
 function printHelp() {
   printKxBanner();
-  console.log(`Kx-Defender (CLI — no server by default)
+  console.log(`Kx-Defender (eDEX HUD in PowerShell — no server by default)
 
 PowerShell:
   npx -y --prefer-online angelsj913/Kx-Defender-
   irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
 
-Then at the Kx> prompt:
+HUD commands:
   /h
+  lang ko | lang en
   roast tickets --scope lab --realm lab.local --sim
-  watch procs --scope lab --live
   exit
 
 One-shot:
   npx -y --prefer-online angelsj913/Kx-Defender- kx /h
-  npx -y --prefer-online angelsj913/Kx-Defender- kx roast tickets --scope lab --sim
 
-Optional Console UI:
-  npx -y --prefer-online angelsj913/Kx-Defender- serve
-
-Flags:
-  --all / -g      Install agent skills (+ shims)
-  --serve         Start Console UI instead of CLI shell
-  --bind host:port
+Optional:
+  --serve     Web Console (eDEX-styled)
+  --classic   Plain shell (no HUD panels)
+  edex|hud    Force eDEX HUD
 `);
 }
 
@@ -63,6 +60,7 @@ function parseArgs(argv) {
     global: false,
     project: false,
     serve: false,
+    classic: false,
     bind: process.env.KX_BIND || "127.0.0.1:8787",
     help: false,
   };
@@ -73,8 +71,11 @@ function parseArgs(argv) {
     else if (a === "-g" || a === "--global") flags.global = true;
     else if (a === "--project") flags.project = true;
     else if (a === "--serve" || a === "--console") flags.serve = true;
-    else if (a === "--no-serve") flags.serve = false; // legacy no-op (CLI is default)
-    else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
+    else if (a === "--classic" || a === "--simple") flags.classic = true;
+    else if (a === "--no-serve") flags.serve = false;
+    else if (a === "--edex" || a === "--hud") {
+      /* default */
+    } else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
     else if (a === "--bind") flags.bind = argv[++i];
     else if (a.startsWith("--bind=")) flags.bind = a.slice("--bind=".length);
     else positional.push(a);
@@ -157,7 +158,12 @@ function runProgram(flags, { withSkills = false } = {}) {
     startServe(flags.bind);
     return;
   }
-  startKxShell();
+  // Classic plain shell: --classic ; default = eDEX HUD
+  if (flags.classic) {
+    startKxShell();
+    return;
+  }
+  startEdexShell();
 }
 
 function main() {
@@ -184,6 +190,13 @@ function main() {
     setupSync();
     installUserShims();
     startKxShell();
+    return;
+  }
+
+  if (cmd === "edex" || cmd === "hud") {
+    setupSync();
+    installUserShims();
+    startEdexShell();
     return;
   }
 

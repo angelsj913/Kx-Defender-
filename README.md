@@ -69,29 +69,22 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 | `compliance` | 7 | CMMC, PCI-DSS, NERC CIP, ... |
 | `building_defense` | 31 | defensive `building-*` blueprints |
 
-## Install & run (PowerShell CLI — no server)
+## Install & run (PowerShell eDEX HUD)
 
 ```powershell
 npx clear-npx-cache; npx -y --prefer-online angelsj913/Kx-Defender-
 ```
 
-Opens an interactive **Kx>** shell in the terminal (does **not** start the web Console).
+Tron/eDEX-style multi-panel HUD inside the terminal (SYS / MAIN / NET + filesystem strip).
 
 ```
-Kx> lang ko
-Kx> /h
-Kx> roast tickets --scope lab --realm lab.local --sim
-Kx> lang en
-Kx> exit
+ kx> /h
+ kx> lang ko
+ kx> roast tickets --scope lab --sim
+ kx> exit
 ```
 
-Language:
-
-```powershell
-npx -y --prefer-online angelsj913/Kx-Defender- kx lang ko
-npx -y --prefer-online angelsj913/Kx-Defender- kx lang en
-npx -y --prefer-online angelsj913/Kx-Defender- kx lang
-```
+Plain shell: `--classic` · Web Console: `serve`
 
 One-shot:
 
