@@ -157,7 +157,7 @@ class KxClient {
 
     if (["users", "useradd", "userdel", "passwd"].includes(head)) {
       this.store = loadUsers();
-      handleAuthCmd(args, this.store);
+      handleAuthCmd(args, this.store, this.user);
       return;
     }
 

@@ -10,14 +10,29 @@ const KX_DIR = path.join(os.homedir(), ".kx-defender");
 const USERS_FILE = path.join(KX_DIR, "users.json");
 
 function hash(pw) {
-  return crypto.createHash("sha256").update(String(pw)).digest("hex");
+  const salt = crypto.randomBytes(16).toString("hex");
+  const digest = crypto.scryptSync(String(pw), salt, 64).toString("hex");
+  return `scrypt$${salt}$${digest}`;
+}
+
+function verify(password, stored) {
+  if (typeof stored !== "string") return false;
+  if (stored.startsWith("scrypt$")) {
+    const [, salt, expected] = stored.split("$");
+    if (!salt || !/^[a-f0-9]{128}$/i.test(expected || "")) return false;
+    const actual = crypto.scryptSync(String(password), salt, 64).toString("hex");
+    return crypto.timingSafeEqual(Buffer.from(actual, "hex"), Buffer.from(expected, "hex"));
+  }
+  if (!/^[a-f0-9]{64}$/i.test(stored)) return false;
+  const legacy = crypto.createHash("sha256").update(String(password)).digest("hex");
+  return crypto.timingSafeEqual(Buffer.from(legacy, "hex"), Buffer.from(stored, "hex"));
 }
 
 function load() {
   try {
     return JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
   } catch (_) {
-    return { users: [{ username: "admin", passwordHash: hash("admin"), role: "admin" }] };
+    return { users: [] };
   }
 }
 
@@ -27,9 +42,10 @@ function save(store) {
 }
 
 function init() {
-  if (!fs.existsSync(USERS_FILE)) {
-    save({ users: [{ username: "admin", passwordHash: hash("admin"), role: "admin" }] });
-  }
+  if (fs.existsSync(USERS_FILE)) return null;
+  const password = process.env.KX_INITIAL_ADMIN_PASSWORD || crypto.randomBytes(18).toString("base64url");
+  save({ users: [{ username: "admin", passwordHash: hash(password), role: "admin" }] });
+  return process.env.KX_INITIAL_ADMIN_PASSWORD ? null : password;
 }
 
 function readLine(prompt) {
@@ -74,16 +90,26 @@ function readSecret(prompt) {
 }
 
 async function login() {
-  init();
+  const initialPassword = init();
   const WARN = "\x1b[38;2;255;176;0m";
   const RESET = "\x1b[0m";
+
+  if (initialPassword) {
+    process.stdout.write(`${WARN}  First-run admin password (save it now): ${initialPassword}${RESET}\n`);
+  }
 
   for (let i = 0; i < 3; i++) {
     const username = await readLine("  username: ");
     const password = await readSecret("  password: ");
     const store = load();
     const user = store.users.find((u) => u.username === username);
-    if (user && user.passwordHash === hash(password)) return user;
+    if (user && verify(password, user.passwordHash)) {
+      if (!user.passwordHash.startsWith("scrypt$")) {
+        user.passwordHash = hash(password);
+        save(store);
+      }
+      return user;
+    }
     const left = 2 - i;
     if (left > 0) process.stdout.write(`${WARN}  incorrect. ${left} attempt(s) left${RESET}\n\n`);
   }
@@ -91,16 +117,21 @@ async function login() {
   process.exit(1);
 }
 
-function handleAuthCmd(args, store) {
+function handleAuthCmd(args, store, actor) {
   const cmd = (args[0] || "").toLowerCase();
+
+  if (!actor || actor.role !== "admin") {
+    console.error("  admin role required");
+    return true;
+  }
 
   if (cmd === "users") {
     for (const u of store.users) console.log(`  ${u.role === "admin" ? "*" : " "} ${u.username}`);
     return true;
   }
   if (cmd === "useradd") {
-    const [, uname, pw = "password"] = args;
-    if (!uname) { console.error("  useradd <username> [password]"); return true; }
+    const [, uname, pw] = args;
+    if (!uname || !pw) { console.error("  useradd <username> <password>"); return true; }
     if (store.users.find((u) => u.username === uname)) { console.error(`  '${uname}' exists`); return true; }
     store.users.push({ username: uname, passwordHash: hash(pw), role: "user" });
     save(store);
@@ -131,4 +162,4 @@ function handleAuthCmd(args, store) {
   return false;
 }
 
-module.exports = { login, handleAuthCmd, load, init, hash };
+module.exports = { login, handleAuthCmd, load, init, hash, verify };
