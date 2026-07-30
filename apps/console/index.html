@@ -45,6 +45,20 @@
     <button id="clear-btn" class="danger" data-i18n="btn.clear">CLEAR</button>
   </section>
 
+  <!-- Dynamic Parameter Form (verb+object dependent) -->
+  <section id="param-form" class="param-form" aria-live="polite">
+    <div class="param-form-inner">
+      <div class="param-header">
+        <span class="param-title" data-i18n="param.title">PARAMETERS</span>
+        <span id="param-context" class="param-context">—</span>
+        <span class="param-hint" data-i18n="param.hint">enter values → RUN appends them to the command</span>
+      </div>
+      <div id="param-fields" class="param-fields">
+        <div class="param-empty" data-i18n="param.empty">Type a verb + object to see required parameters (e.g. `sweep web`, `kill pid`).</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Status Bar (Real-time) -->
   <section class="status-bar">
     <div class="status-item">

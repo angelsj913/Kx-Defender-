@@ -13,6 +13,7 @@ const state = {
   lexicon: null,          // { verbs: { roast: {objects: [...], default_object, role, family}, ... } }
   suggestions: [],        // current suggestion list
   suggestIndex: -1,       // highlighted suggestion index
+  paramSchemaKey: null,   // last rendered param schema key (to skip DOM rebuild)
 };
 
 const LS_HISTORY_KEY = "kx-cmd-history";
@@ -59,6 +60,11 @@ const I18N = {
     "msg.loading": "loading…",
     "msg.no_runs": "no runs yet",
     "msg.ready": "ready",
+    "param.title": "PARAMETERS",
+    "param.hint": "enter values → RUN appends them to the command",
+    "param.empty": "Type a verb + object to see required parameters (e.g. `sweep web`, `kill pid`).",
+    "param.already": "already in command",
+    "param.required_missing": "required — will use default in simulate",
   },
   ko: {
     "scope": "범위",
@@ -95,6 +101,11 @@ const I18N = {
     "msg.loading": "불러오는 중…",
     "msg.no_runs": "실행 기록 없음",
     "msg.ready": "준비",
+    "param.title": "파라미터",
+    "param.hint": "값 입력 → 실행 시 명령에 자동 추가",
+    "param.empty": "verb + object 를 입력하면 필요한 파라미터가 표시됩니다 (예: `sweep web`, `kill pid`).",
+    "param.already": "이미 명령에 포함됨",
+    "param.required_missing": "필수 — 시뮬레이션에서는 기본값 사용",
   },
 };
 
@@ -138,6 +149,9 @@ function toggleLang() {
   currentLang = currentLang === "ko" ? "en" : "ko";
   try { localStorage.setItem(LS_LANG_KEY, currentLang); } catch {}
   applyI18n();
+  // Rebuild param form so hint texts refresh in the new language
+  state.paramSchemaKey = null;
+  if (typeof updateParamForm === "function") updateParamForm();
 }
 
 // Global flag suggestions (all known flags across modules)
@@ -621,6 +635,336 @@ async function refreshLedger() {
 }
 
 // ============================================================
+// Parameter Schema (per verb+object) — drives the dynamic form
+// Each field: { flag, label, type, placeholder, required, hint, defaultValue }
+//   flag        : the CLI flag to append (e.g. "--url", "--pid")
+//   label       : short human label for the input
+//   type        : "text" | "number" | "select"
+//   options     : for type=select, list of {value, label}
+//   placeholder : sample value shown in the input
+//   required    : true → orange border, warning if empty
+//   hint        : small helper text below the input
+//   defaultValue: pre-filled value on render
+// ============================================================
+const PARAM_SCHEMA = {
+  // Attack — Kerberos
+  "roast.tickets": [
+    { flag: "--realm", label: "AD Realm", type: "text", placeholder: "lab.local", required: false, hint: "Active Directory domain" },
+  ],
+  "roast.spn": [
+    { flag: "--realm", label: "AD Realm", type: "text", placeholder: "lab.local", required: false, hint: "Active Directory domain" },
+  ],
+
+  // Attack — NTLM relay
+  "relay.esc8": [
+    { flag: "--at", label: "ADCS Target", type: "text", placeholder: "adcs.lab.local", required: false, hint: "Certificate authority host" },
+    { flag: "--realm", label: "AD Realm", type: "text", placeholder: "lab.local", required: false, hint: "Domain (optional)" },
+  ],
+  "relay.ntlm": [
+    { flag: "--at", label: "Relay Target", type: "text", placeholder: "smb.lab.local", required: false, hint: "SMB / HTTP endpoint" },
+  ],
+
+  // Attack — DPAPI / OAuth / WiFi
+  "loot.vault": [
+    { flag: "--at", label: "User / Host", type: "text", placeholder: "user@lab.local", required: false, hint: "Credential target (optional)" },
+  ],
+  "loot.dpapi": [
+    { flag: "--at", label: "User / Host", type: "text", placeholder: "user@lab.local", required: false, hint: "DPAPI vault owner" },
+  ],
+  "bait.dcode": [
+    { flag: "--at", label: "IdP Endpoint", type: "text", placeholder: "mock.idp.local", required: false, hint: "OAuth device-code IdP" },
+  ],
+  "bait.oauth": [
+    { flag: "--at", label: "IdP Endpoint", type: "text", placeholder: "mock.idp.local", required: false, hint: "OAuth IdP" },
+  ],
+  "crack.wifi": [
+    { flag: "--at", label: "ESSID", type: "text", placeholder: "LabWiFi", required: false, hint: "Target WiFi network name" },
+  ],
+  "crack.wpa": [
+    { flag: "--at", label: "ESSID", type: "text", placeholder: "LabWiFi", required: false, hint: "Target WPA network" },
+  ],
+
+  // Attack — Cloud / Entra / Graph / LLM
+  "breach.entra": [
+    { flag: "--realm", label: "Tenant", type: "text", placeholder: "contoso.lab.local", required: false, hint: "Entra ID tenant domain" },
+  ],
+  "breach.aad": [
+    { flag: "--realm", label: "Tenant", type: "text", placeholder: "contoso.lab.local", required: false, hint: "Azure AD tenant" },
+  ],
+  "graph.pull": [
+    { flag: "--with", label: "Access Token", type: "text", placeholder: "access_token=labtok_...", required: false, hint: "key=value (optional token)" },
+  ],
+  "graph.mail": [
+    { flag: "--with", label: "Access Token", type: "text", placeholder: "access_token=labtok_...", required: false, hint: "key=value" },
+  ],
+  "graph.drive": [
+    { flag: "--with", label: "Access Token", type: "text", placeholder: "access_token=labtok_...", required: false, hint: "key=value" },
+  ],
+  "probe.mind": [
+    { flag: "--at", label: "Model Endpoint", type: "text", placeholder: "http://localhost:8000/v1", required: false, hint: "LLM API endpoint" },
+  ],
+  "probe.llm": [
+    { flag: "--at", label: "Model Endpoint", type: "text", placeholder: "http://localhost:8000/v1", required: false, hint: "LLM API" },
+  ],
+  "probe.garak": [
+    { flag: "--at", label: "Model Endpoint", type: "text", placeholder: "http://localhost:8000/v1", required: false, hint: "LLM API" },
+  ],
+
+  // C2 / Nexus
+  "nexus.listen": [
+    { flag: "--bind", label: "Bind (host:port)", type: "text", placeholder: "127.0.0.1:4455", required: true, hint: "Loopback only in --live", defaultValue: "127.0.0.1:4455" },
+  ],
+  "nexus.havoc": [
+    { flag: "--bind", label: "Bind (host:port)", type: "text", placeholder: "127.0.0.1:4455", required: true, hint: "Havoc listener bind", defaultValue: "127.0.0.1:4455" },
+  ],
+  "nexus.sliver": [
+    { flag: "--bind", label: "Bind (host:port)", type: "text", placeholder: "127.0.0.1:4456", required: true, hint: "Sliver listener bind", defaultValue: "127.0.0.1:4456" },
+  ],
+  "nexus.status": [],
+
+  // Web sweep — URL is essential
+  "sweep.web": [
+    { flag: "--url", label: "Target URL", type: "text", placeholder: "http://127.0.0.1:8080/", required: true, hint: "Full URL to scan (http/https)" },
+  ],
+  "sweep.xss": [
+    { flag: "--url", label: "Target URL", type: "text", placeholder: "http://127.0.0.1:8080/?q=test", required: true, hint: "URL with reflected params" },
+  ],
+  "sweep.sqli": [
+    { flag: "--url", label: "Target URL", type: "text", placeholder: "http://127.0.0.1:8080/api?id=1", required: true, hint: "URL with query params" },
+  ],
+  "sweep.jwt": [
+    { flag: "--url", label: "JWT Endpoint", type: "text", placeholder: "http://127.0.0.1:8080/auth", required: true, hint: "Endpoint that returns JWT" },
+  ],
+  "sweep.xxe": [
+    { flag: "--url", label: "XML Endpoint", type: "text", placeholder: "http://127.0.0.1:8080/api/upload", required: true, hint: "Endpoint accepting XML" },
+  ],
+  "sweep.redirect": [
+    { flag: "--url", label: "Target URL", type: "text", placeholder: "http://127.0.0.1:8080/redirect?next=", required: true, hint: "URL with redirect param" },
+  ],
+  "sweep.bac": [
+    { flag: "--url", label: "Target URL", type: "text", placeholder: "http://127.0.0.1:8080/", required: true, hint: "App root to test access control" },
+  ],
+  "sweep.prompt-leak": [
+    { flag: "--url", label: "LLM Endpoint", type: "text", placeholder: "http://127.0.0.1:8080/chat", required: true, hint: "LLM inference endpoint" },
+  ],
+
+  // Defense — process
+  "watch.procs": [
+    { flag: "--with", label: "Limit", type: "text", placeholder: "limit=200", required: false, hint: "key=value (max processes)" },
+  ],
+  "watch.process": [
+    { flag: "--with", label: "Limit", type: "text", placeholder: "limit=200", required: false, hint: "key=value" },
+  ],
+  "kill.pid": [
+    { flag: "--pid", label: "PID", type: "number", placeholder: "1234", required: true, hint: "process id (int)" },
+    { flag: "--with", label: "Force", type: "text", placeholder: "force=true", required: false, hint: "key=value (SIGKILL)" },
+  ],
+  "kill.proc": [
+    { flag: "--pid", label: "PID", type: "number", placeholder: "1234", required: true, hint: "process id" },
+  ],
+
+  // Defense — signature scan
+  "sig.scan": [
+    { flag: "--path", label: "File Path", type: "text", placeholder: "/tmp/sample.exe", required: false, hint: "Path OR sample below" },
+    { flag: "--with", label: "Sample", type: "text", placeholder: "sample=powershell -enc AAAA", required: false, hint: "key=value (raw text)" },
+  ],
+  "sig.file": [
+    { flag: "--path", label: "File Path", type: "text", placeholder: "/tmp/sample.exe", required: true, hint: "Path to scan" },
+  ],
+};
+
+// Fallback param sets when there's no verb+object mapping yet
+const GENERIC_VERB_FALLBACK = {
+  sentry:  [{ flag: "--at", label: "Focus", type: "text", placeholder: "host or artifact", required: false, hint: "optional context" }],
+  trace:   [{ flag: "--at", label: "Focus", type: "text", placeholder: "sample or host", required: false, hint: "optional analysis target" }],
+  audit:   [{ flag: "--at", label: "Focus", type: "text", placeholder: "resource id", required: false, hint: "optional target" }],
+  harden:  [{ flag: "--at", label: "Focus", type: "text", placeholder: "resource id", required: false, hint: "optional target" }],
+  forge:   [{ flag: "--at", label: "Focus", type: "text", placeholder: "rule name", required: false, hint: "optional context" }],
+  triage:  [{ flag: "--at", label: "Focus", type: "text", placeholder: "incident id", required: false, hint: "optional target" }],
+  comply:  [{ flag: "--pact-file", label: "Pact File", type: "text", placeholder: "/path/to/pact.json", required: false, hint: "engagement scope file" }],
+};
+
+// ============================================================
+// Dynamic Parameter Form
+// ============================================================
+function schemaFor(verb, obj) {
+  if (!verb) return { fields: [], key: null };
+  const key = `${verb.toLowerCase()}.${(obj || "").toLowerCase()}`;
+  if (PARAM_SCHEMA[key]) return { fields: PARAM_SCHEMA[key], key };
+  // Try verb.<default_object> from lexicon
+  const meta = state.lexicon?.verbs?.[verb.toLowerCase()];
+  if (meta) {
+    const def = meta.default_object;
+    const dkey = `${verb.toLowerCase()}.${def}`;
+    if (PARAM_SCHEMA[dkey]) return { fields: PARAM_SCHEMA[dkey], key: dkey };
+  }
+  // Verb-level fallback
+  const fb = GENERIC_VERB_FALLBACK[verb.toLowerCase()];
+  if (fb) return { fields: fb, key: `${verb.toLowerCase()}.*` };
+  return { fields: [], key: null };
+}
+
+/**
+ * Extract (verb, obj) and set of already-present flags from a raw command string.
+ * Returns { verb, obj, flagsSet, flagValues } where flagValues['--url'] = 'http://...'
+ */
+function parseCommandForm(input) {
+  const tokens = input.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return { verb: "", obj: "", flagsSet: new Set(), flagValues: {} };
+  const verb = tokens[0] || "";
+  let obj = "";
+  let i = 1;
+  if (tokens[1] && !tokens[1].startsWith("-")) {
+    obj = tokens[1];
+    i = 2;
+  }
+  const flagsSet = new Set();
+  const flagValues = {};
+  while (i < tokens.length) {
+    const tok = tokens[i];
+    if (tok.startsWith("--")) {
+      flagsSet.add(tok);
+      // Value-taking flags: peek next token if not another flag
+      const takesValue = ["--scope","--at","--realm","--url","--bind","--pid","--path","--pact-file","--with"].includes(tok);
+      if (takesValue && i + 1 < tokens.length && !tokens[i + 1].startsWith("-")) {
+        flagValues[tok] = tokens[i + 1];
+        i += 2;
+        continue;
+      }
+    }
+    i += 1;
+  }
+  return { verb, obj, flagsSet, flagValues };
+}
+
+function fieldDomId(flag) {
+  return "pf-" + flag.replace(/[^a-z0-9]/gi, "_");
+}
+
+/**
+ * Render (or update) the parameter form based on the current command input.
+ * DOM is patched in-place — never regenerated wholesale unless the schema changes.
+ */
+function updateParamForm() {
+  const raw = $("cmd").value;
+  const { verb, obj, flagsSet, flagValues } = parseCommandForm(raw);
+  const { fields, key } = schemaFor(verb, obj);
+  const ctx = $("param-context");
+  const box = $("param-fields");
+  const form = $("param-form");
+
+  // Update context label (verb + object) — cheap, always
+  if (verb) {
+    ctx.textContent = obj ? `${verb} ${obj}` : `${verb} …`;
+    ctx.style.opacity = "1";
+  } else {
+    ctx.textContent = "—";
+    ctx.style.opacity = "0.4";
+  }
+
+  // If no schema applies → show empty message (but keep form visible for context)
+  if (!fields || fields.length === 0) {
+    if (state.paramSchemaKey !== "__empty__" + (key || "")) {
+      state.paramSchemaKey = "__empty__" + (key || "");
+      box.innerHTML = `<div class="param-empty">${escapeHtml(t("param.empty", "Type a verb + object to see required parameters."))}</div>`;
+    }
+    return;
+  }
+
+  // If schema changed, rebuild the fields; otherwise just update state markers
+  const schemaKey = `${key}::${fields.map(f => f.flag).join(",")}`;
+  if (state.paramSchemaKey !== schemaKey) {
+    state.paramSchemaKey = schemaKey;
+    let html = "";
+    fields.forEach((f) => {
+      const domId = fieldDomId(f.flag);
+      html += `<div class="param-field ${f.required ? "required" : "optional"}" data-flag="${escapeAttr(f.flag)}">`;
+      html += `<label class="param-field-label" for="${domId}">`;
+      html += `<span class="param-field-flag">${escapeHtml(f.flag)}</span>`;
+      html += `<span>${escapeHtml(f.label || "")}</span>`;
+      if (f.required) html += `<span class="param-field-required-mark">*</span>`;
+      html += `</label>`;
+      const val = f.defaultValue || "";
+      const typeAttr = f.type === "number" ? "number" : "text";
+      html += `<input class="param-field-input" id="${domId}" type="${typeAttr}" `;
+      html += `placeholder="${escapeAttr(f.placeholder || "")}" value="${escapeAttr(val)}" `;
+      html += `data-flag="${escapeAttr(f.flag)}" spellcheck="false" autocomplete="off" />`;
+      html += `<span class="param-field-hint" data-hint-for="${escapeAttr(f.flag)}">${escapeHtml(f.hint || "")}</span>`;
+      html += `</div>`;
+    });
+    box.innerHTML = html;
+
+    // Wire input events to keep filled/required styling live
+    box.querySelectorAll(".param-field-input").forEach((el) => {
+      el.addEventListener("input", () => syncFieldState(el));
+    });
+  }
+
+  // Sync each field's "already-set" / "filled" state against current command
+  box.querySelectorAll(".param-field").forEach((wrap) => {
+    const flag = wrap.getAttribute("data-flag");
+    const input = wrap.querySelector(".param-field-input");
+    const hint = wrap.querySelector(".param-field-hint");
+    const alreadyInCmd = flagsSet.has(flag);
+    if (alreadyInCmd) {
+      wrap.classList.add("already-set");
+      input.disabled = true;
+      input.placeholder = flagValues[flag] || "(already in command)";
+      hint.classList.add("already");
+      hint.textContent = t("param.already", "already in command") + (flagValues[flag] ? `: ${flagValues[flag]}` : "");
+    } else {
+      wrap.classList.remove("already-set");
+      input.disabled = false;
+      hint.classList.remove("already");
+    }
+    syncFieldState(input);
+  });
+}
+
+function syncFieldState(input) {
+  const wrap = input.closest(".param-field");
+  if (!wrap) return;
+  const hasValue = String(input.value || "").trim().length > 0;
+  wrap.classList.toggle("filled", hasValue);
+  input.classList.toggle("invalid", wrap.classList.contains("required") && !hasValue && !wrap.classList.contains("already-set"));
+}
+
+/**
+ * Read all filled param inputs and return array of flag/value pairs to append.
+ * Skips flags already present in the raw command.
+ */
+function collectParamsFromForm(rawCommand) {
+  const { flagsSet } = parseCommandForm(rawCommand);
+  const out = [];
+  document.querySelectorAll("#param-fields .param-field-input").forEach((el) => {
+    const flag = el.getAttribute("data-flag");
+    const value = String(el.value || "").trim();
+    if (!flag || !value) return;
+    if (flagsSet.has(flag)) return;         // don't duplicate
+    if (el.disabled) return;                // already-set
+    out.push({ flag, value });
+  });
+  return out;
+}
+
+/**
+ * Merge form values into the raw command (append missing flags).
+ * Returns the augmented command string.
+ */
+function augmentCommandWithForm(raw) {
+  const additions = collectParamsFromForm(raw);
+  if (additions.length === 0) return raw;
+  let cmd = raw.trimEnd();
+  additions.forEach(({ flag, value }) => {
+    // Quote value if it contains spaces
+    const needsQuote = /\s/.test(value);
+    const v = needsQuote ? `"${value.replace(/"/g, '\\"')}"` : value;
+    cmd += ` ${flag} ${v}`;
+  });
+  return cmd;
+}
+
+// ============================================================
 // Autocomplete (verb / object / flag suggestions)
 // ============================================================
 async function loadLexicon() {
@@ -763,6 +1107,7 @@ function acceptSuggestion(indexOverride) {
   input.setSelectionRange(newCaret, newCaret);
   closeSuggestions();
   triggerSuggestions();
+  updateParamForm();
 }
 
 function closeSuggestions() {
@@ -822,13 +1167,21 @@ async function boot() {
     $("health").textContent = "DOWN";
   }
 
-  // Run button
+  // Run button — merges form values into command before executing
   $("run").onclick = () => {
-    const cmd = $("cmd").value.trim();
-    if (!cmd) return;
-    pushHistory(cmd);
+    const raw = $("cmd").value.trim();
+    if (!raw) return;
+    const merged = augmentCommandWithForm(raw);
+    if (merged !== raw) {
+      // Reflect the augmented command back into the input so the user sees
+      // exactly what was executed. This does NOT regenerate the UI.
+      $("cmd").value = merged;
+    }
+    pushHistory(merged);
     state.historyIndex = -1;
-    runKx(cmd);
+    runKx(merged);
+    // Refresh form marker states (fields become "already-set")
+    updateParamForm();
   };
 
   // Clear button (resets output panels; does NOT regenerate UI)
@@ -846,6 +1199,11 @@ async function boot() {
     setModule("—");
     setDuration(0);
     setCounts(0, 0, state.runCount);
+    // Clear param form inputs (keep schema, wipe values)
+    document.querySelectorAll("#param-fields .param-field-input").forEach((el) => {
+      if (!el.disabled) el.value = "";
+      syncFieldState(el);
+    });
   };
 
   // Command input events (keyboard + autocomplete)
@@ -884,8 +1242,8 @@ async function boot() {
       return;
     }
   });
-  cmdEl.addEventListener("input", () => triggerSuggestions());
-  cmdEl.addEventListener("focus", () => triggerSuggestions());
+  cmdEl.addEventListener("input", () => { triggerSuggestions(); updateParamForm(); });
+  cmdEl.addEventListener("focus", () => { triggerSuggestions(); updateParamForm(); });
   cmdEl.addEventListener("blur", () => setTimeout(closeSuggestions, 150));
   cmdEl.addEventListener("click", () => triggerSuggestions());
 
@@ -893,6 +1251,7 @@ async function boot() {
   document.querySelectorAll("button[data-cmd]").forEach((btn) => {
     btn.addEventListener("click", () => {
       $("cmd").value = btn.getAttribute("data-cmd");
+      updateParamForm();
       $("run").click();
     });
   });
@@ -904,6 +1263,9 @@ async function boot() {
   // Language toggle
   const langBtn = document.getElementById("lang-toggle");
   if (langBtn) langBtn.onclick = toggleLang;
+
+  // Initial parameter form render (empty state)
+  updateParamForm();
 
   // Focus command input on load
   $("cmd").focus();

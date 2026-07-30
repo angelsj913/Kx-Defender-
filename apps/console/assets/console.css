@@ -251,6 +251,133 @@ button.danger:hover {
   box-shadow: 0 0 14px rgba(255, 56, 96, 0.35);
 }
 
+/* ============================================================ */
+/* Parameter Form (dynamic, verb+object dependent)                */
+/* ============================================================ */
+.param-form {
+  position: relative;
+  z-index: 3;
+  border-bottom: 1px solid var(--line);
+  background: rgba(5, 8, 13, 0.9);
+  flex: 0 0 auto;
+  max-height: 260px;
+  overflow-y: auto;
+  transition: max-height 0.2s ease;
+}
+.param-form.hidden { display: none; }
+.param-form-inner {
+  padding: 8px 18px;
+}
+.param-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+.param-title {
+  color: var(--orange);
+  font-weight: 700;
+  text-shadow: 0 0 6px var(--glow-orange);
+}
+.param-context {
+  color: var(--cyan-hot);
+  text-shadow: 0 0 6px var(--glow);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.param-hint {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  margin-left: auto;
+  font-style: italic;
+}
+.param-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px 12px;
+}
+.param-empty {
+  color: var(--muted);
+  font-size: 10px;
+  padding: 6px 0;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+.param-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 8px;
+  border-left: 2px solid var(--muted);
+  background: rgba(8, 12, 18, 0.6);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.param-field.required { border-left-color: var(--orange); }
+.param-field.required.filled { border-left-color: var(--green); }
+.param-field.optional { border-left-color: var(--muted); }
+.param-field.optional.filled { border-left-color: var(--cyan-hot); }
+.param-field.already-set {
+  border-left-color: var(--cyan);
+  background: rgba(0, 229, 255, 0.05);
+  opacity: 0.7;
+}
+.param-field-label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text);
+  letter-spacing: 0.08em;
+}
+.param-field-flag {
+  color: var(--cyan-hot);
+  font-weight: 700;
+  font-family: var(--font);
+  text-shadow: 0 0 4px var(--glow);
+}
+.param-field-required-mark {
+  color: var(--orange);
+  font-weight: 700;
+}
+.param-field-input {
+  background: #05080d;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 5px 8px;
+  outline: none;
+  font-family: var(--font);
+  font-size: 11px;
+}
+.param-field-input:focus {
+  border-color: var(--cyan-hot);
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.3), 0 0 10px var(--glow);
+}
+.param-field-input.invalid {
+  border-color: var(--red);
+  box-shadow: 0 0 0 1px rgba(255, 56, 96, 0.35);
+}
+.param-field-hint {
+  font-size: 9px;
+  color: var(--muted);
+  font-style: italic;
+}
+.param-field-hint.already {
+  color: var(--cyan-hot);
+  font-weight: 700;
+}
+.param-field-select {
+  background: #05080d;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 4px 6px;
+  font-family: var(--font);
+  font-size: 11px;
+}
+
 /* Status Bar - Fixed Height */
 .status-bar {
   position: relative;
