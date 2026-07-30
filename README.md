@@ -5,15 +5,18 @@ Self-built Windows-oriented attack + defense platform (KxLang). Authorized & law
 ## Install
 
 ```bash
-npx skills add angelsj913/Kx-Defender- --all -g
+npx --yes kx-defender add --all -g
 ```
 
-Same shape as `npx skills add vercel-labs/portless`.
-
-List skills without installing:
+Or from this repo:
 
 ```bash
-npx skills add angelsj913/Kx-Defender- -l
+node scripts/npx-entry.js add --all -g
 ```
+
+Installs bundled skills into `~/.agents/skills` and `~/.cursor/skills`.
+Clean output — no GitHub Source banner, no Eve/PromptScript errors.
+
+Do **not** use third-party `npx skills add …` for this repo.
 
 License: Apache-2.0
