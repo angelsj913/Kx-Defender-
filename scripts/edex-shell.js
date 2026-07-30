@@ -310,7 +310,7 @@ class KxClient {
     this.lang = readLang();
     this.locked = false;
     this.pushOut(`${C.ok}operator client online${C.reset}`);
-    this.pushOut(`${C.mute}/h · update · Ctrl+C lock (type kx to resume) · exit${C.reset}`);
+    this.pushOut(`${C.mute}/h · update · Ctrl+C lock (kx or verb to resume) · exit${C.reset}`);
 
     const rl = readline.createInterface({
       input: process.stdin,
@@ -321,14 +321,22 @@ class KxClient {
     let ask = () => {};
     const softLock = () => {
       if (this.locked) {
-        process.stdout.write(`\n${C.warn}[Kx] locked — type kx to resume${C.reset}\n`);
+        const msg =
+          this.lang === "ko"
+            ? "\n[Kx] 잠금 — kx 또는 명령(예: sentry)으로 해제\n"
+            : "\n[Kx] locked — type kx or a command (e.g. sentry)\n";
+        process.stdout.write(`\n${C.warn}${msg.trim()}${C.reset}\n`);
         ask();
         return;
       }
       this.locked = true;
       this.history = [];
       this.pushOut(`${C.warn}client locked${C.reset}`);
-      this.pushOut("resume: include kx in input");
+      this.pushOut(
+        this.lang === "ko"
+          ? "해제: kx 또는 명령 입력 (예: sentry)"
+          : "resume: kx or a command (e.g. sentry)"
+      );
       ask();
     };
 
@@ -349,16 +357,17 @@ class KxClient {
               process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
               process.exit(0);
             }
-            // Unlock on "kx" OR a real command like sentry (Ctrl+C soft-lock used to
-            // swallow verbs forever with "locked — include kx").
+            // Unlock on "kx" OR a real command like sentry.
+            // Only auto-run when the leftover text is a real KxLang/meta head —
+            // never spawn garbage like "login_kx" or "host-kx-01".
             if (containsKx(trimmed) || looksLikeKxCommand(trimmed)) {
               this.locked = false;
               this.history = [];
               this.pushOut(`${C.ok}client resumed${C.reset}`);
               const cmd = stripUnlockPrefix(trimmed);
-              if (cmd) {
+              if (cmd && looksLikeKxCommand(cmd)) {
                 const low = cmd.toLowerCase();
-                if (low === "update" || low === "upgrade") {
+                if (low === "update" || low === "upgrade" || /^kx\s+(update|upgrade)$/i.test(low)) {
                   this.pushOut("updating…");
                   try {
                     require("./kx-update").updateKx();

@@ -99,8 +99,17 @@ function looksLikeKxCommand(line) {
 /** Strip a leading unlock-only token ("kx" / "login kx") leaving the real command. */
 function stripUnlockPrefix(line) {
   let s = String(line || "").trim();
-  const low = s.toLowerCase();
-  if (low === "kx" || low === "login kx" || low === "login-kx" || low === "loginkx") return "";
+  const low = s.toLowerCase().replace(/[\[\]]/g, "");
+  if (
+    low === "kx" ||
+    low === "login kx" ||
+    low === "login-kx" ||
+    low === "loginkx" ||
+    low === "login_kx" ||
+    /^login[-_]?kx$/.test(low)
+  ) {
+    return "";
+  }
   if (/^kx\s+/i.test(s)) s = s.replace(/^kx\s+/i, "").trim();
   return s;
 }

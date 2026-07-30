@@ -34,5 +34,11 @@ assert.strictEqual(looksLikeKxCommand("hello world"), false);
 assert.strictEqual(stripUnlockPrefix("kx"), "");
 assert.strictEqual(stripUnlockPrefix("kx sentry"), "sentry");
 assert.strictEqual(stripUnlockPrefix("sentry"), "sentry");
+assert.strictEqual(stripUnlockPrefix("login_kx"), "");
+assert.strictEqual(stripUnlockPrefix("login-kx"), "");
+assert.strictEqual(stripUnlockPrefix("loginkx"), "");
+assert.strictEqual(stripUnlockPrefix("host-kx-01"), "host-kx-01");
+assert.strictEqual(looksLikeKxCommand("host-kx-01"), false);
+assert.strictEqual(looksLikeKxCommand("login_kx"), false);
 
 console.log("test_kx_routing.js OK");
