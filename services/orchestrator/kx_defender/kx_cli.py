@@ -41,7 +41,7 @@ def _print_json(data: object) -> None:
 
 
 def _print_next() -> None:
-    print("next: kx /h", file=sys.stderr)
+    print(t("next: kx /h", "다음: kx /h"), file=sys.stderr)
 
 
 def _repo_root() -> Path:
@@ -736,7 +736,13 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_watch_continuous(args))
 
     if head == "serve":
-        print("KxLang error: web console removed. Use native client: kx", file=sys.stderr)
+        print(
+            t(
+                "KxLang error: web console removed. Use: kx",
+                "KxLang 오류: 웹 콘솔은 제거됨. kx 클라이언트를 사용하세요.",
+            ),
+            file=sys.stderr,
+        )
         raise SystemExit(2)
 
     raise SystemExit(_run_parsed(args, pretty=pretty))

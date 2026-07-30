@@ -12,6 +12,7 @@ const readline = require("readline");
 const { spawnSync } = require("child_process");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
+const { looksLikeKxCommand, stripUnlockPrefix, isUnlockToken } = require("./kx-routing");
 
 const C = {
   reset: "\x1b[0m",
@@ -26,7 +27,14 @@ const C = {
   bg: "\x1b[48;2;2;4;10m",
 };
 
-const LOGO = ["  _  __", " | |/ /__  __", " | ' </\\ \\/ /", " |_|\\_\\\\_/\\_\\"];
+const LOGO = [
+  "██╗  ██╗██╗  ██╗",
+  "██║ ██╔╝╚██╗██╔╝",
+  "█████╔╝  ╚███╔╝ ",
+  "██╔═██╗  ██╔██╗ ",
+  "██║  ██╗██╔╝ ██╗",
+  "╚═╝  ╚═╝╚═╝  ╚═╝",
+];
 
 function cols() {
   return Math.max(64, process.stdout.columns || 100);
@@ -121,10 +129,6 @@ function decodeChildText(raw) {
   return s;
 }
 
-function containsKx(text) {
-  return /kx/i.test(String(text || ""));
-}
-
 function primaryIpv4() {
   const ifaces = os.networkInterfaces() || {};
   for (const list of Object.values(ifaces)) {
@@ -217,6 +221,9 @@ class KxClient {
       return;
     }
 
+    // Always re-read lang so Python `lang ko` and client stay in sync
+    this.lang = readLang();
+
     let args = splitArgs(trimmed);
     if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
     if (!args.length) args = ["/h"];
@@ -242,6 +249,33 @@ class KxClient {
 
     ensureSetup();
     const state = readState();
+    // Interactive client: readable text by default (JSON via --json)
+    const headCmd = (args[0] || "").toLowerCase();
+    const metaNoPretty = new Set([
+      "lang",
+      "language",
+      "locale",
+      "lexicon",
+      "/h",
+      "/help",
+      "help",
+      "-h",
+      "--help",
+      "?",
+      "update",
+      "upgrade",
+      "daemon",
+      "alert",
+      "alerts",
+      "report",
+      "why",
+      "form",
+      "suggest",
+      "ask",
+    ]);
+    if (!metaNoPretty.has(headCmd) && !args.includes("--pretty")) {
+      args = [...args, "--pretty"];
+    }
     const env = {
       ...process.env,
       KX_LANG: this.lang,
@@ -279,7 +313,7 @@ class KxClient {
     this.lang = readLang();
     this.locked = false;
     this.pushOut(`${C.ok}operator client online${C.reset}`);
-    this.pushOut(`${C.mute}/h · update · Ctrl+C lock (type kx to resume) · exit${C.reset}`);
+    this.pushOut(`${C.mute}/h · update · Ctrl+C lock (kx or verb to resume) · exit${C.reset}`);
 
     const rl = readline.createInterface({
       input: process.stdin,
@@ -290,14 +324,22 @@ class KxClient {
     let ask = () => {};
     const softLock = () => {
       if (this.locked) {
-        process.stdout.write(`\n${C.warn}[Kx] locked — type kx to resume${C.reset}\n`);
+        const msg =
+          this.lang === "ko"
+            ? "\n[Kx] 잠금 — kx 또는 명령(예: sentry)으로 해제\n"
+            : "\n[Kx] locked — type kx or a command (e.g. sentry)\n";
+        process.stdout.write(`\n${C.warn}${msg.trim()}${C.reset}\n`);
         ask();
         return;
       }
       this.locked = true;
       this.history = [];
       this.pushOut(`${C.warn}client locked${C.reset}`);
-      this.pushOut("resume: include kx in input");
+      this.pushOut(
+        this.lang === "ko"
+          ? "해제: kx 또는 명령 입력 (예: sentry)"
+          : "resume: kx or a command (e.g. sentry)"
+      );
       ask();
     };
 
@@ -309,15 +351,42 @@ class KxClient {
       rl.question(prompt, (line) => {
         try {
           if (this.locked) {
-            if (containsKx(line)) {
+            const trimmed = (line || "").trim();
+            if (!trimmed) {
+              ask();
+              return;
+            }
+            if (trimmed.toLowerCase() === "exit") {
+              process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
+              process.exit(0);
+            }
+            // Unlock only on explicit unlock tokens or real KxLang/meta heads.
+            // Do NOT unlock on arbitrary text that merely contains "kx".
+            if (isUnlockToken(trimmed)) {
               this.locked = false;
               this.history = [];
               this.pushOut(`${C.ok}client resumed${C.reset}`);
-            } else if ((line || "").trim().toLowerCase() === "exit") {
-              process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
-              process.exit(0);
+              const cmd = stripUnlockPrefix(trimmed);
+              if (cmd && looksLikeKxCommand(cmd)) {
+                const low = cmd.toLowerCase();
+                if (low === "update" || low === "upgrade" || /^kx\s+(update|upgrade)$/i.test(low)) {
+                  this.pushOut("updating…");
+                  try {
+                    require("./kx-update").updateKx();
+                    this.pushOut(`${C.ok}update complete${C.reset}`);
+                  } catch (err) {
+                    this.pushOut(`[update] ${err.message || err}`);
+                  }
+                } else {
+                  this.runCommand(cmd);
+                }
+              }
             } else {
-              this.pushOut(`${C.mute}locked — include kx${C.reset}`);
+              this.pushOut(
+                this.lang === "ko"
+                  ? `${C.mute}잠금 — kx 또는 명령 입력 (예: sentry)${C.reset}`
+                  : `${C.mute}locked — type kx or a command (e.g. sentry)${C.reset}`
+              );
             }
             ask();
             return;
@@ -351,17 +420,17 @@ class KxClient {
   }
 }
 
-function startEdexShell() {
+function startOperatorShell() {
   // Keep export name for npx-entry / shims — this IS the native client
   const ui = new KxClient();
   ui.start();
 }
 
 function startKxClient() {
-  startEdexShell();
+  startOperatorShell();
 }
 
-module.exports = { startEdexShell, startKxClient, KxClient, EdexShell: KxClient };
+module.exports = { startOperatorShell, startKxClient, KxClient };
 
 if (require.main === module) {
   try {

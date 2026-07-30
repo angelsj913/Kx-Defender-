@@ -16,7 +16,7 @@
 - **방어 영역**: 실시간 프로세스 모니터링, 악성코드 탐지, 행동 기반 위협 탐지
 - **공격 영역**: Red Team 도구 통합 (Kerberoasting, NTLM Relaying, DPAPI, OAuth 피싱, WiFi 크래킹, C2, LLM Red Teaming)
 - **웹 보안**: 자체 구현 웹 취약점 스캐너 (OWASP ZAP 수준)
-- **UI**: eDEX-UI 스타일 통합 대시보드
+- **UI**: terminal UI 스타일 통합 대시보드
 
 ### 대상 사용자
 - 🔍 보안 연구자 (악성코드 분석, 취약점 조사)
@@ -72,7 +72,7 @@
 - ✅ 동적 스캔으로 0-day 웹 취약점 탐지
 
 #### 사용자 경험
-- ✅ eDEX-UI 스타일 통합 대시보드로 전문가 경험 제공
+- ✅ terminal UI 스타일 통합 대시보드로 전문가 경험 제공
 - ✅ 공격/방어 기능을 한 곳에서 관리
 
 ### 3.2 핵심 성과 지표 (KPI)
@@ -395,7 +395,7 @@
 - 감정 자극 공격 (Emotional manipulation)
 - 데이터 추출 요청 (데이터 유출)
 - 정책 회피 기법 테스트
-- 여러 LLM 모델 지원 (OpenAI, Claude, Gemini, Local LLMs)
+- 여러 LLM 모델 지원 (third-party LLM SaaS, third-party LLM SaaS, third-party LLM SaaS, Local LLMs)
 
 **Acceptance Criteria**:
 - 100개 요청 내 Jailbreak 성공률 측정
@@ -413,9 +413,9 @@
 
 ### 5.3 UI/UX 기능 (Dashboard & Interface)
 
-#### 5.3.1 eDEX-UI 스타일 통합 대시보드
+#### 5.3.1 terminal UI 스타일 통합 대시보드
 **요구사항**:
-- 테마: 사이버펑크/터미널 스타일 (eDEX-UI 기반)
+- 테마: 사이버펑크/터미널 스타일 (terminal UI 기반)
 - 색상: 검정(#000000), 사이언(#00D9FF), 마젠타(#FF00FF), 주황(#FF6600)
 - 폰트: Courier New, IBM Plex Mono (터미널 느낌)
 - 반응형 디자인 (1080p ~ 4K 모니터 지원)
@@ -471,7 +471,7 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                   Kx-Defender UI                        │
-│              (eDEX-UI 기반 대시보드)                     │
+│              (terminal UI 기반 대시보드)                     │
 │         HTTP/WebSocket ← 실시간 이벤트 → REST API       │
 └─────────────────────────────────────────────────────────┘
                           ↕
@@ -694,7 +694,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 
 **Acceptance Criteria**:
 - ✅ 50+ 다양한 인젝션 페이로드
-- ✅ 여러 LLM 모델 지원 (OpenAI, Claude, Gemini)
+- ✅ 여러 LLM 모델 지원 (third-party LLM SaaS, third-party LLM SaaS, third-party LLM SaaS)
 - ✅ 응답 자동 분석 (정책 위반 감지)
 - ✅ 민감 정보 유출 탐지 (API 키, 개인정보)
 - ✅ 공격 유형별 통계 리포트
@@ -799,7 +799,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 ✅ HTML 리포트  
 
 #### UI
-✅ eDEX-UI 스타일 대시보드  
+✅ terminal UI 스타일 대시보드  
 ✅ 방어/공격 모듈 탭  
 ✅ 실시간 프로세스/위협 뷰  
 
@@ -830,7 +830,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 | 7 | **웹 스캐너 구현** | 크롤러 + SQLi/XSS 탐지 | 📋 계획 |
 | 8 | **C2 서버 기본 구현** | 리스너 + 에이전트 제너레이터 | 📋 계획 |
 | 9 | **LLM Red Teaming** | 페이로드 DB + 응답 분석 | 📋 계획 |
-| 10 | **UI 개발** | eDEX-UI 기반 대시보드 + 통합 | 📋 계획 |
+| 10 | **UI 개발** | terminal UI 기반 대시보드 + 통합 | 📋 계획 |
 | 11 | **통합 테스트** | 엔드-투-엔드 테스트 + 버그 수정 | 📋 계획 |
 | 12 | **최적화 & MVP 릴리스** | 성능 튜닝 + v1.0 릴리스 | 📋 계획 |
 
@@ -924,7 +924,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 **마감**: 2026-08-12
 
 ### UI/UX 검토 (Design Lead)
-- [ ] eDEX-UI 스타일 일관성
+- [ ] terminal UI 스타일 일관성
 - [ ] 사용성 평가
 - [ ] 반응형 디자인 테스트
 - [ ] 접근성 (WCAG 2.1)
@@ -974,7 +974,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 - Sigma Rules: https://github.com/SigmaHQ/sigma
 
 #### 공격 관련
-- Impacket: https://github.com/SecureAuthCorp/impacket
+- Impacket: 
 - Aircrack-ng: https://www.aircrack-ng.org/
 - Havoc C2: https://github.com/HavocFramework/Havoc
 - Sliver: https://github.com/BishopFox/sliver
@@ -985,7 +985,7 @@ So that LLM 기반 애플리케이션의 보안을 평가할 수 있다.
 - WebGoat: https://github.com/WebGoat/WebGoat
 
 #### UI/UX
-- eDEX-UI: https://github.com/GitSquared/edex-ui
+- terminal UI: 
 - Electron: https://www.electronjs.org/
 - React: https://reactjs.org/
 

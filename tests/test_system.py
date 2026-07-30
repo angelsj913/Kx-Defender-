@@ -6,7 +6,7 @@ import json
 import threading
 from http.client import HTTPConnection
 
-from kx_defender.api import KxAPIHandler, serve
+from kx_defender.api import KxAPIHandler
 from kx_defender.kxlang import parse_line
 from kx_defender.orchestrator import Orchestrator
 from modules.engines.kxscore import score_process

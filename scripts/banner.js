@@ -1,13 +1,15 @@
 "use strict";
 
-/** Kx ASCII brand mark — single-cell safe for Windows Terminal */
+/** Kx ASCII brand mark */
 
-const KX_LOGO = `
-  _  __
- | |/ /__  __
- | ' </\\ \\/ /
- |_|\\_\\\\_/\\_\\
-`.trimEnd();
+const KX_LOGO = [
+  "██╗  ██╗██╗  ██╗",
+  "██║ ██╔╝╚██╗██╔╝",
+  "█████╔╝  ╚███╔╝ ",
+  "██╔═██╗  ██╔██╗ ",
+  "██║  ██╗██╔╝ ██╗",
+  "╚═╝  ╚═╝╚═╝  ╚═╝",
+].join("\n");
 
 function printKxBanner(stream = process.stdout) {
   const line = "─".repeat(40);
