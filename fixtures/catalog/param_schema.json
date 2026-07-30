@@ -1,0 +1,123 @@
+{
+  "_comment": "Per-verb.object parameter schema for CLI interactive prompts, suggestions, and validation. Ported from the retired web UI's PARAM_SCHEMA.",
+  "schemas": {
+    "roast.tickets": [
+      {"flag": "--realm", "label": "AD Realm", "type": "text", "placeholder": "lab.local", "required": false, "hint": "Active Directory domain"}
+    ],
+    "roast.spn": [
+      {"flag": "--realm", "label": "AD Realm", "type": "text", "placeholder": "lab.local", "required": false, "hint": "Active Directory domain"}
+    ],
+    "relay.esc8": [
+      {"flag": "--at", "label": "ADCS Target", "type": "text", "placeholder": "adcs.lab.local", "required": false, "hint": "Certificate authority host"},
+      {"flag": "--realm", "label": "AD Realm", "type": "text", "placeholder": "lab.local", "required": false, "hint": "Domain (optional)"}
+    ],
+    "relay.ntlm": [
+      {"flag": "--at", "label": "Relay Target", "type": "text", "placeholder": "smb.lab.local", "required": false, "hint": "SMB / HTTP endpoint"}
+    ],
+    "loot.vault": [
+      {"flag": "--at", "label": "User / Host", "type": "text", "placeholder": "user@lab.local", "required": false, "hint": "Credential target"}
+    ],
+    "loot.dpapi": [
+      {"flag": "--at", "label": "User / Host", "type": "text", "placeholder": "user@lab.local", "required": false, "hint": "DPAPI vault owner"}
+    ],
+    "bait.dcode": [
+      {"flag": "--at", "label": "IdP Endpoint", "type": "text", "placeholder": "mock.idp.local", "required": false, "hint": "OAuth device-code IdP"}
+    ],
+    "bait.oauth": [
+      {"flag": "--at", "label": "IdP Endpoint", "type": "text", "placeholder": "mock.idp.local", "required": false, "hint": "OAuth IdP"}
+    ],
+    "crack.wifi": [
+      {"flag": "--at", "label": "ESSID", "type": "text", "placeholder": "LabWiFi", "required": false, "hint": "Target WiFi network name"}
+    ],
+    "crack.wpa": [
+      {"flag": "--at", "label": "ESSID", "type": "text", "placeholder": "LabWiFi", "required": false, "hint": "Target WPA network"}
+    ],
+    "breach.entra": [
+      {"flag": "--realm", "label": "Tenant", "type": "text", "placeholder": "contoso.lab.local", "required": false, "hint": "Entra ID tenant"}
+    ],
+    "breach.aad": [
+      {"flag": "--realm", "label": "Tenant", "type": "text", "placeholder": "contoso.lab.local", "required": false, "hint": "Azure AD tenant"}
+    ],
+    "graph.pull": [
+      {"flag": "--with", "label": "Access Token", "type": "text", "placeholder": "access_token=labtok_...", "required": false, "hint": "key=value"}
+    ],
+    "graph.mail": [
+      {"flag": "--with", "label": "Access Token", "type": "text", "placeholder": "access_token=labtok_...", "required": false, "hint": "key=value"}
+    ],
+    "graph.drive": [
+      {"flag": "--with", "label": "Access Token", "type": "text", "placeholder": "access_token=labtok_...", "required": false, "hint": "key=value"}
+    ],
+    "probe.mind": [
+      {"flag": "--at", "label": "Model Endpoint", "type": "text", "placeholder": "http://localhost:8000/v1", "required": false, "hint": "LLM API endpoint"}
+    ],
+    "probe.llm": [
+      {"flag": "--at", "label": "Model Endpoint", "type": "text", "placeholder": "http://localhost:8000/v1", "required": false, "hint": "LLM API"}
+    ],
+    "probe.garak": [
+      {"flag": "--at", "label": "Model Endpoint", "type": "text", "placeholder": "http://localhost:8000/v1", "required": false, "hint": "LLM API"}
+    ],
+    "nexus.listen": [
+      {"flag": "--bind", "label": "Bind host:port", "type": "text", "placeholder": "127.0.0.1:4455", "required": true, "hint": "Loopback-only in --live", "default": "127.0.0.1:4455"}
+    ],
+    "nexus.havoc": [
+      {"flag": "--bind", "label": "Bind host:port", "type": "text", "placeholder": "127.0.0.1:4455", "required": true, "hint": "Havoc listener bind", "default": "127.0.0.1:4455"}
+    ],
+    "nexus.sliver": [
+      {"flag": "--bind", "label": "Bind host:port", "type": "text", "placeholder": "127.0.0.1:4456", "required": true, "hint": "Sliver listener bind", "default": "127.0.0.1:4456"}
+    ],
+    "nexus.status": [],
+    "sweep.web": [
+      {"flag": "--url", "label": "Target URL", "type": "text", "placeholder": "http://127.0.0.1:8080/", "required": true, "hint": "Full URL to scan"}
+    ],
+    "sweep.xss": [
+      {"flag": "--url", "label": "Target URL", "type": "text", "placeholder": "http://127.0.0.1:8080/?q=test", "required": true, "hint": "URL with reflected params"}
+    ],
+    "sweep.sqli": [
+      {"flag": "--url", "label": "Target URL", "type": "text", "placeholder": "http://127.0.0.1:8080/api?id=1", "required": true, "hint": "URL with query params"}
+    ],
+    "sweep.jwt": [
+      {"flag": "--url", "label": "JWT Endpoint", "type": "text", "placeholder": "http://127.0.0.1:8080/auth", "required": true, "hint": "Endpoint that returns JWT"}
+    ],
+    "sweep.xxe": [
+      {"flag": "--url", "label": "XML Endpoint", "type": "text", "placeholder": "http://127.0.0.1:8080/api/upload", "required": true, "hint": "Endpoint accepting XML"}
+    ],
+    "sweep.redirect": [
+      {"flag": "--url", "label": "Target URL", "type": "text", "placeholder": "http://127.0.0.1:8080/redirect?next=", "required": true, "hint": "URL with redirect param"}
+    ],
+    "sweep.bac": [
+      {"flag": "--url", "label": "Target URL", "type": "text", "placeholder": "http://127.0.0.1:8080/", "required": true, "hint": "App root"}
+    ],
+    "sweep.prompt-leak": [
+      {"flag": "--url", "label": "LLM Endpoint", "type": "text", "placeholder": "http://127.0.0.1:8080/chat", "required": true, "hint": "LLM inference endpoint"}
+    ],
+    "watch.procs": [
+      {"flag": "--with", "label": "Limit", "type": "text", "placeholder": "limit=200", "required": false, "hint": "key=value"}
+    ],
+    "watch.process": [
+      {"flag": "--with", "label": "Limit", "type": "text", "placeholder": "limit=200", "required": false, "hint": "key=value"}
+    ],
+    "kill.pid": [
+      {"flag": "--pid", "label": "PID", "type": "int", "placeholder": "1234", "required": true, "hint": "process id"},
+      {"flag": "--with", "label": "Force", "type": "text", "placeholder": "force=true", "required": false, "hint": "key=value"}
+    ],
+    "kill.proc": [
+      {"flag": "--pid", "label": "PID", "type": "int", "placeholder": "1234", "required": true, "hint": "process id"}
+    ],
+    "sig.scan": [
+      {"flag": "--path", "label": "File Path", "type": "text", "placeholder": "/tmp/sample.exe", "required": false, "hint": "path OR sample below"},
+      {"flag": "--with", "label": "Sample", "type": "text", "placeholder": "sample=powershell -enc ...", "required": false, "hint": "key=value"}
+    ],
+    "sig.file": [
+      {"flag": "--path", "label": "File Path", "type": "text", "placeholder": "/tmp/sample.exe", "required": true, "hint": "path to scan"}
+    ]
+  },
+  "verb_fallback": {
+    "sentry":  [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "host or artifact", "required": false, "hint": "optional context"}],
+    "trace":   [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "sample or host", "required": false, "hint": "optional analysis target"}],
+    "audit":   [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "resource id", "required": false, "hint": "optional target"}],
+    "harden":  [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "resource id", "required": false, "hint": "optional target"}],
+    "forge":   [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "rule name", "required": false, "hint": "optional context"}],
+    "triage":  [{"flag": "--at", "label": "Focus", "type": "text", "placeholder": "incident id", "required": false, "hint": "optional target"}],
+    "comply":  [{"flag": "--pact-file", "label": "Pact File", "type": "text", "placeholder": "/path/to/pact.json", "required": false, "hint": "engagement scope file"}]
+  }
+}

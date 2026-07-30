@@ -4,15 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from kx_defender.base import AttackModule
+from kx_defender.base import DefenseModule
 from kx_defender.result import Finding, ModuleResult
 from modules.engines.kxscore import score_process
 from modules.engines.kxwatch import list_processes
 
 
-class ProcessMonitorModule(AttackModule):
+class ProcessMonitorModule(DefenseModule):
     name = "process_monitor"
-    category = "defense"
     description = "Self-built process snapshot with KxScore behavioral scoring."
 
     def run(self, params: dict[str, Any]) -> ModuleResult:
