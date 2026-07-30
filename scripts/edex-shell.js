@@ -28,7 +28,9 @@ const C = {
   black: "\x1b[38;2;0;0;0m",
 };
 
-const LOGO = []; // reserved for Claude design track — no decorative logo in system HUD
+const { KX_LOGO } = require("./banner");
+
+const LOGO = KX_LOGO.split("\n").filter(Boolean);
 
 function decodeChildText(raw) {
   if (raw == null) return "";
@@ -196,12 +198,14 @@ class EdexShell {
     out.push("\x1b[2J\x1b[H"); // clear + home
     out.push(C.bg);
 
-    // Top title bar — brand only (no decorative tagline)
-    out.push(
-      `${C.fg}╔${hline(W - 2, "═")}╗${C.reset}\n` +
-        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(" Kx ", W - 2, "center")}${C.reset}${C.fg}║${C.reset}\n` +
-        `${C.fg}╠${hline(side, "═")}╦${hline(mid, "═")}╦${hline(side, "═")}╣${C.reset}\n`
-    );
+    // Top brand — ASCII KX logo (not plain "Kx" text)
+    out.push(`${C.fg}╔${hline(W - 2, "═")}╗${C.reset}\n`);
+    for (const line of LOGO) {
+      out.push(
+        `${C.fg}║${C.reset}${C.accent}${C.bold}${pad(line, W - 2, "center")}${C.reset}${C.fg}║${C.reset}\n`
+      );
+    }
+    out.push(`${C.fg}╠${hline(side, "═")}╦${hline(mid, "═")}╦${hline(side, "═")}╣${C.reset}\n`);
 
     const bodyRows = Math.max(left.length, right.length, this.maxHistory + 2, 10);
     for (let i = 0; i < bodyRows; i++) {
