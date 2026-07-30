@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kx-defender"
+version = "0.1.1"
+description = "Kx-Defender self-built attack/defense platform (KxLang, no external security tools)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Kx-Defender Contributors" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+kx = "kx_defender.kx_cli:main"
+kxctl = "kx_defender.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["services/orchestrator", "."]
+include = ["kx_defender*", "modules*"]
+exclude = ["tests*", "fixtures*", "skills*", "docs*", "data*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["services/orchestrator", "."]

@@ -1,0 +1,53 @@
+{
+  "name": "kx-defender",
+  "version": "0.2.0",
+  "description": "Kx-Defender CLI — lang ko|en · npx -y --prefer-online angelsj913/Kx-Defender-",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "bin": {
+    "kx-defender": "scripts/npx-entry.js",
+    "kx": "scripts/npm-kx.js"
+  },
+  "files": [
+    "scripts/**",
+    "services/**",
+    "modules/**",
+    "apps/**",
+    "fixtures/**",
+    "rules/**",
+    "skills/**",
+    "docs/**",
+    "pyproject.toml",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "preferGlobal": true,
+  "scripts": {
+    "setup": "node scripts/npm-setup.js",
+    "start": "node scripts/npm-start.js",
+    "kx": "node scripts/npm-kx.js",
+    "help": "node scripts/npm-kx.js /h",
+    "test": "node scripts/npm-test.js",
+    "skills": "node scripts/install-agent-skills.js --all -g",
+    "publish:public": "npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelsj913/Kx-Defender-.git"
+  },
+  "bugs": {
+    "url": "https://github.com/angelsj913/Kx-Defender-/issues"
+  },
+  "homepage": "https://github.com/angelsj913/Kx-Defender-#readme",
+  "keywords": [
+    "kx-defender",
+    "kxlang",
+    "security",
+    "self-built",
+    "npx",
+    "skills"
+  ]
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+data/*.db
+.DS_Store
+node_modules/
+package-lock.json
+.kx-runtime.json

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kx-Defender Console</title>
+  <link rel="stylesheet" href="/assets/console.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <header class="top">
+    <div class="brand">KX-DEFENDER <span>CONSOLE</span></div>
+    <div class="meta">
+      <label>SCOPE
+        <select id="scope">
+          <option value="lab">LAB</option>
+          <option value="owned">OWNED</option>
+          <option value="pact">PACT</option>
+        </select>
+      </label>
+      <label>MODE
+        <select id="mode">
+          <option value="sim">SIM</option>
+          <option value="live">LIVE</option>
+        </select>
+      </label>
+      <span id="health" class="pill">…</span>
+    </div>
+  </header>
+
+  <section class="command">
+    <div class="prompt">kx&gt;</div>
+    <input id="cmd" autocomplete="off" spellcheck="false"
+      placeholder="roast tickets --realm lab.local   |   /h   |   sentry detect" />
+    <button id="run">RUN</button>
+  </section>
+
+  <main class="grid">
+    <section class="panel" id="panel-sentry">
+      <h2>SENTRY</h2>
+      <div class="actions">
+        <button data-cmd="watch procs">watch procs</button>
+        <button data-cmd="sentry detect">sentry detect</button>
+        <button data-cmd="sig scan">sig scan</button>
+      </div>
+      <pre class="out" id="out-sentry">ready</pre>
+    </section>
+    <section class="panel" id="panel-strike">
+      <h2>STRIKE</h2>
+      <div class="actions">
+        <button data-cmd="roast tickets --realm lab.local">roast</button>
+        <button data-cmd="relay esc8 --at adcs.lab.local">relay</button>
+        <button data-cmd="breach entra --realm contoso.lab.local">breach</button>
+        <button data-cmd="probe mind --at local-fixture">probe</button>
+      </div>
+      <pre class="out" id="out-strike">ready</pre>
+    </section>
+    <section class="panel" id="panel-sweep">
+      <h2>SWEEP</h2>
+      <div class="actions">
+        <button data-cmd="sweep web --url http://127.0.0.1/">sweep web</button>
+      </div>
+      <pre class="out" id="out-sweep">ready</pre>
+    </section>
+    <section class="panel" id="panel-nexus">
+      <h2>NEXUS</h2>
+      <div class="actions">
+        <button data-cmd="nexus status">status</button>
+        <button data-cmd="nexus listen --bind 127.0.0.1:4455">listen</button>
+      </div>
+      <pre class="out" id="out-nexus">ready</pre>
+    </section>
+    <section class="panel wide" id="panel-ledger">
+      <h2>LEDGER</h2>
+      <button id="refresh">refresh</button>
+      <pre class="out" id="out-ledger">loading…</pre>
+    </section>
+  </main>
+  <script src="/assets/console.js"></script>
+</body>
+</html>

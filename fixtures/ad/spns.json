@@ -1,0 +1,7 @@
+{
+  "spns": [
+    {"spn": "HTTP/web.lab.local", "account": "svc_web", "etype": 23},
+    {"spn": "MSSQLSvc/db.lab.local:1433", "account": "svc_sql", "etype": 23},
+    {"spn": "CIFS/fs.lab.local", "account": "svc_fs", "etype": 23}
+  ]
+}

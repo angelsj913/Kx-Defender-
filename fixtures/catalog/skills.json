@@ -1,0 +1,1314 @@
+{
+  "skills": [
+    {
+      "name": "abusing-dpapi-for-credential-access",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "attacking-entra-id-with-roadtools",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "attacking-oauth-with-device-code-phishing",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "building-c2-infrastructure-with-sliver-framework",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "building-red-team-c2-infrastructure-with-havoc",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "performing-kerberoasting-attack",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "performing-wifi-password-cracking-with-aircrack",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "post-exploiting-microsoft-graph-with-graphrunner",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "red-teaming-llms-with-garak",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "relaying-ntlm-for-adcs-esc8",
+      "family": "attack_named",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-broken-access-control",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-business-logic-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-email-header-injection",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-host-header-injection",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-json-web-token-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-open-redirect-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-sensitive-data-exposure",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-system-prompt-leakage",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-xml-injection-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-xss-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-xss-vulnerabilities-with-burpsuite",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "testing-for-xxe-injection-vulnerabilities",
+      "family": "testing_for",
+      "category": "attack"
+    },
+    {
+      "name": "analyzing-active-directory-acl-abuse",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-android-malware-with-apktool",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-api-gateway-access-logs",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-apt-group-with-mitre-navigator",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-azure-activity-logs-for-threats",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-bootkit-and-rootkit-samples",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-browser-forensics-with-hindsight",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-campaign-attribution-evidence",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-certificate-transparency-for-phishing",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-cloud-storage-access-patterns",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-cobalt-strike-beacon-configuration",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-cobaltstrike-malleable-c2-profiles",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-command-and-control-communication",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-cyber-kill-chain",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-disk-image-with-autopsy",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-dns-logs-for-exfiltration",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-docker-container-forensics",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-email-headers-for-phishing-investigation",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ethereum-smart-contract-vulnerabilities",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-golang-malware-with-ghidra",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-heap-spray-exploitation",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-indicators-of-compromise",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ios-app-security-with-objection",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-kubernetes-audit-logs",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-linux-audit-logs-for-intrusion",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-linux-elf-malware",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-linux-kernel-rootkits",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-linux-system-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-lnk-file-and-jump-list-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-macro-malware-in-office-documents",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malicious-pdf-with-peepdf",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malicious-url-with-urlscan",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malware-behavior-with-cuckoo-sandbox",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malware-family-relationships-with-malpedia",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malware-persistence-with-autoruns",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-malware-sandbox-evasion-techniques",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-memory-dumps-with-volatility",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-memory-forensics-with-lime-and-volatility",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-mft-for-deleted-file-recovery",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-covert-channels-in-malware",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-flow-data-with-netflow",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-packets-with-scapy",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-traffic-for-incidents",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-traffic-of-malware",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-network-traffic-with-wireshark",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-office365-audit-logs-for-compromise",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-outlook-pst-for-email-forensics",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-packed-malware-with-upx-unpacker",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-pdf-malware-with-pdfid",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-persistence-mechanisms-in-linux",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-powershell-empire-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-powershell-script-block-logging",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-prefetch-files-for-execution-history",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ransomware-encryption-mechanisms",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ransomware-leak-site-intelligence",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ransomware-network-indicators",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-ransomware-payment-wallets",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-sbom-for-supply-chain-vulnerabilities",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-security-logs-with-splunk",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-slack-space-and-file-system-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-supply-chain-malware-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-threat-actor-ttps-with-mitre-attack",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-threat-actor-ttps-with-mitre-navigator",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-threat-intelligence-feeds",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-threat-landscape-with-misp",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-tls-certificate-transparency-logs",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-typosquatting-domains-with-dnstwist",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-uefi-bootkit-persistence",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-usb-device-connection-history",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-web-server-logs-for-intrusion",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-amcache-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-event-logs-in-splunk",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-lnk-files-for-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-prefetch-with-python",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-registry-for-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "analyzing-windows-shellbag-artifacts",
+      "family": "analyzing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-aws-s3-bucket-permissions",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-azure-active-directory-configuration",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-cloud-with-cis-benchmarks",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-entra-id-with-aadinternals",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-foundry-smart-contract-security",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-gcp-iam-permissions",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-kubernetes-cluster-rbac",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-kubernetes-rbac-privilege-escalation",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-mcp-servers-for-tool-poisoning",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-terraform-infrastructure-for-security",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-tls-certificate-transparency-logs",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "auditing-uefi-firmware-with-chipsec",
+      "family": "auditing",
+      "category": "defense"
+    },
+    {
+      "name": "building-adversary-infrastructure-tracking-system",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-automated-malware-submission-pipeline",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-cloud-siem-with-sentinel",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-detection-rule-with-splunk-spl",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-detection-rules-with-sigma",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-devsecops-pipeline-with-gitlab-ci",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-identity-federation-with-saml-azure-ad",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-incident-response-dashboard",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-incident-response-playbook",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-incident-timeline-with-timesketch",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-ioc-defanging-and-sharing-pipeline",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-ioc-enrichment-pipeline-with-opencti",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-malware-incident-communication-template",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-patch-tuesday-response-process",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-phishing-reporting-button-workflow",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-ransomware-playbook-with-cisa-framework",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-role-mining-for-rbac-optimization",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-soc-escalation-matrix",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-soc-metrics-and-kpi-tracking",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-soc-playbook-for-ransomware",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-super-timelines-with-plaso",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-actor-profile-from-osint",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-feed-aggregation-with-misp",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-hunt-hypothesis-framework",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-intelligence-enrichment-in-splunk",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-intelligence-feed-integration",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-threat-intelligence-platform",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-vulnerability-aging-and-sla-tracking",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-vulnerability-dashboard-with-defectdojo",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-vulnerability-exception-tracking-system",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "building-vulnerability-scanning-workflow",
+      "family": "building_defense",
+      "category": "defense"
+    },
+    {
+      "name": "achieving-cmmc-level-2-compliance",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "building-identity-governance-lifecycle-process",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "implementing-aws-config-rules-for-compliance",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "implementing-aws-security-hub-compliance",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "implementing-identity-governance-with-sailpoint",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "implementing-nerc-cip-compliance-controls",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "implementing-pci-dss-compliance-controls",
+      "family": "compliance",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-ai-model-prompt-injection-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-anomalies-in-industrial-control-systems",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-anomalous-authentication-patterns",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-api-enumeration-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-arp-poisoning-in-network-traffic",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-attacks-on-historian-servers",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-attacks-on-scada-systems",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-aws-cloudtrail-anomalies",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-aws-credential-exposure-with-trufflehog",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-aws-guardduty-findings-automation",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-aws-iam-privilege-escalation",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-azure-lateral-movement",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-azure-service-principal-abuse",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-azure-storage-account-misconfigurations",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-beaconing-patterns-with-zeek",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-bluetooth-low-energy-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-broken-object-property-level-authorization",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-business-email-compromise",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-business-email-compromise-with-ai",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-cloud-threats-with-guardduty",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-command-and-control-over-dns",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-compromised-cloud-credentials",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-container-drift-at-runtime",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-container-escape-attempts",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-container-escape-with-falco-rules",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-container-runtime-threats-with-falco",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-credential-dumping-techniques",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-cryptomining-in-cloud",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-data-and-model-poisoning",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-dcsync-attack-in-active-directory",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-deepfake-audio-in-vishing-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-dependency-confusion",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-dll-sideloading-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-dnp3-protocol-anomalies",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-dns-exfiltration-with-dns-query-analysis",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-email-account-compromise",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-email-forwarding-rules-attack",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-entra-offensive-tools-in-graph-logs",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-evasion-techniques-in-endpoint-logs",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-exfiltration-over-dns-with-zeek",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-fileless-attacks-on-endpoints",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-fileless-malware-techniques",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-golden-ticket-attacks-in-kerberos-logs",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-golden-ticket-forgery",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-indirect-prompt-injection",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-insider-data-exfiltration-via-dlp",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-insider-threat-behaviors",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-insider-threat-with-ueba",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-kerberoasting-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-lateral-movement-in-network",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-lateral-movement-with-splunk",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-lateral-movement-with-zeek",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-living-off-the-land-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-living-off-the-land-with-lolbas",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-malicious-npm-packages",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-malicious-scheduled-tasks-with-sysmon",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-mimikatz-execution-patterns",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-misconfigured-azure-storage",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-mobile-malware-behavior",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-modbus-command-injection-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-modbus-protocol-anomalies",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-model-extraction-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-network-anomalies-with-zeek",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-network-scanning-with-ids-signatures",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-ntlm-relay-with-event-correlation",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-oauth-token-theft",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-pass-the-hash-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-pass-the-ticket-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-port-scanning-with-fail2ban",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-privilege-escalation-attempts",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-privilege-escalation-in-kubernetes-pods",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-process-hollowing-technique",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-process-injection-techniques",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-qr-code-phishing-with-email-security",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-ransomware-encryption-behavior",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-ransomware-precursors-in-network",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-rdp-brute-force-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-rootkit-activity",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-s3-data-exfiltration-attempts",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-secure-boot-bypass",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-serverless-function-injection",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-service-account-abuse",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-shadow-api-endpoints",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-shadow-it-cloud-usage",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-spearphishing-with-email-gateway",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-sql-injection-via-waf-logs",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-stuxnet-style-attacks",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-supply-chain-attacks-in-ci-cd",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-suspicious-oauth-application-consent",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-suspicious-powershell-execution",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-t1003-credential-dumping-with-edr",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-t1055-process-injection-with-sysmon",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-t1548-abuse-elevation-control-mechanism",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-typosquatting-packages",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-typosquatting-packages-in-npm-pypi",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "detecting-wmi-persistence",
+      "family": "detecting",
+      "category": "defense"
+    },
+    {
+      "name": "securing-agentic-ai-tool-invocation",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-api-gateway-with-aws-waf",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-aws-iam-permissions",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-aws-lambda-execution-roles",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-azure-with-microsoft-defender",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-container-registry-images",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-container-registry-with-harbor",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-github-actions-workflows",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-helm-chart-deployments",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-historian-server-in-ot-environment",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-kubernetes-on-cloud",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-remote-access-to-ot-environment",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "securing-serverless-functions",
+      "family": "securing",
+      "category": "defense"
+    },
+    {
+      "name": "triaging-security-alerts-in-splunk",
+      "family": "triaging",
+      "category": "defense"
+    },
+    {
+      "name": "triaging-security-incident",
+      "family": "triaging",
+      "category": "defense"
+    },
+    {
+      "name": "triaging-security-incident-with-ir-playbook",
+      "family": "triaging",
+      "category": "defense"
+    },
+    {
+      "name": "triaging-vulnerabilities-with-ssvc-framework",
+      "family": "triaging",
+      "category": "defense"
+    },
+    {
+      "name": "triaging-windows-with-kape",
+      "family": "triaging",
+      "category": "defense"
+    }
+  ]
+}
