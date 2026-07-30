@@ -5,7 +5,9 @@ const { isLoginCommand, isClientOnlyArgv } = require("../scripts/kx-routing");
 
 assert.strictEqual(isLoginCommand("login", []), true);
 assert.strictEqual(isLoginCommand("login", ["kx"]), true);
-assert.strictEqual(isLoginCommand("loginkx", []), true);
+assert.strictEqual(isLoginCommand("login_kx", []), true);
+assert.strictEqual(isClientOnlyArgv(["login_kx"]), true);
+assert.strictEqual(isClientOnlyArgv(["kx", "login_kx"]), true);
 assert.strictEqual(isLoginCommand("kx", ["login"]), true);
 assert.strictEqual(isLoginCommand("client", []), false);
 assert.strictEqual(isLoginCommand("roast", ["tickets", "--realm", "kx.lab"]), false);
