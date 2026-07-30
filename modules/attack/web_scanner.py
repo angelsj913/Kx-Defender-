@@ -106,8 +106,27 @@ class WebScannerModule(AttackModule):
         try:
             status, body, headers = _fetch(url)
         except (URLError, HTTPError, TimeoutError, ValueError) as exc:
-            result.errors.append(f"crawl failed: {exc}")
-            return result.finish("error")
+            # Unreachable target: don't fail the whole command — report as a finding
+            # so the operator sees WHY nothing was scanned. Status stays "ok" because
+            # the scan attempt itself completed cleanly.
+            result.findings.append(
+                Finding(
+                    title="Target unreachable",
+                    severity="info",
+                    detail=f"Seed URL could not be fetched — no web surface to scan.",
+                    evidence={"url": url, "error": str(exc), "error_type": type(exc).__name__},
+                )
+            )
+            result.artifacts = {
+                "pages_crawled": 0,
+                "reachable": False,
+                "url": url,
+                "engine": "KxSweep",
+                "self_built": True,
+            }
+            result.finish("ok")
+            result.artifacts["report_html"] = findings_report("KxSweep Report", result.to_dict())
+            return result
 
         crawled.append(url)
         parser = _LinkParser()

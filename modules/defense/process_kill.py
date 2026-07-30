@@ -22,17 +22,20 @@ class ProcessKillModule(DefenseModule):
             meta={"engine": "KxAction"},
         )
         pid_raw = params.get("pid") or params.get("target")
+        if params["mode"] == "simulate" and pid_raw is None:
+            pid_raw = 99999  # lab-safe mock PID for demonstration
         if pid_raw is None:
-            result.errors.append("pid required")
+            result.errors.append("pid required (use --pid <n> or --at <n>)")
             return result.finish("error")
         try:
             pid = int(pid_raw)
         except (TypeError, ValueError):
-            result.errors.append("pid must be int")
+            result.errors.append(f"pid must be integer, got {pid_raw!r}")
             return result.finish("error")
 
         if params["mode"] == "simulate":
-            outcome = {"ok": True, "pid": pid, "force": False, "simulated": True}
+            outcome = {"ok": True, "pid": pid, "force": False, "simulated": True,
+                       "note": "no real process affected in simulate mode"}
         else:
             force = str(params.get("force", "false")).lower() in {"1", "true", "yes"}
             outcome = terminate(pid, force=force)
