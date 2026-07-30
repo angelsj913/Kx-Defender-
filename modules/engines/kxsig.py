@@ -118,6 +118,33 @@ def list_user_rule_files() -> list[dict[str, Any]]:
     return out
 
 
+def test_rule(rule: dict[str, Any], samples: list[str]) -> list[dict[str, Any]]:
+    """Return per-sample match results for a single rule.
+
+    Useful for rule authors: ``kx sig test <rule.json> --sample "x"``.
+    """
+    valid, errs = validate_rules([rule])
+    if not valid:
+        return [{"sample": "(schema)", "hit": False, "error": "; ".join(errs)}]
+    r = valid[0]
+    out: list[dict[str, Any]] = []
+    for s in samples:
+        matched_pattern: str | None = None
+        for p in r.get("patterns", []):
+            try:
+                if re.search(p, s):
+                    matched_pattern = p
+                    break
+            except re.error:
+                continue
+        out.append({
+            "sample": s,
+            "hit": matched_pattern is not None,
+            "matched_pattern": matched_pattern,
+        })
+    return out
+
+
 def summarize_rule_catalog() -> dict[str, Any]:
     """Aggregate counts by category and severity across builtin + user rules."""
     rules = load_rules()

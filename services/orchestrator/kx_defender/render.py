@@ -6,8 +6,7 @@ Ports the retired web UI's specialized widgets to the CLI:
   - `render_process_tree(processes, alert_count, color=True)` — process tree widget
   - `render_signature_matrix(hits, rule_count, hit_count, color=True)` — sig matrix
 
-Every renderer returns a plain ``str`` so the caller controls where it goes
-(stdout, stderr, embedded log, JSON debug wrapper, …).
+All human-readable labels honour the current UI language via ``i18n.t()``.
 """
 
 from __future__ import annotations
@@ -16,6 +15,8 @@ import json
 import os
 import sys
 from typing import Any, Iterable
+
+from kx_defender.i18n import get_lang, t as _t
 
 
 # ============================================================
@@ -85,12 +86,13 @@ def render_findings(findings: Iterable[dict[str, Any]], color: bool | None = Non
     muted = _c("muted", use_color)
     accent = _c("accent", use_color)
 
+    _lg = get_lang()
     items = list(findings or [])
     if not items:
-        return f"{muted}(no findings){reset}\n"
+        return f"{muted}{_t('(no findings)', '(탐지 결과 없음)', _lg)}{reset}\n"
 
     lines: list[str] = []
-    lines.append(f"{orange}FINDINGS ({len(items)}){reset}")
+    lines.append(f"{orange}{_t('FINDINGS', '탐지', _lg)} ({len(items)}){reset}")
     for f in items:
         sev = str(f.get("severity", "info")).lower()
         sev_color = _SEV_COLOR.get(sev, _ANSI["muted"]) if use_color else ""
@@ -174,9 +176,12 @@ def render_process_tree(
     red = _c("red", use_color)
     yellow = _c("yellow", use_color)
 
+    _lg = get_lang()
     lines = [
-        f"{orange}PROCESS TREE{reset}  {muted}·{reset}  engine={accent}{engine}{reset}  "
-        f"{muted}·{reset}  total={accent}{len(processes)}{reset}  alerts={red}{alert_count}{reset}",
+        f"{orange}{_t('PROCESS TREE', '프로세스 트리', _lg)}{reset}  "
+        f"{muted}·{reset}  engine={accent}{engine}{reset}  "
+        f"{muted}·{reset}  {_t('total', '전체', _lg)}={accent}{len(processes)}{reset}  "
+        f"{_t('alerts', '경보', _lg)}={red}{alert_count}{reset}",
     ]
 
     # Build ppid → children map. PIDs not in the list anchor at depth 0.
@@ -240,16 +245,25 @@ def render_signature_matrix(
     if hit_count is None:
         hit_count = len(hits)
 
+    _lg = get_lang()
     lines = [
-        f"{orange}SIGNATURE MATRIX{reset}  {muted}·{reset}  engine={accent}{engine}{reset}  "
-        f"{muted}·{reset}  rules={accent}{rule_count}{reset}  hits={accent}{hit_count}{reset}",
+        f"{orange}{_t('SIGNATURE MATRIX', '시그니처 매트릭스', _lg)}{reset}  "
+        f"{muted}·{reset}  engine={accent}{engine}{reset}  "
+        f"{muted}·{reset}  {_t('rules','룰',_lg)}={accent}{rule_count}{reset}  "
+        f"{_t('hits','매치',_lg)}={accent}{hit_count}{reset}",
     ]
 
     if not hits:
-        lines.append(f"  {muted}(no signature hits){reset}")
+        lines.append(f"  {muted}{_t('(no signature hits)','(시그니처 매치 없음)', _lg)}{reset}")
         return "\n".join(lines) + "\n"
 
-    header = f"  {muted}{'RULE ID':<14}{'SEV':<10}{'NAME':<28}PATTERN{reset}"
+    header = (
+        f"  {muted}"
+        f"{_t('RULE ID','룰 ID',_lg):<14}"
+        f"{_t('SEV','심각도',_lg):<10}"
+        f"{_t('NAME','이름',_lg):<28}"
+        f"{_t('PATTERN','패턴',_lg)}{reset}"
+    )
     lines.append(header)
     lines.append(f"  {muted}{'-'*70}{reset}")
     for h in hits:
@@ -303,7 +317,8 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
     # Errors
     errors = payload.get("errors") or []
     if errors:
-        parts.append(f"{red}ERRORS{reset}")
+        _lg = get_lang()
+        parts.append(f"{red}{_t('ERRORS', '오류', _lg)}{reset}")
         for e in errors:
             parts.append(f"  {red}✗{reset} {e}")
         parts.append("")
@@ -338,11 +353,19 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
         rendered_widget = True
 
     if not rendered_widget and artifacts:
-        parts.append(f"{orange}ARTIFACTS{reset}")
+        _lg = get_lang()
+        parts.append(f"{orange}{_t('ARTIFACTS', '산출물', _lg)}{reset}")
         # Skip the noisy report_html blob if present
         preview = {k: v for k, v in artifacts.items() if k != "report_html"}
         parts.extend(f"  {ln}" for ln in _dump_evidence(preview, use_color))
         if "report_html" in artifacts:
-            parts.append(f"  {muted}(report_html: {len(artifacts['report_html'])} bytes omitted){reset}")
+            html_len = len(artifacts["report_html"])
+            note = _t(
+                f"(report_html: {html_len} bytes omitted)",
+                f"(report_html: {html_len} bytes 생략됨)",
+                _lg,
+            )
+            parts.append(f"  {muted}{note}{reset}")
 
+    # Errors header (rendered above) needs i18n too.
     return "\n".join(parts) + "\n"
