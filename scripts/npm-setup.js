@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const SETUP_VERSION = "0.3.2";
+const SETUP_VERSION = "0.3.3";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");

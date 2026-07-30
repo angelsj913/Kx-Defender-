@@ -294,13 +294,22 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
     scope = str(payload.get("authorized_scope", "?"))
     run_id = str(payload.get("run_id", ""))[:8]
 
-    header = (
-        f"{orange}▸{reset} {accent}{module}{reset}  "
-        f"{muted}status={reset}{status_c}{status}{reset}  "
-        f"{muted}mode={reset}{mode}  "
-        f"{muted}scope={reset}{scope}  "
-        f"{muted}run={reset}{run_id}"
-    )
+    if get_lang() == "ko":
+        header = (
+            f"{orange}▸{reset} {accent}{module}{reset}  "
+            f"{muted}상태={reset}{status_c}{status}{reset}  "
+            f"{muted}모드={reset}{mode}  "
+            f"{muted}범위={reset}{scope}  "
+            f"{muted}실행={reset}{run_id}"
+        )
+    else:
+        header = (
+            f"{orange}▸{reset} {accent}{module}{reset}  "
+            f"{muted}status={reset}{status_c}{status}{reset}  "
+            f"{muted}mode={reset}{mode}  "
+            f"{muted}scope={reset}{scope}  "
+            f"{muted}run={reset}{run_id}"
+        )
 
     parts = [header, ""]
 

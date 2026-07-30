@@ -3,7 +3,7 @@
 
 /**
  * Single kx launcher (simplified — PRD §4):
- *   kx                 → native client
+ *   kx                 → native client (via npx-entry for shims)
  *   kx update          → updater
  *   kx login | hud …   → client
  *   kx <verb> …        → Python kx_cli (one path)
@@ -12,6 +12,7 @@
 const path = require("path");
 const { spawnSync } = require("child_process");
 const { runKx, ensureSetup } = require("./npm-setup");
+const { isClientOnlyArgv } = require("./kx-routing");
 
 const args = process.argv.slice(2);
 
@@ -26,20 +27,6 @@ function isUpdate(argv) {
   return false;
 }
 
-function isClientOnly(argv) {
-  if (!argv.length) return true;
-  const a0 = lower(argv[0]).replace(/[\[\]]/g, "");
-  if (["login", "login-kx", "loginkx", "hud", "edex", "shell", "repl", "cli", "client"].includes(a0)) {
-    return true;
-  }
-  if (a0 === "kx") {
-    if (argv.length === 1) return true;
-    const a1 = lower(argv[1]).replace(/[\[\]]/g, "");
-    return ["login", "hud", "edex", "shell", "repl", "cli", "client"].includes(a1);
-  }
-  return false;
-}
-
 if (isUpdate(args)) {
   try {
     require("./kx-update").updateKx();
@@ -50,7 +37,7 @@ if (isUpdate(args)) {
   }
 }
 
-if (isClientOnly(args)) {
+if (isClientOnlyArgv(args)) {
   // Route through npx-entry so shims / persistent install / setup still run
   const entry = path.join(__dirname, "npx-entry.js");
   const forward =
