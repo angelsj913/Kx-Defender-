@@ -1,7 +1,12 @@
 "use strict";
 
 const assert = require("assert");
-const { isLoginCommand, isClientOnlyArgv } = require("../scripts/kx-routing");
+const {
+  isLoginCommand,
+  isClientOnlyArgv,
+  looksLikeKxCommand,
+  stripUnlockPrefix,
+} = require("../scripts/kx-routing");
 
 assert.strictEqual(isLoginCommand("login", []), true);
 assert.strictEqual(isLoginCommand("login", ["kx"]), true);
@@ -21,5 +26,13 @@ assert.strictEqual(isClientOnlyArgv(["hud"]), true);
 assert.strictEqual(isClientOnlyArgv(["roast", "tickets"]), false);
 assert.strictEqual(isClientOnlyArgv(["/h"]), false);
 assert.strictEqual(isClientOnlyArgv(["lang", "ko"]), false);
+
+assert.strictEqual(looksLikeKxCommand("sentry"), true);
+assert.strictEqual(looksLikeKxCommand("kx sentry"), true);
+assert.strictEqual(looksLikeKxCommand("roast tickets"), true);
+assert.strictEqual(looksLikeKxCommand("hello world"), false);
+assert.strictEqual(stripUnlockPrefix("kx"), "");
+assert.strictEqual(stripUnlockPrefix("kx sentry"), "sentry");
+assert.strictEqual(stripUnlockPrefix("sentry"), "sentry");
 
 console.log("test_kx_routing.js OK");

@@ -12,6 +12,7 @@ const readline = require("readline");
 const { spawnSync } = require("child_process");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
+const { looksLikeKxCommand, stripUnlockPrefix } = require("./kx-routing");
 
 const C = {
   reset: "\x1b[0m",
@@ -245,6 +246,33 @@ class KxClient {
 
     ensureSetup();
     const state = readState();
+    // Interactive client: readable text by default (JSON via --json)
+    const headCmd = (args[0] || "").toLowerCase();
+    const metaNoPretty = new Set([
+      "lang",
+      "language",
+      "locale",
+      "lexicon",
+      "/h",
+      "/help",
+      "help",
+      "-h",
+      "--help",
+      "?",
+      "update",
+      "upgrade",
+      "daemon",
+      "alert",
+      "alerts",
+      "report",
+      "why",
+      "form",
+      "suggest",
+      "ask",
+    ]);
+    if (!metaNoPretty.has(headCmd) && !args.includes("--pretty")) {
+      args = [...args, "--pretty"];
+    }
     const env = {
       ...process.env,
       KX_LANG: this.lang,
@@ -312,15 +340,42 @@ class KxClient {
       rl.question(prompt, (line) => {
         try {
           if (this.locked) {
-            if (containsKx(line)) {
+            const trimmed = (line || "").trim();
+            if (!trimmed) {
+              ask();
+              return;
+            }
+            if (trimmed.toLowerCase() === "exit") {
+              process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
+              process.exit(0);
+            }
+            // Unlock on "kx" OR a real command like sentry (Ctrl+C soft-lock used to
+            // swallow verbs forever with "locked — include kx").
+            if (containsKx(trimmed) || looksLikeKxCommand(trimmed)) {
               this.locked = false;
               this.history = [];
               this.pushOut(`${C.ok}client resumed${C.reset}`);
-            } else if ((line || "").trim().toLowerCase() === "exit") {
-              process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
-              process.exit(0);
+              const cmd = stripUnlockPrefix(trimmed);
+              if (cmd) {
+                const low = cmd.toLowerCase();
+                if (low === "update" || low === "upgrade") {
+                  this.pushOut("updating…");
+                  try {
+                    require("./kx-update").updateKx();
+                    this.pushOut(`${C.ok}update complete${C.reset}`);
+                  } catch (err) {
+                    this.pushOut(`[update] ${err.message || err}`);
+                  }
+                } else {
+                  this.runCommand(cmd);
+                }
+              }
             } else {
-              this.pushOut(`${C.mute}locked — include kx${C.reset}`);
+              this.pushOut(
+                this.lang === "ko"
+                  ? `${C.mute}잠금 — kx 또는 명령 입력 (예: sentry)${C.reset}`
+                  : `${C.mute}locked — type kx or a command (e.g. sentry)${C.reset}`
+              );
             }
             ask();
             return;
