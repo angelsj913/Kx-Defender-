@@ -228,7 +228,7 @@ function runProgram(flags, { withSkills = false } = {}) {
     startKxShell();
     return;
   }
-  startEdexShell();
+  startOperatorShell();
 }
 
 function isUpdateArgv(argv) {
@@ -283,7 +283,7 @@ function main() {
     if ((rest[0] || "").toLowerCase() === "login") {
       setupSync();
       installUserShims();
-      startEdexShell();
+      startOperatorShell();
       return;
     }
     ensureSetup();
@@ -300,7 +300,7 @@ function main() {
   if (isLoginCommand(cmd, rest)) {
     setupSync();
     installUserShims();
-    startEdexShell();
+    startOperatorShell();
     return;
   }
 
@@ -314,7 +314,7 @@ function main() {
   if (cmd === "edex" || cmd === "hud" || cmd === "client") {
     setupSync();
     installUserShims();
-    startEdexShell();
+    startOperatorShell();
     return;
   }
 
