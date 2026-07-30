@@ -65,7 +65,9 @@ def test_kx_cli_lexicon(capsys):
     assert "sentry" in out
 
 
-def test_kx_slash_h_help(capsys):
+def test_kx_slash_h_help(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
+    monkeypatch.setenv("KX_LANG", "en")
     with pytest.raises(SystemExit) as exc:
         kx_main(["/h"])
     assert exc.value.code == 0
@@ -76,7 +78,9 @@ def test_kx_slash_h_help(capsys):
     assert "--scope" in out
 
 
-def test_kx_slash_h_verb_help(capsys):
+def test_kx_slash_h_verb_help(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
+    monkeypatch.setenv("KX_LANG", "en")
     with pytest.raises(SystemExit) as exc:
         kx_main(["/h", "roast"])
     assert exc.value.code == 0
@@ -85,7 +89,9 @@ def test_kx_slash_h_verb_help(capsys):
     assert "performing-kerberoasting-attack" in out
 
 
-def test_kx_verb_slash_h(capsys):
+def test_kx_verb_slash_h(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
+    monkeypatch.setenv("KX_LANG", "en")
     with pytest.raises(SystemExit) as exc:
         kx_main(["nexus", "/h"])
     assert exc.value.code == 0
@@ -93,7 +99,9 @@ def test_kx_verb_slash_h(capsys):
     assert "KxLang verb: nexus" in out
 
 
-def test_kx_help_unknown_verb(capsys):
+def test_kx_help_unknown_verb(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
+    monkeypatch.setenv("KX_LANG", "en")
     with pytest.raises(SystemExit) as exc:
         kx_main(["/h", "nukem"])
     assert exc.value.code == 2
@@ -124,14 +132,21 @@ def test_lang_get_set(capsys, tmp_path, monkeypatch):
         kx_main(["/h"])
     assert exc.value.code == 0
     help_out = capsys.readouterr().out
-    assert "Usage:" in help_out
+    assert "사용법:" in help_out
     assert "kx lang" in help_out
-    assert "사용법:" not in help_out
+    assert "Usage:" not in help_out
 
     with pytest.raises(SystemExit) as exc:
         kx_main(["lang", "en"])
     assert exc.value.code == 0
     assert i18n.get_lang() == "en"
+
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["/h"])
+    assert exc.value.code == 0
+    help_en = capsys.readouterr().out
+    assert "Usage:" in help_en
+    assert "사용법:" not in help_en
 
 
 def test_update_is_meta_not_verb(monkeypatch):

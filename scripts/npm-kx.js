@@ -2,10 +2,11 @@
 "use strict";
 
 /**
- * `kx` launcher:
- *   kx              → HUD
- *   kx update       → updater (not a KxLang verb)
- *   kx /h | kx <verb> … → one-shot KxLang
+ * Single kx launcher (simplified — PRD §4):
+ *   kx                 → native client
+ *   kx update          → updater
+ *   kx login | hud …   → client
+ *   kx <verb> …        → Python kx_cli (one path)
  */
 
 const path = require("path");
@@ -14,42 +15,27 @@ const { runKx, ensureSetup } = require("./npm-setup");
 
 const args = process.argv.slice(2);
 
+function lower(a) {
+  return String(a || "").toLowerCase();
+}
+
 function isUpdate(argv) {
   if (!argv.length) return false;
-  const a0 = String(argv[0]).toLowerCase();
-  if (a0 === "update" || a0 === "upgrade") return true;
-  if (a0 === "kx" && argv[1]) {
-    const a1 = String(argv[1]).toLowerCase();
-    return a1 === "update" || a1 === "upgrade";
-  }
+  if (["update", "upgrade"].includes(lower(argv[0]))) return true;
+  if (lower(argv[0]) === "kx" && ["update", "upgrade"].includes(lower(argv[1]))) return true;
   return false;
 }
 
-function containsKx(text) {
-  return /kx/i.test(String(text || ""));
-}
-
-function shouldEnterProgram(argv) {
+function isClientOnly(argv) {
   if (!argv.length) return true;
-  if (isUpdate(argv)) return false;
-  const a0 = String(argv[0]).toLowerCase();
-  if (a0 === "/h" || a0 === "-h" || a0 === "--help" || a0 === "help") return false;
-  if (a0 === "kx") {
-    const rest = argv.slice(1);
-    if (!rest.length) return true;
-    const head = String(rest[0]).toLowerCase();
-    if (["login", "hud", "edex", "shell", "repl", "cli"].includes(head)) return true;
-    return false; // kx roast …
-  }
-  if (containsKx(argv.join(" "))) {
-    const first = a0.replace(/[\[\]]/g, "");
-    const kxLangVerbs = new Set([
-      "sentry", "trace", "audit", "harden", "triage", "comply", "forge",
-      "roast", "relay", "loot", "bait", "breach", "crack", "nexus", "graph",
-      "probe", "sweep", "watch", "kill", "sig", "lang", "lexicon",
-    ]);
-    if (kxLangVerbs.has(first)) return false;
+  const a0 = lower(argv[0]).replace(/[\[\]]/g, "");
+  if (["login", "login-kx", "loginkx", "hud", "edex", "shell", "repl", "cli", "client"].includes(a0)) {
     return true;
+  }
+  if (a0 === "kx") {
+    if (argv.length === 1) return true;
+    const a1 = lower(argv[1]).replace(/[\[\]]/g, "");
+    return ["login", "hud", "edex", "shell", "repl", "cli", "client"].includes(a1);
   }
   return false;
 }
@@ -64,8 +50,8 @@ if (isUpdate(args)) {
   }
 }
 
-if (shouldEnterProgram(args)) {
-  const entry = path.join(__dirname, "npx-entry.js");
+if (isClientOnly(args)) {
+  const entry = path.join(__dirname, "kx-client.js");
   const res = spawnSync(process.execPath, [entry], {
     stdio: "inherit",
     env: process.env,
@@ -75,6 +61,6 @@ if (shouldEnterProgram(args)) {
 }
 
 ensureSetup();
-const forward = args[0] && String(args[0]).toLowerCase() === "kx" ? args.slice(1) : args;
+const forward = lower(args[0]) === "kx" ? args.slice(1) : args;
 const res = runKx(forward);
 process.exit(res.status == null ? 1 : res.status);

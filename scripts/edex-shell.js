@@ -217,6 +217,9 @@ class KxClient {
       return;
     }
 
+    // Always re-read lang so Python `lang ko` and client stay in sync
+    this.lang = readLang();
+
     let args = splitArgs(trimmed);
     if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
     if (!args.length) args = ["/h"];

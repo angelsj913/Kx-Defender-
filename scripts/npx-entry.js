@@ -80,6 +80,26 @@ function parseArgs(argv) {
   return { flags, positional };
 }
 
+function readPkgVersion(root) {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
+    return String(pkg.version || "0.0.0");
+  } catch (_) {
+    return "0.0.0";
+  }
+}
+
+function cmpSemver(a, b) {
+  const pa = String(a).split(".").map((x) => parseInt(x, 10) || 0);
+  const pb = String(b).split(".").map((x) => parseInt(x, 10) || 0);
+  const n = Math.max(pa.length, pb.length);
+  for (let i = 0; i < n; i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d > 0 ? 1 : -1;
+  }
+  return 0;
+}
+
 function preferPersistentApp() {
   if (process.env.KX_FROM_APP === "1" || process.env.KX_DEV === "1") return false;
   // Local git clone: stay on the working tree (avoid surprising redirects)
@@ -93,6 +113,10 @@ function preferPersistentApp() {
     // Stale persistent app without updater — stay on this (npx) package
     if (!hasUpdater) return false;
     if (!fs.existsSync(entry)) return false;
+    // Never redirect to an older persistent app (fixes "same reply" from stale trees)
+    const here = readPkgVersion(ROOT);
+    const there = readPkgVersion(app);
+    if (cmpSemver(there, here) < 0) return false;
     const res = spawnSync(process.execPath, [entry, ...process.argv.slice(2)], {
       stdio: "inherit",
       env: { ...process.env, KX_FROM_APP: "1" },
@@ -343,13 +367,7 @@ function main() {
     return;
   }
 
-  // Any leftover argv that mentions kx → enter the program
-  if (containsKx([cmd, ...rest].join(" "))) {
-    runProgram(flags);
-    return;
-  }
-
-  // Unknown verb → treat as one-shot KxLang: npx ... roast tickets ...
+  // One-shot KxLang only — never steal into the client (PRD RC2)
   ensureSetup();
   const res = runKx([cmd, ...rest]);
   process.exit(res.status == null ? 1 : res.status);
