@@ -2,13 +2,13 @@
 "use strict";
 
 /**
- * Kx-Defender npx entry — quiet skills-style one-liner
+ * Any-PC short launcher (no npm publish required):
  *
- *   npx --yes kx-defender add --all -g
- *   npx --yes kx-defender --all -g
+ *   npx -y angelsj913/Kx-Defender-
+ *   npx -y angelsj913/Kx-Defender- --all -g
  *
- * Installs bundled agent skills only (no third-party `skills` CLI,
- * no GitHub Source banner, no Eve/PromptScript noise).
+ * npm user/repo shorthand installs from GitHub; our CLI stays quiet
+ * (no third-party `skills` CLI, no Eve/PromptScript noise).
  */
 
 const { spawnSync } = require("child_process");
@@ -24,22 +24,23 @@ const { setup, ensureSetup, runKx, log, ROOT, isWin } = require("./npm-setup");
 function printHelp() {
   console.log(`Kx-Defender
 
-Install agent skills:
-  npx --yes kx-defender add --all -g
-  npx --yes kx-defender --all -g
+Run (any PC, short — no npm publish):
+  npx -y angelsj913/Kx-Defender-
+  npx -y angelsj913/Kx-Defender- --all -g
+
+Skills only:
+  npx -y angelsj913/Kx-Defender- add --all -g
 
 Other:
-  npx --yes kx-defender setup          Python runtime + package
-  npx --yes kx-defender serve [--bind host:port]
-  npx --yes kx-defender kx <KxLang args...>
+  npx -y angelsj913/Kx-Defender- setup
+  npx -y angelsj913/Kx-Defender- serve [--bind host:port]
+  npx -y angelsj913/Kx-Defender- kx <KxLang args...>
 
 Flags:
-  --all           Install all bundled skills
-  -g, --global    Install into user skill dirs (~/.agents/skills, ~/.cursor/skills)
-  --runtime       Also set up Python runtime (optional)
-  --no-serve      With --runtime, skip Console start
-
-Self-Built Only — ships this package's skills/ only.
+  --all           Install all bundled agent skills
+  -g, --global    User skill dirs + CLI shims
+  --no-serve      Setup/skills only (do not start Console)
+  --bind host:port   Console bind (default 127.0.0.1:8787)
 `);
 }
 
@@ -47,8 +48,8 @@ function parseArgs(argv) {
   const flags = {
     all: false,
     global: false,
+    project: false,
     noServe: false,
-    runtime: false,
     bind: process.env.KX_BIND || "127.0.0.1:8787",
     help: false,
   };
@@ -57,8 +58,8 @@ function parseArgs(argv) {
     const a = argv[i];
     if (a === "--all") flags.all = true;
     else if (a === "-g" || a === "--global") flags.global = true;
+    else if (a === "--project") flags.project = true;
     else if (a === "--no-serve") flags.noServe = true;
-    else if (a === "--runtime") flags.runtime = true;
     else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
     else if (a === "--bind") flags.bind = argv[++i];
     else if (a.startsWith("--bind=")) flags.bind = a.slice("--bind=".length);
@@ -117,14 +118,31 @@ function doSkillInstall(flags) {
     console.error("No bundled skills found.");
     process.exit(1);
   }
-  const result = installAgentSkills({
-    global: Boolean(flags.global || flags.all),
-  });
+  const useGlobal = flags.project ? false : true;
+  const result = installAgentSkills({ global: useGlobal });
   console.log(`Installed ${result.names.length} skills`);
   for (const name of result.names) console.log(`  ✓ ${name}`);
   for (const t of result.targets) console.log(`  → ${t}`);
-  if (flags.global) installGlobalShims();
+  if (useGlobal && (flags.global || flags.all)) installGlobalShims();
   console.log("Done.");
+}
+
+function runProgram(flags, { withSkills = false } = {}) {
+  if (withSkills || flags.all || flags.global) {
+    try {
+      doSkillInstall(flags);
+    } catch (err) {
+      console.error(`[Kx] skill install skipped: ${err.message || err}`);
+    }
+  }
+  console.log("[Kx] Starting Kx-Defender...");
+  setup();
+  if (flags.global) installGlobalShims();
+  if (flags.noServe) {
+    log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
+    return;
+  }
+  startServe(flags.bind);
 }
 
 function main() {
@@ -137,7 +155,7 @@ function main() {
   const cmd = (positional[0] || "").toLowerCase();
   const rest = positional.slice(1);
 
-  // Consume format-only package ref after `add` (never fetch remote)
+  // Format-only token after `add` (never fetch a remote skill pack)
   if (cmd === "add" && rest[0] && !rest[0].startsWith("-")) {
     rest.shift();
   }
@@ -158,14 +176,10 @@ function main() {
     return;
   }
 
-  if (cmd === "setup" || flags.runtime) {
+  if (cmd === "setup") {
     setup();
     if (flags.global) installGlobalShims();
-    if (!flags.noServe && cmd !== "setup") {
-      startServe(flags.bind);
-      return;
-    }
-    log("Runtime ready. Try: kx /h");
+    log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
     return;
   }
 
@@ -174,21 +188,15 @@ function main() {
     return;
   }
 
-  // Default / add / install / --all / -g → quiet agent-skill install
-  const isSkillAdd =
-    !cmd ||
-    cmd === "add" ||
-    cmd === "init" ||
-    cmd === "install" ||
-    flags.all ||
-    flags.global;
-
-  if (isSkillAdd) {
+  // Skills-only: add / install / init
+  if (cmd === "add" || cmd === "init" || cmd === "install") {
     doSkillInstall(flags);
-    if (flags.runtime) {
-      setup();
-      if (!flags.noServe) startServe(flags.bind);
-    }
+    return;
+  }
+
+  // Bare / --all / -g → run the program (any PC short command)
+  if (!cmd || flags.all || flags.global) {
+    runProgram(flags, { withSkills: Boolean(flags.all || flags.global) });
     return;
   }
 

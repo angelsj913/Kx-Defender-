@@ -78,47 +78,40 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 **금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
-## Install
+## Install & run (any PC — short command)
 
-`npx kx-defender` needs the package on **npmjs.com**. It is **not published yet**, so you will see `E404` until you publish once.
-
-### 1) Publish once (repo owner — Windows)
-
-```powershell
-npm login
-git clone https://github.com/angelsj913/Kx-Defender-.git
-cd Kx-Defender-
-git checkout cursor/kx-attack-modules-7992
-.\scripts\publish-npm.ps1
-```
-
-Or: `npm publish --access public` from the repo root after `npm login`.
-
-### 2) Install skills (after publish)
+No npm publish needed. Works on any PC with Node.js:
 
 ```bash
-npx --yes kx-defender add --all -g
+npx -y angelsj913/Kx-Defender-
 ```
 
-Installs into `~/.agents/skills` and `~/.cursor/skills` (quiet — no Eve/PromptScript noise).
-
-### Works right now (no npm publish)
-
-```powershell
-git clone https://github.com/angelsj913/Kx-Defender-.git
-cd Kx-Defender-
-node scripts/npx-entry.js add --all -g
-```
-
-> Do **not** use third-party `npx skills add …` for this repo.
-
-### Platform runtime (optional)
-
-Requires **Node.js 16+** and **Python 3.9+**:
+With skills + global shims:
 
 ```bash
-npx --yes kx-defender setup
-# or from a clone:
+npx -y angelsj913/Kx-Defender- --all -g
+```
+
+Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).
+
+Skills only:
+
+```bash
+npx -y angelsj913/Kx-Defender- add --all -g
+```
+
+KxLang:
+
+```bash
+npx -y angelsj913/Kx-Defender- kx /h
+```
+
+> Do **not** use third-party `npx skills add …` (GitHub Source banner + Eve/PromptScript errors).  
+> `npx kx-defender` needs an npm publish; use `npx -y angelsj913/Kx-Defender-` instead.
+
+### Platform from a clone
+
+```bash
 npm install && npm start
 kx /h
 npm test
