@@ -6,4 +6,4 @@
  * Prefer: node scripts/kx-client.js   or   kx
  */
 
-require("./edex-shell").startKxClient();
+require("./kx-tui").startKxClient();

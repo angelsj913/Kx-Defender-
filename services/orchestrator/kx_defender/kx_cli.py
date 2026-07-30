@@ -688,7 +688,7 @@ def main(argv: list[str] | None = None) -> None:
     # Meta commands (must not go through KxLang verb parser)
     if args and args[0].lower() in {"update", "upgrade"}:
         raise SystemExit(_run_update())
-    if args and args[0].lower() in {"login", "hud", "edex"}:
+    if args and args[0].lower() in {"login", "hud"}:
         raise SystemExit(_run_hud())
     if not args:
         # Bare `kx` → interactive program

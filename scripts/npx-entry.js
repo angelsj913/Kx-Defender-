@@ -18,7 +18,6 @@ const {
   listSkillDirs,
 } = require("./install-agent-skills");
 const {
-  setupSync,
   ensureSetup,
   runKx,
   log,
@@ -27,7 +26,7 @@ const {
   SETUP_VERSION,
 } = require("./npm-setup");
 const { printKxBanner } = require("./banner");
-const { startEdexShell } = require("./edex-shell");
+const { startKxTui: startEdexShell } = require("./kx-tui");
 const { startKxShell } = require("./kx-shell");
 
 function printHelp() {
@@ -69,7 +68,7 @@ function parseArgs(argv) {
     else if (a === "--classic" || a === "--simple") flags.classic = true;
     else if (a === "--serve" || a === "--console" || a === "--no-serve") {
       console.error("[Kx] web console removed — use: kx");
-    } else if (a === "--edex" || a === "--hud" || a === "--client") {
+    } else if (a === "--hud" || a === "--client") {
       /* default client */
     } else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
     else if (a === "--bind" || a.startsWith("--bind=")) {
@@ -127,13 +126,13 @@ function installUserShims() {
   const entry = path.join(root, "scripts", "npx-entry.js");
   const kxJs = path.join(root, "scripts", "npm-kx.js");
   const shellJs = path.join(root, "scripts", "kx-shell.js");
-  const edexJs = path.join(root, "scripts", "kx-client.js");
+  const clientJs = path.join(root, "scripts", "kx-client.js");
   const updateJs = path.join(root, "scripts", "kx-update.js");
 
   if (isWin()) {
     fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${kxJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-defender.cmd"), `@node "${entry}" %*\r\n`);
-    fs.writeFileSync(path.join(binDir, "kx-client.cmd"), `@node "${edexJs}" %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-client.cmd"), `@node "${clientJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-shell.cmd"), `@node "${shellJs}" %*\r\n`);
     fs.writeFileSync(path.join(binDir, "login-kx.cmd"), `@node "${entry}" login kx %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-update.cmd"), `@node "${updateJs}" %*\r\n`);
@@ -141,7 +140,7 @@ function installUserShims() {
     for (const [name, target, prefix] of [
       ["kx", kxJs, ""],
       ["kx-defender", entry, ""],
-      ["kx-client", edexJs, ""],
+      ["kx-client", clientJs, ""],
       ["kx-shell", shellJs, ""],
       ["login-kx", entry, "login kx "],
       ["kx-update", updateJs, ""],
@@ -183,7 +182,7 @@ function isLoginCommand(cmd, rest) {
     .replace(/\s+/g, " ")
     .trim();
   // One-shot: kx <verb> … → not a login
-  if (/^kx\s+\S+/.test(norm) && !/^kx\s+(login|hud|shell|edex|repl|cli)\b/.test(norm)) {
+  if (/^kx\s+\S+/.test(norm) && !/^kx\s+(login|hud|shell|repl|cli)\b/.test(norm)) {
     return false;
   }
   return true;
@@ -209,7 +208,6 @@ function doSkillInstall(flags) {
 }
 
 function runProgram(flags, { withSkills = false } = {}) {
-  printKxBanner();
   if (withSkills || flags.all || flags.global) {
     try {
       doSkillInstall(flags);
@@ -217,10 +215,10 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  console.log(`[Kx] Starting DEFCOM Operator Client v${SETUP_VERSION}...`);
-  setupSync();
+  ensureSetup();
   installUserShims();
   if (flags.classic) {
+    printKxBanner();
     startKxShell();
     return;
   }
@@ -277,7 +275,7 @@ function main() {
       return;
     }
     if ((rest[0] || "").toLowerCase() === "login") {
-      setupSync();
+      ensureSetup();
       installUserShims();
       startEdexShell();
       return;
@@ -294,21 +292,21 @@ function main() {
 
   // login / [login kx] / login-kx → start HUD (re-entry)
   if (isLoginCommand(cmd, rest)) {
-    setupSync();
+    ensureSetup();
     installUserShims();
     startEdexShell();
     return;
   }
 
   if (cmd === "shell" || cmd === "repl" || cmd === "cli") {
-    setupSync();
+    ensureSetup();
     installUserShims();
     startKxShell();
     return;
   }
 
-  if (cmd === "edex" || cmd === "hud") {
-    setupSync();
+  if (cmd === "hud") {
+    ensureSetup();
     installUserShims();
     startEdexShell();
     return;
@@ -320,7 +318,7 @@ function main() {
   }
 
   if (cmd === "setup") {
-    setupSync();
+    ensureSetup();
     installUserShims();
     log("Ready. Run: npx -y --prefer-online angelsj913/Kx-Defender-");
     log("Or: npx -y --prefer-online angelsj913/Kx-Defender- kx /h");

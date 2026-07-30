@@ -38,7 +38,7 @@ function shouldEnterProgram(argv) {
     const rest = argv.slice(1);
     if (!rest.length) return true;
     const head = String(rest[0]).toLowerCase();
-    if (["login", "hud", "edex", "shell", "repl", "cli"].includes(head)) return true;
+    if (["login", "hud", "shell", "repl", "cli"].includes(head)) return true;
     return false; // kx roast …
   }
   if (containsKx(argv.join(" "))) {
