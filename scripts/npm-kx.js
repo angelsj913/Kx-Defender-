@@ -51,8 +51,15 @@ if (isUpdate(args)) {
 }
 
 if (isClientOnly(args)) {
-  const entry = path.join(__dirname, "kx-client.js");
-  const res = spawnSync(process.execPath, [entry], {
+  // Route through npx-entry so shims / persistent install / setup still run
+  const entry = path.join(__dirname, "npx-entry.js");
+  const forward =
+    !args.length || (args.length === 1 && lower(args[0]) === "kx")
+      ? []
+      : lower(args[0]) === "kx"
+        ? args.slice(1)
+        : args;
+  const res = spawnSync(process.execPath, [entry, ...forward], {
     stdio: "inherit",
     env: process.env,
     windowsHide: true,
