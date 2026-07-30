@@ -94,6 +94,9 @@ function preferPersistentApp() {
     const app = getAppRoot();
     if (!app || path.resolve(app) === path.resolve(ROOT)) return false;
     const entry = path.join(app, "scripts", "npx-entry.js");
+    const hasUpdater = fs.existsSync(path.join(app, "scripts", "kx-update.js"));
+    // Stale persistent app without updater — stay on this (npx) package
+    if (!hasUpdater) return false;
     if (!fs.existsSync(entry)) return false;
     const res = spawnSync(process.execPath, [entry, ...process.argv.slice(2)], {
       stdio: "inherit",
@@ -232,11 +235,33 @@ function runProgram(flags, { withSkills = false } = {}) {
   startEdexShell();
 }
 
+function isUpdateArgv(argv) {
+  const a = (argv || []).map((x) => String(x).toLowerCase());
+  if (!a.length) return false;
+  if (a[0] === "update" || a[0] === "upgrade") return true;
+  if (a[0] === "kx" && (a[1] === "update" || a[1] === "upgrade")) return true;
+  return false;
+}
+
 function main() {
+  const rawArgv = process.argv.slice(2);
+
+  // CRITICAL: handle update from THIS package before redirecting to
+  // ~/.kx-defender/app (which may be an older install without updater).
+  if (isUpdateArgv(rawArgv)) {
+    try {
+      require("./kx-update").updateKx();
+    } catch (err) {
+      console.error(`[Kx] ${err.message || err}`);
+      process.exit(err.status || 1);
+    }
+    return;
+  }
+
   // After `update`, prefer ~/.kx-defender/app so npx cache is not required
   preferPersistentApp();
 
-  const { flags, positional } = parseArgs(process.argv.slice(2));
+  const { flags, positional } = parseArgs(rawArgv);
   if (flags.help && positional.length === 0) {
     printHelp();
     return;

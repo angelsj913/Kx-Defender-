@@ -1,8 +1,9 @@
 {
   "name": "kx-defender",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Kx-Defender eDEX HUD — npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
+  "main": "scripts/npx-entry.js",
   "engines": {
     "node": ">=16"
   },
