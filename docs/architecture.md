@@ -101,7 +101,7 @@ flowchart LR
 
 ---
 
-## 9. 에이전트 계약
+## 8. 에이전트 계약
 
 1. `skills/kxlang` 사용
 2. `kx /h` 확인
