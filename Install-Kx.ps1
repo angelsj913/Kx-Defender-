@@ -10,7 +10,7 @@
   irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
 
 .EXAMPLE
-  .\Install-Kx.ps1 -All -Global
+  .\Install-Kx.ps1 -Fresh
 #>
 [CmdletBinding()]
 param(
@@ -19,7 +19,8 @@ param(
     [switch]$Global,
     [switch]$NoServe,
     [string]$Bind = "127.0.0.1:8787",
-    [switch]$SkillsOnly
+    [switch]$SkillsOnly,
+    [switch]$Fresh
 )
 
 $ErrorActionPreference = "Stop"
@@ -42,7 +43,15 @@ function Show-KxBanner {
 
 Show-KxBanner
 
-# Prefer local repo launcher when present; otherwise npx from GitHub
+if ($Fresh) {
+    Write-Host "[Kx] Fresh: clearing npx cache / broken portable Python ..." -ForegroundColor DarkCyan
+    try { & npx clear-npx-cache 2>$null } catch { }
+    $pyHome = Join-Path $env:USERPROFILE ".kx-defender\python"
+    if (Test-Path -LiteralPath $pyHome) {
+        Remove-Item -LiteralPath $pyHome -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
 $repoRoot = $null
 if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "package.json"))) {
     $repoRoot = $PSScriptRoot

@@ -1,6 +1,6 @@
 {
   "name": "kx-defender",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Kx-Defender — PowerShell: irm .../Install-Kx.ps1 | iex  ·  npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
   "engines": {

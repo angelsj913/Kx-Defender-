@@ -11,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const SETUP_VERSION = "0.1.7";
+const SETUP_VERSION = "0.1.8";
 const ROOT = path.resolve(__dirname, "..");
 const VENV = path.join(ROOT, ".venv");
 const STATE = path.join(ROOT, ".kx-runtime.json");
@@ -279,6 +279,35 @@ function extractTarGz(archive, destDir) {
 
 function bootstrapPortablePython() {
   log(`Python not on PATH — downloading portable CPython once (${SETUP_VERSION}) ...`);
+
+  // If a previous broken install exists, wipe it (common on Windows MotW failures)
+  const existingExe = isWin()
+    ? path.join(PY_HOME, "python.exe")
+    : path.join(PY_HOME, "bin", "python3");
+  if (fs.existsSync(PY_HOME)) {
+    const ok = fs.existsSync(existingExe) && probePython(existingExe);
+    if (!ok) {
+      log("Removing broken portable Python install ...");
+      try {
+        fs.rmSync(PY_HOME, { recursive: true, force: true });
+      } catch (err) {
+        if (isWin()) {
+          spawnSync(
+            "powershell",
+            [
+              "-NoProfile",
+              "-ExecutionPolicy",
+              "Bypass",
+              "-Command",
+              `Remove-Item -LiteralPath '${PY_HOME.replace(/'/g, "''")}' -Recurse -Force -ErrorAction SilentlyContinue`,
+            ],
+            { stdio: "ignore", windowsHide: true }
+          );
+        }
+      }
+    }
+  }
+
   const triple = platformTriple();
   const asset = `cpython-${PY_VERSION}+${PY_TAG}-${triple}-install_only.tar.gz`;
   const url = `https://github.com/astral-sh/python-build-standalone/releases/download/${PY_TAG}/${asset}`;
