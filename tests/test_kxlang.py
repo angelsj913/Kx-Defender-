@@ -91,3 +91,42 @@ def test_kx_help_unknown_verb(capsys):
     assert exc.value.code == 2
     err = capsys.readouterr().err
     assert "unknown verb" in err
+
+
+def test_lang_get_set(capsys, tmp_path, monkeypatch):
+    from kx_defender import i18n
+
+    cfg = tmp_path / "config.json"
+    monkeypatch.setenv("KX_CONFIG", str(cfg))
+    monkeypatch.delenv("KX_LANG", raising=False)
+
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["lang"])
+    assert exc.value.code == 0
+    assert "language: en" in capsys.readouterr().out
+
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["lang", "ko"])
+    assert exc.value.code == 0
+    out = capsys.readouterr().out
+    assert "ko" in out
+    assert i18n.get_lang() == "ko"
+
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["/h"])
+    assert exc.value.code == 0
+    help_out = capsys.readouterr().out
+    assert "사용법:" in help_out
+    assert "kx lang" in help_out
+
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["lang", "en"])
+    assert exc.value.code == 0
+    assert i18n.get_lang() == "en"
+
+
+def test_lang_rejects_unknown(capsys, tmp_path, monkeypatch):
+    monkeypatch.setenv("KX_CONFIG", str(tmp_path / "config.json"))
+    with pytest.raises(SystemExit) as exc:
+        kx_main(["lang", "fr"])
+    assert exc.value.code == 2

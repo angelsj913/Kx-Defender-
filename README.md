@@ -87,10 +87,19 @@ npx clear-npx-cache; npx -y --prefer-online angelsj913/Kx-Defender-
 Opens an interactive **Kx>** shell in the terminal (does **not** start the web Console).
 
 ```
+Kx> lang ko
 Kx> /h
 Kx> roast tickets --scope lab --realm lab.local --sim
-Kx> watch procs --scope lab --live
+Kx> lang en
 Kx> exit
+```
+
+Language:
+
+```powershell
+npx -y --prefer-online angelsj913/Kx-Defender- kx lang ko
+npx -y --prefer-online angelsj913/Kx-Defender- kx lang en
+npx -y --prefer-online angelsj913/Kx-Defender- kx lang
 ```
 
 One-shot:
