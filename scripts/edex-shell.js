@@ -1,8 +1,7 @@
 "use strict";
 
 /**
- * Kx DEFCOM — native terminal Operator Client (not a web UI).
- * Runs inside PowerShell / Windows Terminal as a dedicated client surface.
+ * Kx DEFCOM — Operator Client (Claude Code CLI style, single-window scrolling)
  */
 
 const fs = require("fs");
@@ -16,114 +15,21 @@ const { readLang, writeLang, splitArgs } = require("./kx-shell");
 const C = {
   reset: "\x1b[0m",
   bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  show: "\x1b[?25h",
   fg: "\x1b[38;2;186;230;236m",
   accent: "\x1b[38;2;0;255;208m",
   warn: "\x1b[38;2;255;176;0m",
   ok: "\x1b[38;2;0;255;136m",
   mute: "\x1b[38;2;70;100;110m",
-  bg: "\x1b[48;2;2;4;10m",
 };
 
-const LOGO = ["  _  __", " | |/ /__  __", " | ' </\\ \\/ /", " |_|\\_\\\\_/\\_\\"];
-
-function cols() {
-  return Math.max(64, process.stdout.columns || 100);
-}
-
-function stripAnsi(s) {
-  return String(s).replace(/\x1b\[[0-9;]*m/g, "");
-}
-
-function displayWidth(s) {
-  let w = 0;
-  for (const ch of stripAnsi(s)) {
-    const cp = ch.codePointAt(0);
-    if (cp <= 0x1f || (cp >= 0x7f && cp <= 0x9f)) continue;
-    if (
-      (cp >= 0x1100 && cp <= 0x115f) ||
-      (cp >= 0x2e80 && cp <= 0xa4cf) ||
-      (cp >= 0xac00 && cp <= 0xd7a3) ||
-      (cp >= 0xf900 && cp <= 0xfaff) ||
-      (cp >= 0xff00 && cp <= 0xff60) ||
-      (cp >= 0xffe0 && cp <= 0xffe6)
-    ) {
-      w += 2;
-    } else w += 1;
-  }
-  return w;
-}
-
-function pad(s, width, align = "left") {
-  const plain = stripAnsi(s);
-  let w = displayWidth(plain);
-  if (w > width) {
-    let out = "";
-    let used = 0;
-    for (const ch of plain) {
-      const cw = displayWidth(ch);
-      if (used + cw > width - 1) break;
-      out += ch;
-      used += cw;
-    }
-    return out + "…";
-  }
-  const n = width - w;
-  if (align === "right") return " ".repeat(n) + s;
-  if (align === "center") {
-    const L = Math.floor(n / 2);
-    return " ".repeat(L) + s + " ".repeat(n - L);
-  }
-  return s + " ".repeat(n);
-}
-
-function hline(width, ch = "-") {
-  // ASCII-only separators: reliable on every Windows code page / font
-  return ch.repeat(Math.max(0, width));
-}
-
-function boxTop(W) {
-  return "+" + hline(W - 2, "=") + "+";
-}
-function boxMid(W) {
-  return "+" + hline(W - 2, "-") + "+";
-}
-function boxBot(W) {
-  return "+" + hline(W - 2, "=") + "+";
-}
-function boxRow(content, W) {
-  const inner = W - 2;
-  return "|" + pad(content, inner) + "|";
-}
-
-function decodeChildText(raw) {
-  if (raw == null) return "";
-  if (Buffer.isBuffer(raw)) {
-    const asUtf8 = raw.toString("utf8");
-    if (isWin() && /[\u00c0-\u00ff]{2,}/.test(asUtf8) && !/[가-힣]/.test(asUtf8)) {
-      try {
-        return raw.toString("cp949");
-      } catch {
-        return asUtf8;
-      }
-    }
-    return asUtf8;
-  }
-  const s = String(raw);
-  if (isWin() && /[\u00c0-\u00ff]{2,}/.test(s) && !/[가-힣]/.test(s)) {
-    try {
-      return Buffer.from(s, "latin1").toString("utf8");
-    } catch {
-      return s;
-    }
-  }
-  return s;
-}
-
-function containsKx(text) {
-  return /kx/i.test(String(text || ""));
-}
+const LOGO = [
+  "██╗  ██╗██╗  ██╗",
+  "██║ ██╔╝╚██╗██╔╝",
+  "█████╔╝  ╚███╔╝ ",
+  "██╔═██╗  ██╔██╗ ",
+  "██║  ██╗██╔╝ ██╗",
+  "╚═╝  ╚═╝╚═╝  ╚═╝",
+];
 
 function primaryIpv4() {
   const ifaces = os.networkInterfaces() || {};
@@ -141,79 +47,99 @@ function memPct() {
   return Math.round(((t - f) / t) * 100);
 }
 
-function setWindowTitle(title) {
-  try {
-    process.stdout.write(`\x1b]0;${title}\x07`);
-  } catch {
-    /* ignore */
+function printBanner() {
+  const line = "─".repeat(50);
+  process.stdout.write("\n");
+  for (const l of LOGO) {
+    process.stdout.write(`  ${C.accent}${C.bold}${l}${C.reset}\n`);
   }
+  process.stdout.write(`\n  ${C.mute}KX DEFCOM  ·  OPERATOR CLIENT  ·  v${SETUP_VERSION}${C.reset}\n`);
+  process.stdout.write(`${C.fg}${line}${C.reset}\n`);
+  process.stdout.write(
+    `  ${C.warn}SYS ${os.hostname()}  CPU ${os.cpus()?.length || 0}  RAM ${memPct()}%  LINK ${primaryIpv4()}  ${os.platform()}/${os.arch()}${C.reset}\n`
+  );
+  process.stdout.write(`${C.fg}${line}${C.reset}\n\n`);
+}
+
+function runCmd(args, lang) {
+  const state = readState();
+  const env = {
+    ...process.env,
+    KX_LANG: lang,
+    PYTHONUTF8: "1",
+    PYTHONIOENCODING: "utf-8",
+  };
+
+  // Always call Python directly to avoid kx.exe creating new console windows on Windows
+  const code =
+    "import sys; from kx_defender.kx_cli import main; sys.argv=['kx']+sys.argv[1:]; main()";
+  const pyExe = state?.python || (isWin() ? "python" : "python3");
+
+  return spawnSync(pyExe, ["-c", code, ...args], {
+    cwd: ROOT,
+    stdio: "inherit",
+    shell: false,
+    windowsHide: true,
+    env,
+  });
 }
 
 class KxClient {
   constructor() {
-    this.history = [];
-    this.maxHistory = 16;
+    this.lang = "en";
+  }
+
+  start() {
+    ensureSetup();
     this.lang = readLang();
-    this.locked = false;
-  }
+    printBanner();
 
-  pushOut(text) {
-    for (const line of String(text || "").replace(/\r\n/g, "\n").split("\n")) {
-      this.history.push(line);
-      if (this.history.length > this.maxHistory) this.history.shift();
-    }
-  }
-
-  renderFrame() {
-    const W = cols();
-    const out = [];
-    out.push("\x1b[2J\x1b[H");
-    out.push(C.bg);
-
-    out.push(`${C.fg}${boxTop(W)}${C.reset}\n`);
-    for (const line of LOGO) {
-      out.push(`${C.fg}|${C.reset}${C.accent}${C.bold}${pad(line, W - 2, "center")}${C.reset}${C.fg}|${C.reset}\n`);
-    }
-    out.push(
-      `${C.fg}|${C.reset}${pad(`${C.mute}KX DEFCOM  ·  OPERATOR CLIENT  ·  v${SETUP_VERSION}${C.reset}`, W - 2, "center")}${C.fg}|${C.reset}\n`
-    );
-    out.push(`${C.fg}${boxMid(W)}${C.reset}\n`);
-
-    const host = pad(os.hostname(), 18);
-    const telemetry = ` SYS ${host}  CPU ${os.cpus()?.length || 0}  RAM ${memPct()}%  LINK ${primaryIpv4()}  ${os.platform()}/${os.arch()}`;
-    out.push(`${C.fg}|${C.reset}${pad(`${C.warn}${telemetry}${C.reset}`, W - 2)}${C.fg}|${C.reset}\n`);
-    out.push(`${C.fg}${boxMid(W)}${C.reset}\n`);
-
-    out.push(`${C.fg}|${C.reset}${pad(` ${C.warn}> MAIN${C.reset}  ${C.mute}KxLang command feed${C.reset}`, W - 2)}${C.fg}|${C.reset}\n`);
-    out.push(`${C.fg}|${C.reset}${pad(` ${C.mute}${hline(Math.min(40, W - 6), ".")}${C.reset}`, W - 2)}${C.fg}|${C.reset}\n`);
-
-    const rows = Math.max(10, Math.min(this.maxHistory, Math.floor((process.stdout.rows || 32) * 0.42)));
-    for (let i = 0; i < rows; i++) {
-      const line = this.history[i] != null ? String(this.history[i]) : "";
-      out.push(`${C.fg}|${C.reset}${pad(" " + line, W - 2)}${C.fg}|${C.reset}\n`);
+    const lang = this.lang;
+    if (lang === "ko") {
+      console.log(`${C.ok}operator client online${C.reset}`);
+      console.log(`${C.mute}/h 도움말  ·  update 업데이트  ·  exit 종료${C.reset}\n`);
+    } else {
+      console.log(`${C.ok}operator client online${C.reset}`);
+      console.log(`${C.mute}/h help  ·  update  ·  exit${C.reset}\n`);
     }
 
-    out.push(`${C.fg}${boxMid(W)}${C.reset}\n`);
-    let cwd = process.cwd();
-    if (cwd.length > W - 12) cwd = "..." + cwd.slice(-(W - 14));
-    out.push(`${C.fg}|${C.reset}${pad(` FS ${cwd}`, W - 2)}${C.fg}|${C.reset}\n`);
-    out.push(`${C.fg}${boxBot(W)}${C.reset}\n`);
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: true,
+    });
 
-    process.stdout.write(out.join(""));
+    const ask = () => {
+      if (rl.closed) return;
+      rl.question(`${C.accent}${C.bold} kx>${C.reset} `, (line) => {
+        try {
+          this.handle(line, rl);
+        } catch (err) {
+          console.error(`[Kx] ${err.message || err}`);
+        }
+        if (!rl.closed) ask();
+      });
+    };
+
+    rl.on("close", () => {
+      console.log(`\n${C.ok}[Kx] client closed${C.reset}`);
+      process.exit(0);
+    });
+
+    ask();
   }
 
-  runCommand(line) {
+  handle(line, rl) {
     const trimmed = (line || "").trim();
     if (!trimmed) return;
-    this.pushOut(`${C.accent}kx>${C.reset} ${trimmed}`);
 
     const lower = trimmed.toLowerCase();
     if (lower === "exit" || lower === "quit" || lower === "q") {
-      process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
-      process.exit(0);
+      if (rl) rl.close();
+      return;
     }
     if (lower === "clear" || lower === "cls") {
-      this.history = [];
+      process.stdout.write("\x1b[2J\x1b[H");
       return;
     }
 
@@ -222,137 +148,41 @@ class KxClient {
     if (!args.length) args = ["/h"];
 
     const head = (args[0] || "").toLowerCase();
+
     if (head === "lang" || head === "language" || head === "locale" || args[0] === "언어") {
       if (args.length < 2) {
-        this.pushOut(this.lang === "ko" ? `언어: ${this.lang}` : `language: ${this.lang}`);
+        console.log(this.lang === "ko" ? `언어: ${this.lang} (한국어)` : `language: ${this.lang} (English)`);
       } else {
         const raw = String(args[1]).toLowerCase();
         let next = null;
-        if (["ko", "kr", "korean", "kor", "한국어", "한글"].includes(raw) || args[1] === "한국어") next = "ko";
+        if (["ko", "kr", "korean", "kor", "한국어", "한글"].includes(raw)) next = "ko";
         else if (["en", "english", "eng", "us"].includes(raw)) next = "en";
-        if (!next) this.pushOut("use: lang en | lang ko");
+        if (!next) console.error("[Kx] use: lang en | lang ko");
         else {
           writeLang(next);
           this.lang = next;
-          this.pushOut(next === "ko" ? "언어 → ko" : "language → en");
+          console.log(next === "ko" ? "언어가 ko (한국어)(으)로 설정되었습니다." : "language set to en (English)");
         }
       }
       return;
     }
 
-    ensureSetup();
-    const state = readState();
-    const env = {
-      ...process.env,
-      KX_LANG: this.lang,
-      PYTHONUTF8: "1",
-      PYTHONIOENCODING: "utf-8",
-    };
-    let res;
-    if (state?.kx && fs.existsSync(state.kx)) {
-      res = spawnSync(state.kx, args, {
-        cwd: ROOT,
-        encoding: "utf8",
-        shell: false,
-        windowsHide: true,
-        env,
-      });
-    } else {
-      const code =
-        "import sys; from kx_defender.kx_cli import main; sys.argv=['kx']+sys.argv[1:]; main()";
-      res = spawnSync(state?.python || "python", ["-c", code, ...args], {
-        cwd: ROOT,
-        encoding: "utf8",
-        shell: isWin(),
-        windowsHide: true,
-        env,
-      });
-    }
-    const text = decodeChildText(`${res.stdout || ""}${res.stderr || ""}`).trimEnd();
-    if (text) for (const ln of text.split("\n")) this.pushOut(ln);
-    else if (res.status) this.pushOut(`${C.warn}exit ${res.status}${C.reset}`);
-  }
-
-  start() {
-    ensureSetup();
-    setWindowTitle(`Kx DEFCOM Client v${SETUP_VERSION}`);
-    this.lang = readLang();
-    this.locked = false;
-    this.pushOut(`${C.ok}operator client online${C.reset}`);
-    this.pushOut(`${C.mute}/h · update · Ctrl+C lock (type kx to resume) · exit${C.reset}`);
-
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-      terminal: true,
-    });
-
-    let ask = () => {};
-    const softLock = () => {
-      if (this.locked) {
-        process.stdout.write(`\n${C.warn}[Kx] locked — type kx to resume${C.reset}\n`);
-        ask();
-        return;
+    if (lower === "update" || lower === "kx update" || lower === "upgrade") {
+      try {
+        require("./kx-update").updateKx();
+      } catch (err) {
+        console.error(`[update] ${err.message || err}`);
       }
-      this.locked = true;
-      this.history = [];
-      this.pushOut(`${C.warn}client locked${C.reset}`);
-      this.pushOut("resume: include kx in input");
-      ask();
-    };
+      return;
+    }
 
-    ask = () => {
-      this.renderFrame();
-      const prompt = this.locked
-        ? `${C.warn}${C.bold} lock>${C.reset} `
-        : `${C.accent}${C.bold} kx>${C.reset} `;
-      rl.question(prompt, (line) => {
-        try {
-          if (this.locked) {
-            if (containsKx(line)) {
-              this.locked = false;
-              this.history = [];
-              this.pushOut(`${C.ok}client resumed${C.reset}`);
-            } else if ((line || "").trim().toLowerCase() === "exit") {
-              process.stdout.write(`\n${C.ok}[Kx] client closed${C.reset}\n`);
-              process.exit(0);
-            } else {
-              this.pushOut(`${C.mute}locked — include kx${C.reset}`);
-            }
-            ask();
-            return;
-          }
-
-          const low = (line || "").trim().toLowerCase();
-          if (low === "update" || low === "kx update" || low === "upgrade") {
-            this.pushOut("updating…");
-            this.renderFrame();
-            try {
-              require("./kx-update").updateKx();
-              this.pushOut(`${C.ok}update complete${C.reset}`);
-            } catch (err) {
-              this.pushOut(`[update] ${err.message || err}`);
-            }
-            ask();
-            return;
-          }
-
-          this.runCommand(line);
-        } catch (err) {
-          this.pushOut(`[err] ${err.message || err}`);
-        }
-        ask();
-      });
-    };
-
-    rl.on("SIGINT", softLock);
-    process.stdout.write(C.show);
-    ask();
+    console.log("");
+    runCmd(args, this.lang);
+    console.log("");
   }
 }
 
 function startEdexShell() {
-  // Keep export name for npx-entry / shims — this IS the native client
   const ui = new KxClient();
   ui.start();
 }

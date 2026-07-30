@@ -1,19 +1,19 @@
 "use strict";
 
-/** Kx ASCII brand mark — single-cell safe for Windows Terminal */
-
-const KX_LOGO = `
-  _  __
- | |/ /__  __
- | ' </\\ \\/ /
- |_|\\_\\\\_/\\_\\
-`.trimEnd();
+const KX_LOGO = [
+  "██╗  ██╗██╗  ██╗",
+  "██║ ██╔╝╚██╗██╔╝",
+  "█████╔╝  ╚███╔╝ ",
+  "██╔═██╗  ██╔██╗ ",
+  "██║  ██╗██╔╝ ██╗",
+  "╚═╝  ╚═╝╚═╝  ╚═╝",
+].join("\n");
 
 function printKxBanner(stream = process.stdout) {
-  const line = "─".repeat(40);
+  const line = "─".repeat(50);
   stream.write("\n");
-  stream.write(KX_LOGO + "\n");
-  stream.write(`  DEFCOM OPERATOR\n`);
+  for (const l of KX_LOGO.split("\n")) stream.write(`  ${l}\n`);
+  stream.write(`  KX DEFCOM  ·  OPERATOR CLIENT\n`);
   stream.write(`${line}\n\n`);
 }
 
