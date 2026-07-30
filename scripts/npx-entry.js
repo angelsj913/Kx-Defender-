@@ -2,13 +2,11 @@
 "use strict";
 
 /**
- * Any-PC short launcher (no npm publish required):
+ * Any-PC short launcher — CLI shell by default (no web server).
  *
- *   npx -y angelsj913/Kx-Defender-
- *   npx -y angelsj913/Kx-Defender- --all -g
- *
- * npm user/repo shorthand installs from GitHub; our CLI stays quiet
- * (no third-party `skills` CLI, no Eve/PromptScript noise).
+ *   npx -y --prefer-online angelsj913/Kx-Defender-
+ *   npx -y --prefer-online angelsj913/Kx-Defender- kx /h
+ *   npx -y --prefer-online angelsj913/Kx-Defender- serve
  */
 
 const { spawnSync } = require("child_process");
@@ -19,34 +17,43 @@ const {
   installAgentSkills,
   listSkillDirs,
 } = require("./install-agent-skills");
-const { setupSync, ensureSetup, runKx, log, ROOT, isWin, SETUP_VERSION } = require("./npm-setup");
+const {
+  setupSync,
+  ensureSetup,
+  runKx,
+  log,
+  ROOT,
+  isWin,
+  SETUP_VERSION,
+} = require("./npm-setup");
 const { printKxBanner } = require("./banner");
+const { startKxShell } = require("./kx-shell");
 
 function printHelp() {
   printKxBanner();
-  console.log(`Kx-Defender
+  console.log(`Kx-Defender (CLI — no server by default)
 
 PowerShell:
+  npx -y --prefer-online angelsj913/Kx-Defender-
   irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
-  npx -y --prefer-online angelsj913/Kx-Defender-
 
-Run:
-  npx -y --prefer-online angelsj913/Kx-Defender-
-  npx -y --prefer-online angelsj913/Kx-Defender- --all -g
+Then at the Kx> prompt:
+  /h
+  roast tickets --scope lab --realm lab.local --sim
+  watch procs --scope lab --live
+  exit
 
-Skills only:
-  npx -y --prefer-online angelsj913/Kx-Defender- add --all -g
+One-shot:
+  npx -y --prefer-online angelsj913/Kx-Defender- kx /h
+  npx -y --prefer-online angelsj913/Kx-Defender- kx roast tickets --scope lab --sim
 
-Other:
-  npx -y --prefer-online angelsj913/Kx-Defender- setup
-  npx -y --prefer-online angelsj913/Kx-Defender- serve [--bind host:port]
-  npx -y --prefer-online angelsj913/Kx-Defender- kx <KxLang args...>
+Optional Console UI:
+  npx -y --prefer-online angelsj913/Kx-Defender- serve
 
 Flags:
-  --all           Install all bundled agent skills
-  -g, --global    User skill dirs + CLI shims
-  --no-serve      Setup/skills only (do not start Console)
-  --bind host:port   Console bind (default 127.0.0.1:8787)
+  --all / -g      Install agent skills (+ shims)
+  --serve         Start Console UI instead of CLI shell
+  --bind host:port
 `);
 }
 
@@ -55,7 +62,7 @@ function parseArgs(argv) {
     all: false,
     global: false,
     project: false,
-    noServe: false,
+    serve: false,
     bind: process.env.KX_BIND || "127.0.0.1:8787",
     help: false,
   };
@@ -65,7 +72,8 @@ function parseArgs(argv) {
     if (a === "--all") flags.all = true;
     else if (a === "-g" || a === "--global") flags.global = true;
     else if (a === "--project") flags.project = true;
-    else if (a === "--no-serve") flags.noServe = true;
+    else if (a === "--serve" || a === "--console") flags.serve = true;
+    else if (a === "--no-serve") flags.serve = false; // legacy no-op (CLI is default)
     else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
     else if (a === "--bind") flags.bind = argv[++i];
     else if (a.startsWith("--bind=")) flags.bind = a.slice("--bind=".length);
@@ -74,42 +82,43 @@ function parseArgs(argv) {
   return { flags, positional };
 }
 
-function installGlobalShims() {
-  const userPrefix = path.join(os.homedir(), ".local");
-  const attempts = [
-    ["install", "-g", ROOT],
-    ["install", "-g", "--force", "--prefix", userPrefix, ROOT],
-  ];
-  for (const args of attempts) {
-    const res = spawnSync("npm", args, {
-      cwd: ROOT,
-      stdio: "ignore",
-      shell: isWin(),
-    });
-    if (res.status === 0) return true;
-  }
-  try {
-    const binDir = path.join(userPrefix, "bin");
-    fs.mkdirSync(binDir, { recursive: true });
-    const entry = path.join(ROOT, "scripts", "npx-entry.js");
-    const kxJs = path.join(ROOT, "scripts", "npm-kx.js");
+function installUserShims() {
+  const binDir = isWin()
+    ? path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local"), "Kx-Defender", "bin")
+    : path.join(os.homedir(), ".local", "bin");
+  fs.mkdirSync(binDir, { recursive: true });
+  const entry = path.join(ROOT, "scripts", "npx-entry.js");
+  const kxJs = path.join(ROOT, "scripts", "npm-kx.js");
+  const shellJs = path.join(ROOT, "scripts", "kx-shell.js");
+
+  if (isWin()) {
+    fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${kxJs}" %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-defender.cmd"), `@node "${entry}" %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-shell.cmd"), `@node "${shellJs}" %*\r\n`);
+  } else {
     for (const [name, target] of [
-      ["kx-defender", entry],
       ["kx", kxJs],
+      ["kx-defender", entry],
+      ["kx-shell", shellJs],
     ]) {
-      const dest = path.join(binDir, isWin() ? `${name}.cmd` : name);
-      if (isWin()) fs.writeFileSync(dest, `@node "${target}" %*\r\n`);
-      else {
-        fs.writeFileSync(dest, `#!/bin/sh\nexec node ${JSON.stringify(target)} "$@"\n`, {
-          mode: 0o755,
-        });
+      const dest = path.join(binDir, name);
+      fs.writeFileSync(dest, `#!/bin/sh\nexec node ${JSON.stringify(target)} "$@"\n`, {
+        mode: 0o755,
+      });
+      try {
         fs.chmodSync(dest, 0o755);
+      } catch (_) {
+        /* ignore */
       }
     }
-    return true;
-  } catch {
-    return false;
   }
+  log(`CLI shims: ${binDir}`);
+  if (isWin()) {
+    log(`This session: $env:PATH="$binDir;$env:PATH"`);
+  } else {
+    log(`Ensure ${binDir} is on PATH`);
+  }
+  return binDir;
 }
 
 function startServe(bind) {
@@ -129,7 +138,6 @@ function doSkillInstall(flags) {
   console.log(`Installed ${result.names.length} skills`);
   for (const name of result.names) console.log(`  ✓ ${name}`);
   for (const t of result.targets) console.log(`  → ${t}`);
-  if (useGlobal && (flags.global || flags.all)) installGlobalShims();
   console.log("Done.");
 }
 
@@ -142,14 +150,14 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  console.log(`[Kx] Starting Kx-Defender v${SETUP_VERSION}...`);
+  console.log(`[Kx] Starting Kx-Defender v${SETUP_VERSION} (CLI shell)...`);
   setupSync();
-  if (flags.global) installGlobalShims();
-  if (flags.noServe) {
-    log("Ready. Try: npx -y --prefer-online angelsj913/Kx-Defender- kx /h");
+  installUserShims();
+  if (flags.serve) {
+    startServe(flags.bind);
     return;
   }
-  startServe(flags.bind);
+  startKxShell();
 }
 
 function main() {
@@ -162,15 +170,21 @@ function main() {
   const cmd = (positional[0] || "").toLowerCase();
   const rest = positional.slice(1);
 
-  // Format-only token after `add` (never fetch a remote skill pack)
   if (cmd === "add" && rest[0] && !rest[0].startsWith("-")) {
     rest.shift();
   }
 
   if (cmd === "kx") {
     ensureSetup();
-    const res = runKx(rest);
+    const res = runKx(rest.length ? rest : ["/h"]);
     process.exit(res.status == null ? 1 : res.status);
+  }
+
+  if (cmd === "shell" || cmd === "repl" || cmd === "cli") {
+    setupSync();
+    installUserShims();
+    startKxShell();
+    return;
   }
 
   if (cmd === "serve") {
@@ -185,8 +199,9 @@ function main() {
 
   if (cmd === "setup") {
     setupSync();
-    if (flags.global) installGlobalShims();
-    log("Ready. Try: npx -y angelsj913/Kx-Defender- kx /h");
+    installUserShims();
+    log("Ready. Run: npx -y --prefer-online angelsj913/Kx-Defender-");
+    log("Or: npx -y --prefer-online angelsj913/Kx-Defender- kx /h");
     return;
   }
 
@@ -195,20 +210,21 @@ function main() {
     return;
   }
 
-  // Skills-only: add / install / init
   if (cmd === "add" || cmd === "init" || cmd === "install") {
     doSkillInstall(flags);
     return;
   }
 
-  // Bare / --all / -g → run the program (any PC short command)
-  if (!cmd || flags.all || flags.global) {
+  // Bare / --all / -g → CLI shell (not web server)
+  if (!cmd || flags.all || flags.global || flags.serve) {
     runProgram(flags, { withSkills: Boolean(flags.all || flags.global) });
     return;
   }
 
-  printHelp();
-  process.exit(1);
+  // Unknown verb → treat as one-shot KxLang: npx ... roast tickets ...
+  ensureSetup();
+  const res = runKx([cmd, ...rest]);
+  process.exit(res.status == null ? 1 : res.status);
 }
 
 try {

@@ -78,63 +78,44 @@ Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
 
 **금지:** 외부 보안 바이너리 래핑, 커스텀 임플란트, AMSI 우회, SaaS LLM API 키 필수 의존.
 
-## Install & run (any PC — short command)
-
-### PowerShell (Windows)
-
-```powershell
-irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex
-```
-
-Or:
-
-```powershell
-npx -y --prefer-online angelsj913/Kx-Defender-
-```
-
-### Any shell
-
-```bash
-npx -y --prefer-online angelsj913/Kx-Defender-
-```
-
-With skills + global shims:
-
-```bash
-npx -y --prefer-online angelsj913/Kx-Defender- --all -g
-```
-
-Starts Kx-Defender Console (default `http://127.0.0.1:8787/`).  
-If Python is missing, a portable CPython is downloaded once to `~/.kx-defender/python` (Node.js required). On Windows, downloaded files are Unblock-File’d so they run inside PowerShell.
-
-If you still see a stale error, clear the npx cache and retry (one line):
+## Install & run (PowerShell CLI — no server)
 
 ```powershell
 npx clear-npx-cache; npx -y --prefer-online angelsj913/Kx-Defender-
 ```
 
-Broken portable Python is removed automatically on the next run (v0.1.8+).
+Opens an interactive **Kx>** shell in the terminal (does **not** start the web Console).
 
-Skills only:
-
-```bash
-npx -y angelsj913/Kx-Defender- add --all -g
+```
+Kx> /h
+Kx> roast tickets --scope lab --realm lab.local --sim
+Kx> watch procs --scope lab --live
+Kx> exit
 ```
 
-KxLang:
+One-shot:
 
-```bash
-npx -y angelsj913/Kx-Defender- kx /h
+```powershell
+npx -y --prefer-online angelsj913/Kx-Defender- kx /h
+npx -y --prefer-online angelsj913/Kx-Defender- kx roast tickets --scope lab --sim
 ```
 
-> Do **not** use third-party `npx skills add …` (GitHub Source banner + Eve/PromptScript errors).  
-> `npx kx-defender` needs an npm publish; use `npx -y angelsj913/Kx-Defender-` instead.
+Optional web Console (only when requested):
+
+```powershell
+npx -y --prefer-online angelsj913/Kx-Defender- serve
+```
+
+Also: `irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex`
+
+If Python is missing, portable CPython is downloaded once to `~/.kx-defender/python`.
 
 ### Platform from a clone
 
 ```bash
-npm install && npm start
-kx /h
+npm install
+node scripts/npx-entry.js
+# or: node scripts/kx-shell.js
 npm test
 ```
 
