@@ -2,11 +2,11 @@
 "use strict";
 
 /**
- * Any-PC short launcher — CLI shell by default (no web server).
+ * Native Operator Client launcher (no web UI).
  *
  *   npx -y --prefer-online angelsj913/Kx-Defender-
- *   npx -y --prefer-online angelsj913/Kx-Defender- kx /h
- *   npx -y --prefer-online angelsj913/Kx-Defender- serve
+ *   kx
+ *   kx /h
  */
 
 const { spawnSync } = require("child_process");
@@ -47,8 +47,7 @@ One-shot:
   kx roast tickets --scope lab --sim
   kx update
 
-Optional (not the primary UI):
-  --serve    minimal local page pointing you back to the client
+Optional:
   --classic  plain shell
 `);
 }
@@ -58,9 +57,7 @@ function parseArgs(argv) {
     all: false,
     global: false,
     project: false,
-    serve: false,
     classic: false,
-    bind: process.env.KX_BIND || "127.0.0.1:8787",
     help: false,
   };
   const positional = [];
@@ -69,15 +66,16 @@ function parseArgs(argv) {
     if (a === "--all") flags.all = true;
     else if (a === "-g" || a === "--global") flags.global = true;
     else if (a === "--project") flags.project = true;
-    else if (a === "--serve" || a === "--console") flags.serve = true;
     else if (a === "--classic" || a === "--simple") flags.classic = true;
-    else if (a === "--no-serve") flags.serve = false;
-    else if (a === "--edex" || a === "--hud") {
-      /* default */
+    else if (a === "--serve" || a === "--console" || a === "--no-serve") {
+      console.error("[Kx] web console removed — use: kx");
+    } else if (a === "--edex" || a === "--hud" || a === "--client") {
+      /* default client */
     } else if (a === "-h" || a === "--help" || a === "/h") flags.help = true;
-    else if (a === "--bind") flags.bind = argv[++i];
-    else if (a.startsWith("--bind=")) flags.bind = a.slice("--bind=".length);
-    else positional.push(a);
+    else if (a === "--bind" || a.startsWith("--bind=")) {
+      console.error("[Kx] web console removed — --bind ignored");
+      if (a === "--bind") i++;
+    } else positional.push(a);
   }
   return { flags, positional };
 }
@@ -191,10 +189,9 @@ function isLoginCommand(cmd, rest) {
   return true;
 }
 
-function startServe(bind) {
-  process.env.KX_BIND = bind;
-  process.env.KX_OPEN = process.env.KX_OPEN || "1";
-  require("./npm-start.js");
+function startServe(_bind) {
+  console.error("[Kx] web console removed. Start the native client: kx");
+  process.exit(2);
 }
 
 function doSkillInstall(flags) {
@@ -223,11 +220,6 @@ function runProgram(flags, { withSkills = false } = {}) {
   console.log(`[Kx] Starting DEFCOM Operator Client v${SETUP_VERSION}...`);
   setupSync();
   installUserShims();
-  if (flags.serve) {
-    startServe(flags.bind);
-    return;
-  }
-  // Classic plain shell: --classic ; default = eDEX HUD
   if (flags.classic) {
     startKxShell();
     return;
@@ -322,13 +314,8 @@ function main() {
     return;
   }
 
-  if (cmd === "serve") {
-    ensureSetup();
-    let bind = flags.bind;
-    for (let i = 0; i < rest.length; i++) {
-      if (rest[i] === "--bind" && rest[i + 1]) bind = rest[++i];
-    }
-    startServe(bind);
+  if (cmd === "serve" || cmd === "console") {
+    startServe();
     return;
   }
 
@@ -350,8 +337,8 @@ function main() {
     return;
   }
 
-  // Bare / --all / -g → CLI shell (not web server)
-  if (!cmd || flags.all || flags.global || flags.serve) {
+  // Bare / --all / -g → native client
+  if (!cmd || flags.all || flags.global) {
     runProgram(flags, { withSkills: Boolean(flags.all || flags.global) });
     return;
   }

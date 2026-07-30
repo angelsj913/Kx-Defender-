@@ -19,8 +19,7 @@ kx nexus listen --scope lab --bind 127.0.0.1:4455 --live
 kx sweep web --scope owned --url http://127.0.0.1:8080/ --sim
 
 # Console UI
-kx serve --bind 127.0.0.1:8787
-# open http://127.0.0.1:8787/
+kx
 ```
 
 Full grammar: [`docs/kxlang.md`](docs/kxlang.md)  

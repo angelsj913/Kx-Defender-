@@ -77,10 +77,5 @@ def test_api_kx_endpoint():
         data = json.loads(res.read().decode())
         assert data["status"] == "ok"
         assert data["kxlang"]["verb"] == "roast"
-
-        conn.request("GET", "/")
-        res = conn.getresponse()
-        html = res.read().decode()
-        assert "DEFCOM" in html or "native terminal client" in html or "kx" in html.lower()
     finally:
         httpd.shutdown()

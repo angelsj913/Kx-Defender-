@@ -25,7 +25,7 @@ EXAMPLES = [
     "kx sweep web --scope owned --url http://127.0.0.1:8080/ --live",
     "kx lang ko",
     "kx lang en",
-    "kx serve --bind 127.0.0.1:8787",
+    "kx update",
 ]
 
 
@@ -49,7 +49,6 @@ def render_global_help(lang: str | None = None) -> str:
         "  kx update             Update install (no full reinstall)",
         "  kx lang [en|ko]       Get/set UI language",
         "  kx lexicon            Dump verb/object lexicon (JSON)",
-        "  kx serve [--bind host:port]  Start Console UI (optional)",
         "",
         "Flags:",
         "  --scope lab|owned|pact   Authorization scope (default: lab)",
@@ -58,7 +57,7 @@ def render_global_help(lang: str | None = None) -> str:
         "  --at <target>            Target host/tenant/ESSID",
         "  --realm <domain>         AD/Entra domain",
         "  --url <url>              Web target URL",
-        "  --bind <host:port>       Listener / console bind address",
+        "  --bind <host:port>       Listener bind address",
         "  --pid <n>                Process id for kill",
         "  --path <file>            File path for sig scan",
         "  --pact-file <path>       Engagement allow-list file",

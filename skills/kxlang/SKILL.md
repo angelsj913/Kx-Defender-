@@ -21,7 +21,7 @@ kx <VERB> <OBJECT> --scope lab|owned|pact [--sim|--live] [flags]
 kx /h
 kx /h roast
 kx lexicon
-kx serve --bind 127.0.0.1:8787
+kx update
 ```
 
 ## Examples

@@ -1,18 +1,14 @@
-"""stdlib HTTP API for Kx Console (self-built, no external web framework)."""
+"""stdlib JSON API helpers (no web UI / no static console)."""
 
 from __future__ import annotations
 
 import json
-import mimetypes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from kx_defender.kxlang import KxLangError, parse_line
 from kx_defender.orchestrator import Orchestrator
-
-CONSOLE_DIR = Path(__file__).resolve().parents[3] / "apps" / "console"
 
 
 class KxAPIHandler(BaseHTTPRequestHandler):
@@ -35,12 +31,8 @@ class KxAPIHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         path = parsed.path
-        if path in {"/", "/index.html"}:
-            return self._static("index.html")
-        if path.startswith("/assets/"):
-            return self._static(path[len("/assets/") :], under="assets")
         if path == "/api/health":
-            return self._json(200, {"ok": True, "product": "Kx-Defender", "self_built": True})
+            return self._json(200, {"ok": True, "product": "Kx-Defender"})
         if path == "/api/modules":
             qs = parse_qs(parsed.query)
             family = qs.get("family", [None])[0]
@@ -71,7 +63,6 @@ class KxAPIHandler(BaseHTTPRequestHandler):
             line = str(payload.get("command") or "").strip()
             if not line:
                 return self._json(400, {"error": "command required"})
-            # allow "kx roast ..." or bare "roast ..."
             if line.startswith("kx "):
                 line = line[3:].strip()
             try:
@@ -99,18 +90,9 @@ class KxAPIHandler(BaseHTTPRequestHandler):
 
         return self._json(404, {"error": "not found"})
 
-    def _static(self, name: str, under: str = "") -> None:
-        base = CONSOLE_DIR / under if under else CONSOLE_DIR
-        target = (base / name).resolve()
-        if not str(target).startswith(str(CONSOLE_DIR.resolve())) or not target.is_file():
-            return self._json(404, {"error": "missing asset"})
-        data = target.read_bytes()
-        ctype = mimetypes.guess_type(str(target))[0] or "application/octet-stream"
-        self._send(200, data, ctype)
-
 
 def serve(host: str = "127.0.0.1", port: int = 8787) -> None:
-    CONSOLE_DIR.mkdir(parents=True, exist_ok=True)
-    httpd = ThreadingHTTPServer((host, port), KxAPIHandler)
-    print(f"Kx Console at http://{host}:{port}/  (Ctrl+C to stop)", flush=True)
-    httpd.serve_forever()
+    raise SystemExit(
+        "Web console removed. Use the native client: kx\n"
+        f"(ignored bind {host}:{port})"
+    )

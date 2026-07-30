@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Launch Kx-Defender eDEX-style HUD inside PowerShell (no web server by default).
+  Launch Kx DEFCOM native Operator Client inside PowerShell.
 
 .EXAMPLE
   npx -y --prefer-online angelsj913/Kx-Defender-
@@ -14,9 +14,7 @@ param(
     [switch]$All,
     [Alias("g")]
     [switch]$Global,
-    [switch]$Serve,
     [switch]$Classic,
-    [string]$Bind = "127.0.0.1:8787",
     [switch]$SkillsOnly,
     [switch]$Fresh,
     [switch]$Update,
@@ -218,12 +216,8 @@ $launchArgs = @()
 if ($All) { $launchArgs += "--all" }
 if ($Global) { $launchArgs += "-g" }
 if ($Classic) { $launchArgs += "--classic" }
-if ($Serve) {
-    $launchArgs += "--serve"
-    if ($Bind) { $launchArgs += @("--bind", $Bind) }
-}
 
-Write-Host "[Kx] eDEX HUD launching in this PowerShell window..." -ForegroundColor DarkCyan
+Write-Host "[Kx] Native operator client launching..." -ForegroundColor DarkCyan
 Write-Host ""
 
 Invoke-KxNode @launchArgs

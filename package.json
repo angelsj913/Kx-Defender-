@@ -1,6 +1,6 @@
 {
   "name": "kx-defender",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Kx DEFCOM native operator client — npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
   "main": "scripts/npx-entry.js",
@@ -16,7 +16,6 @@
     "scripts/**",
     "services/**",
     "modules/**",
-    "apps/**",
     "fixtures/**",
     "rules/**",
     "skills/**",
@@ -29,8 +28,9 @@
   "preferGlobal": true,
   "scripts": {
     "setup": "node scripts/npm-setup.js",
-    "start": "node scripts/npm-start.js",
+    "start": "node scripts/npx-entry.js",
     "kx": "node scripts/npm-kx.js",
+    "client": "node scripts/kx-client.js",
     "help": "node scripts/npm-kx.js /h",
     "test": "node scripts/npm-test.js",
     "skills": "node scripts/install-agent-skills.js --all -g",

@@ -46,7 +46,7 @@ function shouldEnterProgram(argv) {
     const kxLangVerbs = new Set([
       "sentry", "trace", "audit", "harden", "triage", "comply", "forge",
       "roast", "relay", "loot", "bait", "breach", "crack", "nexus", "graph",
-      "probe", "sweep", "watch", "kill", "sig", "lang", "lexicon", "serve",
+      "probe", "sweep", "watch", "kill", "sig", "lang", "lexicon",
     ]);
     if (kxLangVerbs.has(first)) return false;
     return true;
