@@ -9,6 +9,8 @@
 <body>
   <div class="grid-bg"></div>
   <div class="scanlines"></div>
+
+  <!-- Top Header -->
   <header class="top">
     <div class="brand">KX-DEFENDER <span>eDEX HUD</span></div>
     <div class="meta">
@@ -29,54 +31,112 @@
     </div>
   </header>
 
+  <!-- Command Input Bar -->
   <section class="command">
     <div class="prompt">kx&gt;</div>
     <input id="cmd" autocomplete="off" spellcheck="false"
       placeholder="roast tickets --realm lab.local   |   /h   |   sentry detect" />
     <button id="run">RUN</button>
+    <button id="clear-btn" class="danger">CLEAR</button>
   </section>
 
+  <!-- Status Bar (Real-time) -->
+  <section class="status-bar">
+    <div class="status-item">
+      <span class="status-label">STATUS</span>
+      <span id="stat-status" class="status-value">IDLE</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">MODULE</span>
+      <span id="stat-module" class="status-value">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">DURATION</span>
+      <span id="stat-duration" class="status-value">0ms</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">FINDINGS</span>
+      <span id="stat-findings" class="status-value">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">ARTIFACTS</span>
+      <span id="stat-artifacts" class="status-value">0</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">RUNS</span>
+      <span id="stat-runs" class="status-value">0</span>
+    </div>
+  </section>
+
+  <!-- Main 2x2 Grid + Bottom Ledger -->
   <main class="grid">
     <section class="panel" id="panel-sentry">
-      <h2>SENTRY</h2>
+      <div class="panel-header">
+        <h2>SENTRY / DEFENSE</h2>
+        <span id="badge-sentry" class="panel-badge">idle</span>
+      </div>
       <div class="actions">
         <button data-cmd="watch procs">watch procs</button>
         <button data-cmd="sentry detect">sentry detect</button>
         <button data-cmd="sig scan">sig scan</button>
+        <button data-cmd="triage incident">triage</button>
       </div>
-      <pre class="out" id="out-sentry">ready</pre>
+      <div class="out" id="out-sentry">ready</div>
     </section>
+
     <section class="panel" id="panel-strike">
-      <h2>STRIKE</h2>
+      <div class="panel-header">
+        <h2>STRIKE / ATTACK</h2>
+        <span id="badge-strike" class="panel-badge">idle</span>
+      </div>
       <div class="actions">
         <button data-cmd="roast tickets --realm lab.local">roast</button>
         <button data-cmd="relay esc8 --at adcs.lab.local">relay</button>
         <button data-cmd="breach entra --realm contoso.lab.local">breach</button>
         <button data-cmd="probe mind --at local-fixture">probe</button>
       </div>
-      <pre class="out" id="out-strike">ready</pre>
+      <div class="out" id="out-strike">ready</div>
     </section>
+
     <section class="panel" id="panel-sweep">
-      <h2>SWEEP</h2>
+      <div class="panel-header">
+        <h2>SWEEP / WEB</h2>
+        <span id="badge-sweep" class="panel-badge">idle</span>
+      </div>
       <div class="actions">
         <button data-cmd="sweep web --url http://127.0.0.1/">sweep web</button>
+        <button data-cmd="sweep xss --url http://127.0.0.1/">sweep xss</button>
+        <button data-cmd="sweep sqli --url http://127.0.0.1/">sweep sqli</button>
+        <button data-cmd="sweep jwt --url http://127.0.0.1/">sweep jwt</button>
       </div>
-      <pre class="out" id="out-sweep">ready</pre>
+      <div class="out" id="out-sweep">ready</div>
     </section>
+
     <section class="panel" id="panel-nexus">
-      <h2>NEXUS</h2>
+      <div class="panel-header">
+        <h2>NEXUS / C2</h2>
+        <span id="badge-nexus" class="panel-badge">idle</span>
+      </div>
       <div class="actions">
         <button data-cmd="nexus status">status</button>
-        <button data-cmd="nexus listen --bind 127.0.0.1:4455">listen</button>
+        <button data-cmd="nexus listen --bind 127.0.0.1:4455">listen havoc</button>
+        <button data-cmd="nexus sliver --bind 127.0.0.1:4456">listen sliver</button>
       </div>
-      <pre class="out" id="out-nexus">ready</pre>
+      <div class="out" id="out-nexus">ready</div>
     </section>
+
     <section class="panel wide" id="panel-ledger">
-      <h2>LEDGER</h2>
-      <button id="refresh">refresh</button>
-      <pre class="out" id="out-ledger">loading…</pre>
+      <div class="panel-header">
+        <h2>LEDGER / HISTORY</h2>
+        <div class="ledger-controls">
+          <span id="badge-ledger" class="panel-badge count">0</span>
+          <button id="refresh">refresh</button>
+        </div>
+      </div>
+      <div class="out" id="out-ledger">loading…</div>
     </section>
   </main>
+
   <script src="/assets/console.js"></script>
 </body>
 </html>
