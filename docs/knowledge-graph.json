@@ -1,0 +1,1260 @@
+{
+  "version": "2.0.0",
+  "language": "ko",
+  "project": {
+    "name": "Kx-Defender",
+    "description": "Windows 중심의 공격 + 방어 플랫폼, KxLang/DEFCOM 지원",
+    "url": "https://github.com/angelsj913/Kx-Defender-",
+    "languages": [
+      "Python",
+      "JavaScript",
+      "JSON",
+      "Markdown",
+      "YAML"
+    ],
+    "frameworks": [
+      "Node.js",
+      "KxLang",
+      "Claude AI"
+    ],
+    "analyzedAt": "2026-07-30T12:18:35.577455Z",
+    "gitCommitHash": "495e926a56c017af85101d44654ea5cdb51a1f1d"
+  },
+  "nodes": [
+    {
+      "id": "ep:npx-entry.js",
+      "type": "EntryPoint",
+      "name": "NPX Entry",
+      "description": "프로젝트의 메인 진입점",
+      "category": "entry-points",
+      "path": "scripts/npx-entry.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "ep:npm-kx.js",
+      "type": "EntryPoint",
+      "name": "Kx CLI Entry",
+      "description": "Kx 명령줄 인터페이스 진입점",
+      "category": "entry-points",
+      "path": "scripts/npm-kx.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "ep:kx-client.js",
+      "type": "EntryPoint",
+      "name": "Client Entry",
+      "description": "클라이언트 애플리케이션 진입점",
+      "category": "entry-points",
+      "path": "scripts/kx-client.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "ep:npm-setup.js",
+      "type": "EntryPoint",
+      "name": "Setup Entry",
+      "description": "환경 설정 진입점",
+      "category": "entry-points",
+      "path": "scripts/npm-setup.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "ep:npm-test.js",
+      "type": "EntryPoint",
+      "name": "Test Entry",
+      "description": "테스트 실행 진입점",
+      "category": "entry-points",
+      "path": "scripts/npm-test.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "rt:npm-setup.js",
+      "type": "RuntimeComponent",
+      "name": "PyEnv Setup",
+      "description": "Python 가상환경 및 종속성 설정",
+      "category": "runtime",
+      "path": "scripts/npm-setup.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "rt:kx-shell.js",
+      "type": "RuntimeComponent",
+      "name": "Interactive Shell",
+      "description": "대화형 셸 환경",
+      "category": "runtime",
+      "path": "scripts/kx-shell.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "rt:edex-shell.js",
+      "type": "RuntimeComponent",
+      "name": "Advanced Shell",
+      "description": "고급 셸 환경",
+      "category": "runtime",
+      "path": "scripts/edex-shell.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "rt:banner.js",
+      "type": "RuntimeComponent",
+      "name": "Banner Display",
+      "description": "배너 표시",
+      "category": "runtime",
+      "path": "scripts/banner.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "rt:kx-update.js",
+      "type": "RuntimeComponent",
+      "name": "Update Manager",
+      "description": "버전 업데이트 관리",
+      "category": "runtime",
+      "path": "scripts/kx-update.js",
+      "language": "JavaScript"
+    },
+    {
+      "id": "mod:attack:c2",
+      "type": "AttackModule",
+      "name": "C2 Attack",
+      "description": "C2 명령 제어 시뮬레이션",
+      "category": "attack-modules",
+      "path": "modules/attack/c2.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:device_code",
+      "type": "AttackModule",
+      "name": "DeviceCode",
+      "description": "OAuth 디바이스 코드 흐름",
+      "category": "attack-modules",
+      "path": "modules/attack/device_code.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:dpapi",
+      "type": "AttackModule",
+      "name": "DPAPI",
+      "description": "Windows 자격증명 추출",
+      "category": "attack-modules",
+      "path": "modules/attack/dpapi.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:kerberoasting",
+      "type": "AttackModule",
+      "name": "Kerberoasting",
+      "description": "Kerberos 티켓 공격",
+      "category": "attack-modules",
+      "path": "modules/attack/kerberoasting.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:llm_redteam",
+      "type": "AttackModule",
+      "name": "LLM RedTeam",
+      "description": "LLM 레드팀 시뮬레이션",
+      "category": "attack-modules",
+      "path": "modules/attack/llm_redteam.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:ntlm_relay",
+      "type": "AttackModule",
+      "name": "NTLM Relay",
+      "description": "NTLM 릴레이 공격",
+      "category": "attack-modules",
+      "path": "modules/attack/ntlm_relay.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:web_scanner",
+      "type": "AttackModule",
+      "name": "Web Scanner",
+      "description": "웹 취약점 스캔",
+      "category": "attack-modules",
+      "path": "modules/attack/web_scanner.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:attack:wifi",
+      "type": "AttackModule",
+      "name": "WiFi Attack",
+      "description": "WiFi 보안 평가",
+      "category": "attack-modules",
+      "path": "modules/attack/wifi.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:defense:process_kill",
+      "type": "DefenseModule",
+      "name": "Process Kill",
+      "description": "악성 프로세스 종료",
+      "category": "defense-modules",
+      "path": "modules/defense/process_kill.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:defense:process_monitor",
+      "type": "DefenseModule",
+      "name": "Process Monitor",
+      "description": "프로세스 모니터링",
+      "category": "defense-modules",
+      "path": "modules/defense/process_monitor.py",
+      "language": "Python"
+    },
+    {
+      "id": "mod:defense:sig_scan",
+      "type": "DefenseModule",
+      "name": "Signature Scan",
+      "description": "시그니처 스캔",
+      "category": "defense-modules",
+      "path": "modules/defense/sig_scan.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:kxaction",
+      "type": "Engine",
+      "name": "KxAction",
+      "description": "작업 실행 엔진",
+      "category": "engines",
+      "path": "modules/engines/kxaction.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:kxscore",
+      "type": "Engine",
+      "name": "KxScore",
+      "description": "위험도 점수 매김",
+      "category": "engines",
+      "path": "modules/engines/kxscore.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:kxsig",
+      "type": "Engine",
+      "name": "KxSig",
+      "description": "시그니처 탐지",
+      "category": "engines",
+      "path": "modules/engines/kxsig.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:kxwatch",
+      "type": "Engine",
+      "name": "KxWatch",
+      "description": "시스템 감시",
+      "category": "engines",
+      "path": "modules/engines/kxwatch.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:nexus_store",
+      "type": "Engine",
+      "name": "NexusStore",
+      "description": "실시간 데이터 저장",
+      "category": "engines",
+      "path": "modules/engines/nexus_store.py",
+      "language": "Python"
+    },
+    {
+      "id": "eng:report",
+      "type": "Engine",
+      "name": "Report",
+      "description": "리포팅 엔진",
+      "category": "engines",
+      "path": "modules/engines/report.py",
+      "language": "Python"
+    },
+    {
+      "id": "cat:factory",
+      "type": "CatalogModule",
+      "name": "Factory",
+      "description": "모듈 생성 팩토리",
+      "category": "catalog",
+      "path": "modules/catalog/factory.py",
+      "language": "Python"
+    },
+    {
+      "id": "cat:handlers",
+      "type": "CatalogModule",
+      "name": "Handlers",
+      "description": "카탈로그 핸들러",
+      "category": "catalog",
+      "path": "modules/catalog/handlers.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:orchestrator",
+      "type": "Service",
+      "name": "Orchestrator",
+      "description": "메인 오케스트레이터",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/orchestrator.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:kx_cli",
+      "type": "Service",
+      "name": "KxCLI",
+      "description": "CLI 인터페이스",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/kx_cli.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:kxlang",
+      "type": "Service",
+      "name": "KxLang",
+      "description": "언어 파서",
+      "category": "orchestrator-lang",
+      "path": "services/orchestrator/kx_defender/kxlang.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:registry",
+      "type": "Service",
+      "name": "Registry",
+      "description": "모듈 레지스트리",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/registry.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:api",
+      "type": "Service",
+      "name": "KxAPI",
+      "description": "REST API",
+      "category": "orchestrator-api",
+      "path": "services/orchestrator/kx_defender/api.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:auth",
+      "type": "Service",
+      "name": "Auth",
+      "description": "인증 및 권한",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/auth.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:base",
+      "type": "Service",
+      "name": "BaseModule",
+      "description": "모듈 기본클래스",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/base.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:result",
+      "type": "Service",
+      "name": "Result",
+      "description": "결과 모델",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/result.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:daemon",
+      "type": "Service",
+      "name": "Daemon",
+      "description": "데몬 프로세스",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/daemon.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:store",
+      "type": "Service",
+      "name": "Store",
+      "description": "실행 저장소",
+      "category": "orchestrator-data",
+      "path": "services/orchestrator/kx_defender/store.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:render",
+      "type": "Service",
+      "name": "Render",
+      "description": "결과 렌더러",
+      "category": "orchestrator-ui",
+      "path": "services/orchestrator/kx_defender/render.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:report",
+      "type": "Service",
+      "name": "Report",
+      "description": "리포팅",
+      "category": "orchestrator-data",
+      "path": "services/orchestrator/kx_defender/report.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:watcher",
+      "type": "Service",
+      "name": "Watcher",
+      "description": "감시 시스템",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/watcher.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:alerts",
+      "type": "Service",
+      "name": "Alerts",
+      "description": "알림 시스템",
+      "category": "orchestrator-core",
+      "path": "services/orchestrator/kx_defender/alerts.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:i18n",
+      "type": "Service",
+      "name": "i18n",
+      "description": "국제화",
+      "category": "orchestrator-util",
+      "path": "services/orchestrator/kx_defender/i18n.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:helptext",
+      "type": "Service",
+      "name": "HelpText",
+      "description": "도움말",
+      "category": "orchestrator-ui",
+      "path": "services/orchestrator/kx_defender/helptext.py",
+      "language": "Python"
+    },
+    {
+      "id": "svc:kxd:paramform",
+      "type": "Service",
+      "name": "ParamForm",
+      "description": "파라미터 폼",
+      "category": "orchestrator-ui",
+      "path": "services/orchestrator/kx_defender/paramform.py",
+      "language": "Python"
+    },
+    {
+      "id": "data:fixture:spns.json",
+      "type": "DataFile",
+      "name": "AD SPN Data",
+      "description": "Active Directory SPN 데이터",
+      "category": "data-fixtures",
+      "path": "fixtures/ad/spns.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:skills.json",
+      "type": "DataFile",
+      "name": "Skills Catalog",
+      "description": "262개 스킬 정의",
+      "category": "data-fixtures",
+      "path": "fixtures/catalog/skills.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:kxlang_lexicon.json",
+      "type": "DataFile",
+      "name": "KxLang Lexicon",
+      "description": "언어 사전",
+      "category": "data-fixtures",
+      "path": "fixtures/catalog/kxlang_lexicon.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:param_schema.json",
+      "type": "DataFile",
+      "name": "Param Schema",
+      "description": "파라미터 스키마",
+      "category": "data-fixtures",
+      "path": "fixtures/catalog/param_schema.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:secrets.json",
+      "type": "DataFile",
+      "name": "DPAPI Secrets",
+      "description": "DPAPI 시크릿 데이터",
+      "category": "data-fixtures",
+      "path": "fixtures/dpapi/secrets.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:payloads.json",
+      "type": "DataFile",
+      "name": "LLM Payloads",
+      "description": "LLM 페이로드",
+      "category": "data-fixtures",
+      "path": "fixtures/llm/payloads.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:fixture_responses.json",
+      "type": "DataFile",
+      "name": "LLM Responses",
+      "description": "LLM 응답 고정값",
+      "category": "data-fixtures",
+      "path": "fixtures/llm/fixture_responses.json",
+      "language": "JSON"
+    },
+    {
+      "id": "data:fixture:wordlist.txt",
+      "type": "DataFile",
+      "name": "WiFi Wordlist",
+      "description": "WiFi 워드리스트",
+      "category": "data-fixtures",
+      "path": "fixtures/wifi/wordlist.txt",
+      "language": ""
+    },
+    {
+      "id": "data:rules:kxsig",
+      "type": "RuleSet",
+      "name": "KxSig Rules",
+      "description": "시그니처 탐지 규칙",
+      "category": "data-rules",
+      "path": "rules/kxsig/core.json",
+      "language": "JSON"
+    },
+    {
+      "id": "doc:architecture",
+      "type": "Documentation",
+      "name": "Architecture",
+      "description": "아키텍처 설명",
+      "category": "documentation",
+      "path": "docs/architecture.md",
+      "language": "Markdown"
+    },
+    {
+      "id": "doc:kxlang",
+      "type": "Documentation",
+      "name": "KxLang Doc",
+      "description": "언어 사양",
+      "category": "documentation",
+      "path": "docs/kxlang.md",
+      "language": "Markdown"
+    },
+    {
+      "id": "doc:API",
+      "type": "Documentation",
+      "name": "API Doc",
+      "description": "REST API 문서",
+      "category": "documentation",
+      "path": "docs/API.md",
+      "language": "Markdown"
+    },
+    {
+      "id": "doc:SETUP",
+      "type": "Documentation",
+      "name": "Setup Guide",
+      "description": "설치 가이드",
+      "category": "documentation",
+      "path": "docs/SETUP.md",
+      "language": "Markdown"
+    },
+    {
+      "id": "doc:README",
+      "type": "Documentation",
+      "name": "README",
+      "description": "프로젝트 개요",
+      "category": "documentation",
+      "path": "README.md",
+      "language": "Markdown"
+    },
+    {
+      "id": "skill:kx-attack-c2",
+      "type": "Skill",
+      "name": "C2 Skill",
+      "description": "C2 공격 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-c2",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-device_code",
+      "type": "Skill",
+      "name": "DevCode Skill",
+      "description": "OAuth 공격 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-device_code",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-dpapi",
+      "type": "Skill",
+      "name": "DPAPI Skill",
+      "description": "DPAPI 공격 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-dpapi",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-kerberoasting",
+      "type": "Skill",
+      "name": "Kerb Skill",
+      "description": "Kerberoasting 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-kerberoasting",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-llm_redteam",
+      "type": "Skill",
+      "name": "LLM Skill",
+      "description": "LLM 레드팀 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-llm_redteam",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-ntlm_relay",
+      "type": "Skill",
+      "name": "NTLM Skill",
+      "description": "NTLM 릴레이 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-ntlm_relay",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-web_scanner",
+      "type": "Skill",
+      "name": "Web Skill",
+      "description": "웹 스캔 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-web_scanner",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-attack-wifi",
+      "type": "Skill",
+      "name": "WiFi Skill",
+      "description": "WiFi 공격 스킬",
+      "category": "skills",
+      "path": "skills/kx-attack-wifi",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-catalog-attack",
+      "type": "Skill",
+      "name": "Attack Catalog",
+      "description": "공격 카탈로그",
+      "category": "skills",
+      "path": "skills/kx-catalog-attack",
+      "language": ""
+    },
+    {
+      "id": "skill:kx-catalog-defense",
+      "type": "Skill",
+      "name": "Defense Catalog",
+      "description": "방어 카탈로그",
+      "category": "skills",
+      "path": "skills/kx-catalog-defense",
+      "language": ""
+    },
+    {
+      "id": "skill:kxlang",
+      "type": "Skill",
+      "name": "KxLang Skill",
+      "description": "언어 스킬",
+      "category": "skills",
+      "path": "skills/kxlang",
+      "language": ""
+    },
+    {
+      "id": "test:test_ad_wifi_c2",
+      "type": "Test",
+      "name": "AD/WiFi/C2 Test",
+      "description": "통합 테스트",
+      "category": "tests",
+      "path": "tests/test_ad_wifi_c2.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_auth",
+      "type": "Test",
+      "name": "Auth Test",
+      "description": "인증 테스트",
+      "category": "tests",
+      "path": "tests/test_auth.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_catalog",
+      "type": "Test",
+      "name": "Catalog Test",
+      "description": "카탈로그 테스트",
+      "category": "tests",
+      "path": "tests/test_catalog.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_kxlang",
+      "type": "Test",
+      "name": "KxLang Test",
+      "description": "언어 테스트",
+      "category": "tests",
+      "path": "tests/test_kxlang.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_local_execute",
+      "type": "Test",
+      "name": "Local Exec Test",
+      "description": "로컬 실행 테스트",
+      "category": "tests",
+      "path": "tests/test_local_execute.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_modules_simulate",
+      "type": "Test",
+      "name": "Simulate Test",
+      "description": "모듈 시뮬레이션 테스트",
+      "category": "tests",
+      "path": "tests/test_modules_simulate.py",
+      "language": "Python"
+    },
+    {
+      "id": "test:test_system",
+      "type": "Test",
+      "name": "System Test",
+      "description": "시스템 테스트",
+      "category": "tests",
+      "path": "tests/test_system.py",
+      "language": "Python"
+    }
+  ],
+  "edges": [
+    {
+      "from": "mod:attack:device_code",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:device_code → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:dpapi",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:dpapi → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:kerberoasting",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:kerberoasting → svc:kxd:result"
+    },
+    {
+      "from": "mod:defense:process_monitor",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:defense:process_monitor → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:device_code",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:device_code → svc:kxd:result"
+    },
+    {
+      "from": "mod:defense:process_kill",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:defense:process_kill → svc:kxd:result"
+    },
+    {
+      "from": "mod:attack:web_scanner",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:web_scanner → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:wifi",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:wifi → svc:kxd:base"
+    },
+    {
+      "from": "test:test_kxlang",
+      "to": "svc:kxd:kxlang",
+      "type": "tests",
+      "description": "test:test_kxlang → svc:kxd:kxlang"
+    },
+    {
+      "from": "mod:defense:process_monitor",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:defense:process_monitor → svc:kxd:result"
+    },
+    {
+      "from": "mod:attack:web_scanner",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:web_scanner → svc:kxd:result"
+    },
+    {
+      "from": "mod:attack:llm_redteam",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:llm_redteam → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:dpapi",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:dpapi → svc:kxd:result"
+    },
+    {
+      "from": "skill:kx-catalog-attack",
+      "to": "cat:factory",
+      "type": "uses",
+      "description": "skill:kx-catalog-attack → cat:factory"
+    },
+    {
+      "from": "mod:attack:c2",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:c2 → svc:kxd:base"
+    },
+    {
+      "from": "mod:attack:wifi",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:wifi → svc:kxd:result"
+    },
+    {
+      "from": "mod:attack:ntlm_relay",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:ntlm_relay → svc:kxd:base"
+    },
+    {
+      "from": "svc:kxd:registry",
+      "to": "data:fixture:skills.json",
+      "type": "loads",
+      "description": "svc:kxd:registry → data:fixture:skills.json"
+    },
+    {
+      "from": "mod:defense:sig_scan",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:defense:sig_scan → svc:kxd:base"
+    },
+    {
+      "from": "svc:kxd:kxlang",
+      "to": "svc:kxd:registry",
+      "type": "queries",
+      "description": "svc:kxd:kxlang → svc:kxd:registry"
+    },
+    {
+      "from": "svc:kxd:registry",
+      "to": "mod:attack:c2",
+      "type": "registers",
+      "description": "svc:kxd:registry → mod:attack:c2"
+    },
+    {
+      "from": "mod:attack:llm_redteam",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:llm_redteam → svc:kxd:result"
+    },
+    {
+      "from": "test:test_ad_wifi_c2",
+      "to": "mod:attack:c2",
+      "type": "tests",
+      "description": "test:test_ad_wifi_c2 → mod:attack:c2"
+    },
+    {
+      "from": "mod:attack:c2",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:c2 → svc:kxd:result"
+    },
+    {
+      "from": "ep:npx-entry.js",
+      "to": "svc:kxd:orchestrator",
+      "type": "invokes",
+      "description": "ep:npx-entry.js → svc:kxd:orchestrator"
+    },
+    {
+      "from": "eng:kxsig",
+      "to": "data:rules:kxsig",
+      "type": "loads",
+      "description": "eng:kxsig → data:rules:kxsig"
+    },
+    {
+      "from": "ep:npm-kx.js",
+      "to": "svc:kxd:kx_cli",
+      "type": "invokes",
+      "description": "ep:npm-kx.js → svc:kxd:kx_cli"
+    },
+    {
+      "from": "mod:defense:sig_scan",
+      "to": "eng:kxsig",
+      "type": "uses",
+      "description": "mod:defense:sig_scan → eng:kxsig"
+    },
+    {
+      "from": "svc:kxd:orchestrator",
+      "to": "cat:factory",
+      "type": "uses",
+      "description": "svc:kxd:orchestrator → cat:factory"
+    },
+    {
+      "from": "skill:kx-attack-c2",
+      "to": "mod:attack:c2",
+      "type": "implements",
+      "description": "skill:kx-attack-c2 → mod:attack:c2"
+    },
+    {
+      "from": "mod:defense:sig_scan",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:defense:sig_scan → svc:kxd:result"
+    },
+    {
+      "from": "ep:kx-client.js",
+      "to": "rt:edex-shell.js",
+      "type": "uses",
+      "description": "ep:kx-client.js → rt:edex-shell.js"
+    },
+    {
+      "from": "rt:edex-shell.js",
+      "to": "svc:kxd:orchestrator",
+      "type": "executes",
+      "description": "rt:edex-shell.js → svc:kxd:orchestrator"
+    },
+    {
+      "from": "mod:defense:process_monitor",
+      "to": "eng:kxscore",
+      "type": "uses",
+      "description": "mod:defense:process_monitor → eng:kxscore"
+    },
+    {
+      "from": "skill:kx-attack-dpapi",
+      "to": "mod:attack:dpapi",
+      "type": "implements",
+      "description": "skill:kx-attack-dpapi → mod:attack:dpapi"
+    },
+    {
+      "from": "mod:attack:kerberoasting",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:attack:kerberoasting → svc:kxd:base"
+    },
+    {
+      "from": "svc:kxd:store",
+      "to": "data:fixture:skills.json",
+      "type": "persists_to",
+      "description": "svc:kxd:store → data:fixture:skills.json"
+    },
+    {
+      "from": "mod:attack:ntlm_relay",
+      "to": "svc:kxd:result",
+      "type": "imports",
+      "description": "mod:attack:ntlm_relay → svc:kxd:result"
+    },
+    {
+      "from": "skill:kx-catalog-defense",
+      "to": "cat:handlers",
+      "type": "uses",
+      "description": "skill:kx-catalog-defense → cat:handlers"
+    },
+    {
+      "from": "mod:defense:process_kill",
+      "to": "eng:kxaction",
+      "type": "uses",
+      "description": "mod:defense:process_kill → eng:kxaction"
+    },
+    {
+      "from": "skill:kxlang",
+      "to": "svc:kxd:kxlang",
+      "type": "integrates",
+      "description": "skill:kxlang → svc:kxd:kxlang"
+    },
+    {
+      "from": "rt:kx-shell.js",
+      "to": "svc:kxd:kx_cli",
+      "type": "drives",
+      "description": "rt:kx-shell.js → svc:kxd:kx_cli"
+    },
+    {
+      "from": "svc:kxd:report",
+      "to": "data:fixture:skills.json",
+      "type": "reads_from",
+      "description": "svc:kxd:report → data:fixture:skills.json"
+    },
+    {
+      "from": "svc:kxd:registry",
+      "to": "mod:defense:process_kill",
+      "type": "registers",
+      "description": "svc:kxd:registry → mod:defense:process_kill"
+    },
+    {
+      "from": "test:test_catalog",
+      "to": "cat:factory",
+      "type": "tests",
+      "description": "test:test_catalog → cat:factory"
+    },
+    {
+      "from": "mod:defense:process_kill",
+      "to": "svc:kxd:base",
+      "type": "imports",
+      "description": "mod:defense:process_kill → svc:kxd:base"
+    },
+    {
+      "from": "rt:npm-setup.js",
+      "to": "svc:kxd:orchestrator",
+      "type": "initializes",
+      "description": "rt:npm-setup.js → svc:kxd:orchestrator"
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:entry-points",
+      "name": "진입점",
+      "description": "NPX/CLI 진입점 및 스크립트",
+      "nodeCount": 5,
+      "nodeIds": [
+        "ep:npx-entry.js",
+        "ep:npm-kx.js",
+        "ep:kx-client.js",
+        "ep:npm-setup.js",
+        "ep:npm-test.js"
+      ]
+    },
+    {
+      "id": "layer:runtime",
+      "name": "런타임",
+      "description": "Node.js 환경 및 셸 환경",
+      "nodeCount": 5,
+      "nodeIds": [
+        "rt:npm-setup.js",
+        "rt:kx-shell.js",
+        "rt:edex-shell.js",
+        "rt:banner.js",
+        "rt:kx-update.js"
+      ]
+    },
+    {
+      "id": "layer:modules",
+      "name": "Python 모듈",
+      "description": "공격/방어/카탈로그/엔진",
+      "nodeCount": 19,
+      "nodeIds": [
+        "mod:attack:c2",
+        "mod:attack:device_code",
+        "mod:attack:dpapi",
+        "mod:attack:kerberoasting",
+        "mod:attack:llm_redteam",
+        "mod:attack:ntlm_relay",
+        "mod:attack:web_scanner",
+        "mod:attack:wifi",
+        "mod:defense:process_kill",
+        "mod:defense:process_monitor",
+        "mod:defense:sig_scan",
+        "eng:kxaction",
+        "eng:kxscore",
+        "eng:kxsig",
+        "eng:kxwatch",
+        "eng:nexus_store",
+        "eng:report",
+        "cat:factory",
+        "cat:handlers"
+      ]
+    },
+    {
+      "id": "layer:services",
+      "name": "오케스트레이터",
+      "description": "Kx-Defender 서비스",
+      "nodeCount": 17,
+      "nodeIds": [
+        "svc:kxd:orchestrator",
+        "svc:kxd:kx_cli",
+        "svc:kxd:kxlang",
+        "svc:kxd:registry",
+        "svc:kxd:api",
+        "svc:kxd:auth",
+        "svc:kxd:base",
+        "svc:kxd:result",
+        "svc:kxd:daemon",
+        "svc:kxd:store",
+        "svc:kxd:render",
+        "svc:kxd:report",
+        "svc:kxd:watcher",
+        "svc:kxd:alerts",
+        "svc:kxd:i18n",
+        "svc:kxd:helptext",
+        "svc:kxd:paramform"
+      ]
+    },
+    {
+      "id": "layer:data",
+      "name": "데이터 계층",
+      "description": "Fixtures, Rules, Skills",
+      "nodeCount": 9,
+      "nodeIds": [
+        "data:fixture:spns.json",
+        "data:fixture:skills.json",
+        "data:fixture:kxlang_lexicon.json",
+        "data:fixture:param_schema.json",
+        "data:fixture:secrets.json",
+        "data:fixture:payloads.json",
+        "data:fixture:fixture_responses.json",
+        "data:fixture:wordlist.txt",
+        "data:rules:kxsig"
+      ]
+    },
+    {
+      "id": "layer:skills",
+      "name": "스킬",
+      "description": "Claude AI 스킬 통합",
+      "nodeCount": 11,
+      "nodeIds": [
+        "skill:kx-attack-c2",
+        "skill:kx-attack-device_code",
+        "skill:kx-attack-dpapi",
+        "skill:kx-attack-kerberoasting",
+        "skill:kx-attack-llm_redteam",
+        "skill:kx-attack-ntlm_relay",
+        "skill:kx-attack-web_scanner",
+        "skill:kx-attack-wifi",
+        "skill:kx-catalog-attack",
+        "skill:kx-catalog-defense",
+        "skill:kxlang"
+      ]
+    },
+    {
+      "id": "layer:testing",
+      "name": "테스트",
+      "description": "테스트 및 문서",
+      "nodeCount": 12,
+      "nodeIds": [
+        "doc:architecture",
+        "doc:kxlang",
+        "doc:API",
+        "doc:SETUP",
+        "doc:README",
+        "test:test_ad_wifi_c2",
+        "test:test_auth",
+        "test:test_catalog",
+        "test:test_kxlang",
+        "test:test_local_execute",
+        "test:test_modules_simulate",
+        "test:test_system"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "step": 1,
+      "title": "시작: 진입점 이해",
+      "description": "NPX와 CLI 진입점 구조 파악하기",
+      "nodeIds": [
+        "ep:npx-entry.js",
+        "ep:npm-kx.js"
+      ],
+      "focus": "프로젝트 시작점",
+      "readingTime": "5분"
+    },
+    {
+      "step": 2,
+      "title": "환경 설정: Python 초기화",
+      "description": "npm-setup.js를 통한 Python 환경 초기화",
+      "nodeIds": [
+        "rt:npm-setup.js",
+        "svc:kxd:orchestrator"
+      ],
+      "focus": "런타임 환경 구성",
+      "readingTime": "10분"
+    },
+    {
+      "step": 3,
+      "title": "핵심: Orchestrator 메커니즘",
+      "description": "메인 오케스트레이터와 명령어 처리",
+      "nodeIds": [
+        "svc:kxd:orchestrator",
+        "svc:kxd:kx_cli",
+        "svc:kxd:registry"
+      ],
+      "focus": "명령어 처리 흐름",
+      "readingTime": "15분"
+    },
+    {
+      "step": 4,
+      "title": "언어: KxLang 파서",
+      "description": "KxLang 언어 구현 및 파싱",
+      "nodeIds": [
+        "svc:kxd:kxlang",
+        "doc:kxlang"
+      ],
+      "focus": "도메인 특화 언어",
+      "readingTime": "20분"
+    },
+    {
+      "step": 5,
+      "title": "공격: 8가지 공격 모듈",
+      "description": "C2, DPAPI, Kerberoasting, WiFi 등",
+      "nodeIds": [
+        "mod:attack:c2",
+        "mod:attack:dpapi",
+        "mod:attack:kerberoasting",
+        "mod:attack:wifi"
+      ],
+      "focus": "공격 기능 구현",
+      "readingTime": "30분"
+    },
+    {
+      "step": 6,
+      "title": "방어: 모니터링 및 탐지",
+      "description": "프로세스 모니터링과 시그니처 스캔",
+      "nodeIds": [
+        "mod:defense:process_monitor",
+        "mod:defense:sig_scan",
+        "eng:kxscore",
+        "eng:kxsig"
+      ],
+      "focus": "방어 기능 구현",
+      "readingTime": "25분"
+    },
+    {
+      "step": 7,
+      "title": "통합: 결과 저장 및 리포팅",
+      "description": "실행 결과의 저장, 렌더링, 리포팅",
+      "nodeIds": [
+        "svc:kxd:store",
+        "svc:kxd:render",
+        "svc:kxd:report"
+      ],
+      "focus": "출력 및 지속성",
+      "readingTime": "15분"
+    },
+    {
+      "step": 8,
+      "title": "확장: Claude AI 스킬 통합",
+      "description": "262개 Claude AI 스킬을 통한 확장",
+      "nodeIds": [
+        "skill:kx-attack-c2",
+        "skill:kx-catalog-attack",
+        "skill:kxlang"
+      ],
+      "focus": "스킬 생태계",
+      "readingTime": "15분"
+    }
+  ],
+  "statistics": {
+    "totalNodes": 78,
+    "totalEdges": 47,
+    "nodesByType": {
+      "EntryPoint": 5,
+      "RuntimeComponent": 5,
+      "AttackModule": 8,
+      "DefenseModule": 3,
+      "Engine": 6,
+      "Service": 17,
+      "DataFile": 8,
+      "Skill": 11
+    },
+    "layers": 7,
+    "tourSteps": 8
+  }
+}
