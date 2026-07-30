@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, urlparse
 
-from kx_defender.kxlang import KxLangError, parse_line
+from kx_defender.kxlang import KxLangError, list_verbs, parse_line
 from kx_defender.orchestrator import Orchestrator
 
 CONSOLE_DIR = Path(__file__).resolve().parents[3] / "apps" / "console"
@@ -41,6 +41,8 @@ class KxAPIHandler(BaseHTTPRequestHandler):
             return self._static(path[len("/assets/") :], under="assets")
         if path == "/api/health":
             return self._json(200, {"ok": True, "product": "Kx-Defender", "self_built": True})
+        if path == "/api/lexicon":
+            return self._json(200, {"language": "KxLang", "codename": "DEFCOM", "verbs": list_verbs()})
         if path == "/api/modules":
             qs = parse_qs(parsed.query)
             family = qs.get("family", [None])[0]

@@ -102,11 +102,27 @@ select {
   letter-spacing: 0.08em;
   font-size: 10px;
 }
+.lang-toggle {
+  background: transparent;
+  border: 1px solid var(--muted);
+  color: var(--muted);
+  padding: 2px 8px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.lang-toggle:hover {
+  border-color: var(--cyan-hot);
+  color: var(--cyan-hot);
+  box-shadow: 0 0 10px var(--glow);
+}
 
 /* Command Bar - Fixed Height */
 .command {
   position: relative;
-  z-index: 2;
+  z-index: 20;
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   gap: 8px;
@@ -115,6 +131,79 @@ select {
   align-items: center;
   background: rgba(5, 8, 13, 0.85);
   flex: 0 0 auto;
+}
+.cmd-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Autocomplete Dropdown */
+.suggest {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 2px;
+  background: var(--panel-hot);
+  border: 1px solid var(--cyan-hot);
+  box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15), 0 0 0 1px rgba(0, 229, 255, 0.2);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  font-size: 11px;
+}
+.suggest.show { display: block; }
+.suggest-item {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(170, 207, 209, 0.08);
+  align-items: baseline;
+}
+.suggest-item:hover, .suggest-item.selected {
+  background: rgba(0, 229, 255, 0.12);
+}
+.suggest-item.selected {
+  border-left: 2px solid var(--cyan-hot);
+  padding-left: 8px;
+}
+.suggest-token {
+  color: var(--cyan-hot);
+  font-weight: 700;
+  text-shadow: 0 0 6px var(--glow);
+  letter-spacing: 0.05em;
+}
+.suggest-hint {
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.suggest-tag {
+  color: var(--orange);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  padding: 1px 5px;
+  border: 1px solid var(--orange);
+  opacity: 0.8;
+}
+.suggest-empty {
+  padding: 8px 12px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 10px;
+}
+.suggest-header {
+  padding: 4px 10px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  border-bottom: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.4);
 }
 .prompt {
   color: var(--orange);
@@ -389,6 +478,247 @@ button.danger:hover {
   font-size: 10px;
   color: var(--muted);
   margin-top: 3px;
+}
+
+/* Expandable Finding */
+.finding-card {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.finding-card:hover {
+  background: rgba(0, 229, 255, 0.05);
+}
+.finding-card.expanded {
+  background: rgba(0, 229, 255, 0.06);
+}
+.finding-toggle {
+  color: var(--muted);
+  font-size: 9px;
+  float: right;
+  padding: 0 4px;
+  letter-spacing: 0.15em;
+}
+.finding-card.expanded .finding-toggle {
+  color: var(--cyan-hot);
+}
+.finding-evidence {
+  display: none;
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--cyan-hot);
+  font-size: 10px;
+  color: var(--cyan);
+  overflow-x: auto;
+  position: relative;
+}
+.finding-card.expanded .finding-evidence {
+  display: block;
+  animation: slideIn 0.15s ease;
+}
+.evidence-key { color: var(--orange); }
+.evidence-str { color: var(--green); }
+.evidence-num { color: var(--yellow); }
+.evidence-bool { color: var(--red); }
+.evidence-null { color: var(--muted); font-style: italic; }
+.evidence-copy {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  border: 1px solid var(--muted);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--muted);
+  font-size: 9px;
+  padding: 2px 6px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+.evidence-copy:hover {
+  border-color: var(--cyan-hot);
+  color: var(--cyan-hot);
+  box-shadow: 0 0 8px var(--glow);
+}
+.evidence-copy.copied {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* Artifact tree (collapsible) */
+.artifact-tree {
+  font-size: 10px;
+  margin-top: 4px;
+}
+.artifact-node {
+  padding-left: 12px;
+  border-left: 1px dotted var(--line);
+  margin-left: 4px;
+}
+.artifact-key {
+  color: var(--orange);
+  cursor: pointer;
+  user-select: none;
+}
+.artifact-key::before {
+  content: "▸ ";
+  color: var(--cyan-hot);
+  display: inline-block;
+  width: 12px;
+  transition: transform 0.1s ease;
+}
+.artifact-key.open::before {
+  content: "▾ ";
+}
+.artifact-value {
+  padding-left: 16px;
+  display: none;
+}
+.artifact-value.open { display: block; }
+.artifact-leaf {
+  color: var(--cyan);
+  padding-left: 16px;
+  word-break: break-all;
+}
+
+/* ============================================================ */
+/* Defense Widget: Process Tree */
+/* ============================================================ */
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 0 4px;
+  padding: 3px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--orange);
+}
+.widget-stats {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+.widget-stats .accent { color: var(--cyan-hot); text-shadow: 0 0 6px var(--glow); }
+.widget-stats .danger { color: var(--red); text-shadow: 0 0 6px rgba(255, 56, 96, 0.5); }
+
+.proc-tree {
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 4px 0;
+}
+.proc-node {
+  display: grid;
+  grid-template-columns: 40px 1fr 60px;
+  gap: 8px;
+  padding: 3px 6px;
+  border-left: 2px solid transparent;
+  align-items: baseline;
+  transition: background 0.1s ease;
+}
+.proc-node:hover { background: rgba(0, 229, 255, 0.05); }
+.proc-node.risk-low { border-left-color: var(--muted); }
+.proc-node.risk-medium { border-left-color: var(--yellow); }
+.proc-node.risk-high { border-left-color: var(--orange); background: rgba(255, 140, 0, 0.05); }
+.proc-node.risk-critical { border-left-color: var(--red); background: rgba(255, 56, 96, 0.08); }
+.proc-indent { color: var(--muted); }
+.proc-pid {
+  color: var(--cyan-hot);
+  text-shadow: 0 0 4px var(--glow);
+  font-weight: 700;
+}
+.proc-name {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.proc-name.high { color: var(--orange); }
+.proc-name.critical { color: var(--red); }
+.proc-cmdline {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 2px;
+}
+.proc-score {
+  text-align: right;
+  color: var(--muted);
+  font-size: 9px;
+}
+.proc-score.high { color: var(--orange); text-shadow: 0 0 4px var(--glow-orange); }
+.proc-score.critical { color: var(--red); text-shadow: 0 0 4px rgba(255, 56, 96, 0.5); }
+.proc-reason {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 2px 0 0;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  vertical-align: middle;
+}
+
+/* ============================================================ */
+/* Defense Widget: Signature Matrix */
+/* ============================================================ */
+.sig-matrix {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 6px 10px;
+  font-size: 10px;
+  padding: 4px 0;
+  align-items: center;
+}
+.sig-row {
+  display: contents;
+}
+.sig-row.hit .sig-cell {
+  background: rgba(255, 140, 0, 0.06);
+}
+.sig-cell {
+  padding: 4px 6px;
+  border-bottom: 1px solid rgba(170, 207, 209, 0.08);
+}
+.sig-id {
+  color: var(--cyan-hot);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.sig-name {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sig-pattern {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  font-family: var(--font);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sig-sev {
+  padding: 2px 6px;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-align: center;
+  min-width: 60px;
+}
+.sig-sev.critical { background: var(--red); color: #000; }
+.sig-sev.high { background: var(--orange); color: #000; }
+.sig-sev.medium { background: var(--yellow); color: #000; }
+.sig-sev.low { background: var(--cyan); color: #000; }
+.sig-sev.info { background: var(--muted); color: #000; }
+.sig-header-row {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  border-bottom: 1px solid var(--line);
 }
 
 @keyframes slideIn {

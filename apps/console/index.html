@@ -14,19 +14,20 @@
   <header class="top">
     <div class="brand">KX-DEFENDER <span>eDEX HUD</span></div>
     <div class="meta">
-      <label>SCOPE
+      <label><span data-i18n="scope">SCOPE</span>
         <select id="scope">
-          <option value="lab">LAB</option>
-          <option value="owned">OWNED</option>
-          <option value="pact">PACT</option>
+          <option value="lab" data-i18n="scope.lab">LAB</option>
+          <option value="owned" data-i18n="scope.owned">OWNED</option>
+          <option value="pact" data-i18n="scope.pact">PACT</option>
         </select>
       </label>
-      <label>MODE
+      <label><span data-i18n="mode">MODE</span>
         <select id="mode">
-          <option value="sim">SIM</option>
-          <option value="live">LIVE</option>
+          <option value="sim" data-i18n="mode.sim">SIM</option>
+          <option value="live" data-i18n="mode.live">LIVE</option>
         </select>
       </label>
+      <button id="lang-toggle" class="lang-toggle" title="Language">KO / EN</button>
       <span id="health" class="pill">…</span>
     </div>
   </header>
@@ -34,36 +35,40 @@
   <!-- Command Input Bar -->
   <section class="command">
     <div class="prompt">kx&gt;</div>
-    <input id="cmd" autocomplete="off" spellcheck="false"
-      placeholder="roast tickets --realm lab.local   |   /h   |   sentry detect" />
-    <button id="run">RUN</button>
-    <button id="clear-btn" class="danger">CLEAR</button>
+    <div class="cmd-wrap">
+      <input id="cmd" autocomplete="off" spellcheck="false"
+        data-i18n-placeholder="cmd.placeholder"
+        placeholder="roast tickets --realm lab.local   |   /h   |   sentry detect" />
+      <div id="suggest" class="suggest" role="listbox" aria-label="command suggestions"></div>
+    </div>
+    <button id="run" data-i18n="btn.run">RUN</button>
+    <button id="clear-btn" class="danger" data-i18n="btn.clear">CLEAR</button>
   </section>
 
   <!-- Status Bar (Real-time) -->
   <section class="status-bar">
     <div class="status-item">
-      <span class="status-label">STATUS</span>
-      <span id="stat-status" class="status-value">IDLE</span>
+      <span class="status-label" data-i18n="stat.status">STATUS</span>
+      <span id="stat-status" class="status-value" data-i18n="status.idle">IDLE</span>
     </div>
     <div class="status-item">
-      <span class="status-label">MODULE</span>
+      <span class="status-label" data-i18n="stat.module">MODULE</span>
       <span id="stat-module" class="status-value">—</span>
     </div>
     <div class="status-item">
-      <span class="status-label">DURATION</span>
+      <span class="status-label" data-i18n="stat.duration">DURATION</span>
       <span id="stat-duration" class="status-value">0ms</span>
     </div>
     <div class="status-item">
-      <span class="status-label">FINDINGS</span>
+      <span class="status-label" data-i18n="stat.findings">FINDINGS</span>
       <span id="stat-findings" class="status-value">0</span>
     </div>
     <div class="status-item">
-      <span class="status-label">ARTIFACTS</span>
+      <span class="status-label" data-i18n="stat.artifacts">ARTIFACTS</span>
       <span id="stat-artifacts" class="status-value">0</span>
     </div>
     <div class="status-item">
-      <span class="status-label">RUNS</span>
+      <span class="status-label" data-i18n="stat.runs">RUNS</span>
       <span id="stat-runs" class="status-value">0</span>
     </div>
   </section>
@@ -72,8 +77,8 @@
   <main class="grid">
     <section class="panel" id="panel-sentry">
       <div class="panel-header">
-        <h2>SENTRY / DEFENSE</h2>
-        <span id="badge-sentry" class="panel-badge">idle</span>
+        <h2 data-i18n="panel.sentry">SENTRY / DEFENSE</h2>
+        <span id="badge-sentry" class="panel-badge" data-i18n="badge.idle">idle</span>
       </div>
       <div class="actions">
         <button data-cmd="watch procs">watch procs</button>
@@ -86,8 +91,8 @@
 
     <section class="panel" id="panel-strike">
       <div class="panel-header">
-        <h2>STRIKE / ATTACK</h2>
-        <span id="badge-strike" class="panel-badge">idle</span>
+        <h2 data-i18n="panel.strike">STRIKE / ATTACK</h2>
+        <span id="badge-strike" class="panel-badge" data-i18n="badge.idle">idle</span>
       </div>
       <div class="actions">
         <button data-cmd="roast tickets --realm lab.local">roast</button>
@@ -100,8 +105,8 @@
 
     <section class="panel" id="panel-sweep">
       <div class="panel-header">
-        <h2>SWEEP / WEB</h2>
-        <span id="badge-sweep" class="panel-badge">idle</span>
+        <h2 data-i18n="panel.sweep">SWEEP / WEB</h2>
+        <span id="badge-sweep" class="panel-badge" data-i18n="badge.idle">idle</span>
       </div>
       <div class="actions">
         <button data-cmd="sweep web --url http://127.0.0.1/">sweep web</button>
@@ -114,8 +119,8 @@
 
     <section class="panel" id="panel-nexus">
       <div class="panel-header">
-        <h2>NEXUS / C2</h2>
-        <span id="badge-nexus" class="panel-badge">idle</span>
+        <h2 data-i18n="panel.nexus">NEXUS / C2</h2>
+        <span id="badge-nexus" class="panel-badge" data-i18n="badge.idle">idle</span>
       </div>
       <div class="actions">
         <button data-cmd="nexus status">status</button>
@@ -127,13 +132,13 @@
 
     <section class="panel wide" id="panel-ledger">
       <div class="panel-header">
-        <h2>LEDGER / HISTORY</h2>
+        <h2 data-i18n="panel.ledger">LEDGER / HISTORY</h2>
         <div class="ledger-controls">
           <span id="badge-ledger" class="panel-badge count">0</span>
-          <button id="refresh">refresh</button>
+          <button id="refresh" data-i18n="btn.refresh">refresh</button>
         </div>
       </div>
-      <div class="out" id="out-ledger">loading…</div>
+      <div class="out" id="out-ledger" data-i18n="msg.loading">loading…</div>
     </section>
   </main>
 
