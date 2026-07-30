@@ -122,6 +122,11 @@ function startKxShell() {
 
     let args = splitArgs(trimmed);
     if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
+    if (!args.length) {
+      runKx(["/h"]);
+      rl.prompt();
+      return;
+    }
 
     // Fast path for lang in shell (also handled by Python CLI)
     const head = (args[0] || "").toLowerCase();
