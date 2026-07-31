@@ -27,7 +27,8 @@ function isWin() {
 
 function spawnOptions(cmd, { platform = process.platform } = {}) {
   const absolute = path.isAbsolute(cmd) || /^[a-zA-Z]:[\\/]/.test(cmd);
-  return { shell: platform === "win32" && !absolute };
+  const nativeGit = /^(git|git\.exe)$/i.test(path.basename(cmd));
+  return { shell: platform === "win32" && !absolute && !nativeGit };
 }
 
 function run(cmd, args, opts = {}) {

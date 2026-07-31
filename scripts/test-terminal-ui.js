@@ -65,7 +65,11 @@ assert.strictEqual(
   false,
   "absolute executable paths must not be parsed by cmd.exe"
 );
-assert.strictEqual(spawnOptions("git", { platform: "win32" }).shell, true);
+assert.strictEqual(
+  spawnOptions("git", { platform: "win32" }).shell,
+  false,
+  "native git.exe must not use cmd.exe or trigger Node DEP0190"
+);
 const updaterSource = fs.readFileSync(path.join(__dirname, "kx-update.js"), "utf8");
 assert.match(
   updaterSource,
