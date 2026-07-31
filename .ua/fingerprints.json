@@ -1,0 +1,8223 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "247f4b43d20996a2706af73807c497c3bf957d1c",
+  "generatedAt": "2026-07-31T13:00:45.932Z",
+  "files": {
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "971b0349fd0ebdbc7a31ff4d70a76c9e0ee523c39e0571f3e96317978f899383",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/publish-npm.yml": {
+      "filePath": ".github/workflows/publish-npm.yml",
+      "contentHash": "c0416f2ee281afa9ae72daba6327893ec300c7e477aff4b9fe85e40d6ee3089f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    ".ua/.understandignore": {
+      "filePath": ".ua/.understandignore",
+      "contentHash": "548a433ea83e35c80d5ffd3dfb52f89961bbf636edc5ea44771e596cca21d4c8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": false
+    },
+    ".ua/COMMANDS_TREE.md": {
+      "filePath": ".ua/COMMANDS_TREE.md",
+      "contentHash": "593e766697a38fa79c2fa20b7a18cb062c582c72a8605be1c7a383a248dc984f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 345,
+      "hasStructuralAnalysis": true
+    },
+    ".ua/config.json": {
+      "filePath": ".ua/config.json",
+      "contentHash": "6241daac28ec1ac6166af17c73964fef9fa7e728b98c19706b07b7b8f0712b20",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "Install-Kx.ps1": {
+      "filePath": "Install-Kx.ps1",
+      "contentHash": "ad31c15b5406e575f3cb7fdd60c8debd44936248022271c2bbf5498a032bab48",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 228,
+      "hasStructuralAnalysis": false
+    },
+    "NOTICE": {
+      "filePath": "NOTICE",
+      "contentHash": "fd4cf54d6d3886e679f58cd3dd6297e34e0a263b2e54f6fc8254addf3826acd1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "PRD-KX-DEFENDER-V2.md": {
+      "filePath": "PRD-KX-DEFENDER-V2.md",
+      "contentHash": "1a427239cc13b1c84365e00b893eeac93e91c43796083b9adc42d5d77266c1d8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1040,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "9b2cf6f7a92606a7bd9c72178efb9bd4f0a2c547277e5d807054c6412aa1877e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 286,
+      "hasStructuralAnalysis": true
+    },
+    "data/.gitkeep": {
+      "filePath": "data/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "docs/API.md": {
+      "filePath": "docs/API.md",
+      "contentHash": "83abfb1a07c50d82337240d089da6ec61f3a2b4b1fa3d97edea4176e1a5cfa47",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "docs/COMMANDS_TREE.md": {
+      "filePath": "docs/COMMANDS_TREE.md",
+      "contentHash": "a5d860491cac6ecd4bf789ed6062a49db50dd869ee532cd701e12c1f2b8c0a0d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 345,
+      "hasStructuralAnalysis": true
+    },
+    "docs/CONTRIBUTING.md": {
+      "filePath": "docs/CONTRIBUTING.md",
+      "contentHash": "c536d052853d008d916e275090c9512508b142acadcfb4934fa1e25e8570768a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "docs/EXECUTION_PATHS.md": {
+      "filePath": "docs/EXECUTION_PATHS.md",
+      "contentHash": "f75985783ac411a626c0667061a91afed84a6dd928f4d845ec4e70018e0bdb41",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 363,
+      "hasStructuralAnalysis": true
+    },
+    "docs/IMPLEMENTATION-PLAN.md": {
+      "filePath": "docs/IMPLEMENTATION-PLAN.md",
+      "contentHash": "50167e9e0a20dbd7a4d5c83b72c211c94d5cbe9a7c9d12e803b900c297d740f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 744,
+      "hasStructuralAnalysis": true
+    },
+    "docs/KX-COMMANDS.md": {
+      "filePath": "docs/KX-COMMANDS.md",
+      "contentHash": "9dc724be1a79c9f17ee216ff5b8e277f3006bd08a0057f26d43e6d585d304a55",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 733,
+      "hasStructuralAnalysis": true
+    },
+    "docs/PROGRAM_GUIDE.md": {
+      "filePath": "docs/PROGRAM_GUIDE.md",
+      "contentHash": "b29161f549b418afc7fed5a441d5f7a8a8ca5eefc8e99cdee0d090cb3b46ace3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 286,
+      "hasStructuralAnalysis": true
+    },
+    "docs/SETUP.md": {
+      "filePath": "docs/SETUP.md",
+      "contentHash": "c0d64746f45cdc49a4e2dabcb4cb3285d465122ff6ca3a50b6e29107495feaf4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "docs/TECHNICAL-APPROACH.md": {
+      "filePath": "docs/TECHNICAL-APPROACH.md",
+      "contentHash": "63d92901b3e93689b8412cc833ec848c75c0e4931d140ef1c3ba9ca3af98cf18",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1038,
+      "hasStructuralAnalysis": true
+    },
+    "docs/architecture.md": {
+      "filePath": "docs/architecture.md",
+      "contentHash": "0daef1e36e5a2f591cf42cd18a7f5b48478055e956a3a87afa73f57071870221",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 138,
+      "hasStructuralAnalysis": true
+    },
+    "docs/knowledge-graph.json": {
+      "filePath": "docs/knowledge-graph.json",
+      "contentHash": "b06a4bccba4424f5959210d6c8650541bfe37910416a3122f62be80a0d5af86a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1260,
+      "hasStructuralAnalysis": true
+    },
+    "docs/kxlang.md": {
+      "filePath": "docs/kxlang.md",
+      "contentHash": "721b5cd88bc5ded7c4e90594c14ce48f4ffa2d694539aedb491ee5f41370b0a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": true
+    },
+    "docs/policy-self-built.md": {
+      "filePath": "docs/policy-self-built.md",
+      "contentHash": "2727cd2cefe7244462827bb504db15c1867fb44cdb858c91075a52d8af8a3c1b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "docs/prd/kx-cli-stability.md": {
+      "filePath": "docs/prd/kx-cli-stability.md",
+      "contentHash": "4d7a18467360f715304a52cf2a3e78a621da4bb2faa7851680eb8c65f844ef5c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 209,
+      "hasStructuralAnalysis": true
+    },
+    "docs/prd/kx-defender-v2.md": {
+      "filePath": "docs/prd/kx-defender-v2.md",
+      "contentHash": "0bc1ddc1d13034fe8bda17ccd742214f167b9ea47867f07dcf1782e87699c59f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "docs/prd/kx-defender-v3.md": {
+      "filePath": "docs/prd/kx-defender-v3.md",
+      "contentHash": "cff4204aa1322a9f209c5105e0335994380b3e6db67a5d3e94c8eefc9b644689",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 180,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/ad/spns.json": {
+      "filePath": "fixtures/ad/spns.json",
+      "contentHash": "9f1fe3ed7ee298d56be06ef5311a2dc08707ad95307c9b335f5ed469f55d3a8f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/catalog/kxlang_lexicon.json": {
+      "filePath": "fixtures/catalog/kxlang_lexicon.json",
+      "contentHash": "13c8d73534b663c1ce41de5b93636c95c32f95d5d74179848ff8d66ac60744ad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 229,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/catalog/param_schema.json": {
+      "filePath": "fixtures/catalog/param_schema.json",
+      "contentHash": "273614f89d83a35bbf84c3508f84867bc2b2d57f1a834aa1838ab1c8b40455d8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 124,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/catalog/skills.json": {
+      "filePath": "fixtures/catalog/skills.json",
+      "contentHash": "d8f8b2dfd5bbd1125b7e16371b7e61e3589d3efb284093bbde2f37d226bd3d3c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1315,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/dpapi/secrets.json": {
+      "filePath": "fixtures/dpapi/secrets.json",
+      "contentHash": "57fbb42c539f61400a0770a1f21acf70685ffbb2c3f43384aef4e5399c5a0723",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/engagement/lab.example.txt": {
+      "filePath": "fixtures/engagement/lab.example.txt",
+      "contentHash": "3bd8c24ccf5d3860606572331c409c076cb4518916edb91145b6aded3f4c383f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "fixtures/llm/fixture_responses.json": {
+      "filePath": "fixtures/llm/fixture_responses.json",
+      "contentHash": "05e4d97493b1a92d7b355b6c350b9d4374998f988d98d2a6b93863ab3976f1df",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/llm/payloads.json": {
+      "filePath": "fixtures/llm/payloads.json",
+      "contentHash": "2dbb494c307b4c3a2b0edce9de411349a7a1d7d0ff2741e2ad105ac01a5ee128",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/playbooks/daily-local-check.json": {
+      "filePath": "fixtures/playbooks/daily-local-check.json",
+      "contentHash": "6f0c004e0ae38fa57e215f4384ef709f9f225e64af1d3df19e0b94a13b9da2f3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "fixtures/wifi/handshake.txt": {
+      "filePath": "fixtures/wifi/handshake.txt",
+      "contentHash": "8c30b730eb5fb6a031bdb904b716730223f2590bedc65c706c00be1edc5d06fb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "fixtures/wifi/wordlist.txt": {
+      "filePath": "fixtures/wifi/wordlist.txt",
+      "contentHash": "51200f25e4fe079d65e25e567d3c0729633af8dad8a0e818ebb332ce7b7340f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": false
+    },
+    "go.mod": {
+      "filePath": "go.mod",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "modules/__init__.py": {
+      "filePath": "modules/__init__.py",
+      "contentHash": "a19fd9a637640a0ee2c753f89593bdca9375acbf5c63bce1e73fc60dc8f99c39",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/__init__.py": {
+      "filePath": "modules/attack/__init__.py",
+      "contentHash": "b8f5184bc2317ad5be13eace7f4064723f2dbaa13df167610057ac38cffd05da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/c2.py": {
+      "filePath": "modules/attack/c2.py",
+      "contentHash": "7a4ab3110a869da4fa79f9ce8582d14251f58b9200b50cbe6558e858ef722cca",
+      "functions": [],
+      "classes": [
+        {
+          "name": "C2Module",
+          "methods": [
+            "run",
+            "_start_echo_listener"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 123
+        }
+      ],
+      "imports": [
+        {
+          "source": "socket",
+          "specifiers": [
+            "socket"
+          ]
+        },
+        {
+          "source": "threading",
+          "specifiers": [
+            "threading"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.engines.nexus_store",
+          "specifiers": [
+            "NexusStore"
+          ]
+        }
+      ],
+      "exports": [
+        "C2Module"
+      ],
+      "totalLines": 141,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/device_code.py": {
+      "filePath": "modules/attack/device_code.py",
+      "contentHash": "995181800ae6e0eb8d1fd12d92478ffa68d729e1ef04634341e372d011bb7585",
+      "functions": [],
+      "classes": [
+        {
+          "name": "DeviceCodeModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 37
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "mask_secret"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "DeviceCodeModule"
+      ],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/dpapi.py": {
+      "filePath": "modules/attack/dpapi.py",
+      "contentHash": "f9968f7814d90118ee77399ed2bee26606a55b61c24a0e990858908fbfb79ce0",
+      "functions": [],
+      "classes": [
+        {
+          "name": "DpapiModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "imports": [
+        {
+          "source": "base64",
+          "specifiers": [
+            "base64"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "mask_secret"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "DpapiModule"
+      ],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/kerberoasting.py": {
+      "filePath": "modules/attack/kerberoasting.py",
+      "contentHash": "f39a9168dee8d3f4bc21c4347d52b97120e59924a7dc1380fa762cee397c75d7",
+      "functions": [],
+      "classes": [
+        {
+          "name": "KerberoastingModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 51
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "KerberoastingModule"
+      ],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/llm_redteam.py": {
+      "filePath": "modules/attack/llm_redteam.py",
+      "contentHash": "1830593d427df0533c30efdaf9140398c971d2a51392bb9f83c2ccf91aa25c59",
+      "functions": [],
+      "classes": [
+        {
+          "name": "LlmRedteamModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 80
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "LlmRedteamModule"
+      ],
+      "totalLines": 103,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/ntlm_relay.py": {
+      "filePath": "modules/attack/ntlm_relay.py",
+      "contentHash": "1ecc51dbb8e1318865694f065ff07f9db6bc699cde8d9514f601ab7194a96115",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NtlmRelayModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "NtlmRelayModule"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/web_scanner.py": {
+      "filePath": "modules/attack/web_scanner.py",
+      "contentHash": "6024a08384acb4442f91322b723b9bc42e6f359114c21be0c1142b40c780657d",
+      "functions": [
+        {
+          "name": "_fetch",
+          "params": [
+            "url",
+            "timeout"
+          ],
+          "returnType": "tuple[int, str, dict[str, str]]",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [
+        {
+          "name": "_LinkParser",
+          "methods": [
+            "__init__",
+            "handle_starttag",
+            "handle_endtag"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "WebScannerModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 158
+        }
+      ],
+      "imports": [
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "html.parser",
+          "specifiers": [
+            "HTMLParser"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "HTTPError",
+            "URLError"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "parse_qsl",
+            "urlencode",
+            "urljoin",
+            "urlparse",
+            "urlunparse"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "Request",
+            "urlopen"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.engines.report",
+          "specifiers": [
+            "findings_report"
+          ]
+        }
+      ],
+      "exports": [
+        "_LinkParser",
+        "_fetch",
+        "WebScannerModule"
+      ],
+      "totalLines": 218,
+      "hasStructuralAnalysis": true
+    },
+    "modules/attack/wifi.py": {
+      "filePath": "modules/attack/wifi.py",
+      "contentHash": "da27cf0600bc477f91e054cd5aec2c97e4ed580a79190763be374d5d29f542c3",
+      "functions": [],
+      "classes": [
+        {
+          "name": "WifiModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 49
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "mask_secret"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "WifiModule"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "modules/catalog/__init__.py": {
+      "filePath": "modules/catalog/__init__.py",
+      "contentHash": "7291626d1041a6f1c6a8df6ce22fee8d502d9e3af1e1683ab5e2a12b499b9b94",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "modules.catalog.factory",
+          "specifiers": [
+            "build_catalog_modules"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "modules/catalog/factory.py": {
+      "filePath": "modules/catalog/factory.py",
+      "contentHash": "cef42e539cef01ac6d31bf06ffd653c8360ce041d3ce85bd32afddbb81ee9ce1",
+      "functions": [
+        {
+          "name": "load_catalog",
+          "params": [],
+          "returnType": "list[dict[str, str]]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "build_catalog_modules",
+          "params": [],
+          "returnType": "list[CatalogSkillModule]",
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [
+        {
+          "name": "CatalogSkillModule",
+          "methods": [
+            "__init__",
+            "describe",
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 24
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.catalog.handlers",
+          "specifiers": [
+            "HANDLERS"
+          ]
+        }
+      ],
+      "exports": [
+        "CatalogSkillModule",
+        "load_catalog",
+        "build_catalog_modules"
+      ],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "modules/catalog/handlers.py": {
+      "filePath": "modules/catalog/handlers.py",
+      "contentHash": "cca66f928e0af7f1d0f75ee325c979a406757e8c89037fae39f5b080907c1aec",
+      "functions": [
+        {
+          "name": "_base",
+          "params": [
+            "skill",
+            "params",
+            "category"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "handle_detecting",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "handle_analyzing",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "handle_auditing",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "handle_securing",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "handle_triaging",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "handle_compliance",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "handle_building_defense",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "handle_testing_for",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "_delegate",
+          "params": [
+            "module_cls",
+            "skill",
+            "params",
+            "extra_meta"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "handle_attack_named",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "_c2_framework",
+          "params": [
+            "skill",
+            "params",
+            "framework"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "_entra",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "_graph",
+          "params": [
+            "skill",
+            "params"
+          ],
+          "returnType": "ModuleResult",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Callable"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "mask_secret"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.attack.c2",
+          "specifiers": [
+            "C2Module"
+          ]
+        },
+        {
+          "source": "modules.attack.device_code",
+          "specifiers": [
+            "DeviceCodeModule"
+          ]
+        },
+        {
+          "source": "modules.attack.dpapi",
+          "specifiers": [
+            "DpapiModule"
+          ]
+        },
+        {
+          "source": "modules.attack.kerberoasting",
+          "specifiers": [
+            "KerberoastingModule"
+          ]
+        },
+        {
+          "source": "modules.attack.llm_redteam",
+          "specifiers": [
+            "LlmRedteamModule"
+          ]
+        },
+        {
+          "source": "modules.attack.ntlm_relay",
+          "specifiers": [
+            "NtlmRelayModule"
+          ]
+        },
+        {
+          "source": "modules.attack.web_scanner",
+          "specifiers": [
+            "WebScannerModule"
+          ]
+        },
+        {
+          "source": "modules.attack.wifi",
+          "specifiers": [
+            "WifiModule"
+          ]
+        }
+      ],
+      "exports": [
+        "_base",
+        "handle_detecting",
+        "handle_analyzing",
+        "handle_auditing",
+        "handle_securing",
+        "handle_triaging",
+        "handle_compliance",
+        "handle_building_defense",
+        "handle_testing_for",
+        "_delegate",
+        "handle_attack_named",
+        "_c2_framework",
+        "_entra",
+        "_graph"
+      ],
+      "totalLines": 303,
+      "hasStructuralAnalysis": true
+    },
+    "modules/defense/__init__.py": {
+      "filePath": "modules/defense/__init__.py",
+      "contentHash": "555334b6ac53fafb29ba01f249ad624087716147928ba783a88e9e48a7920a45",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "modules/defense/process_kill.py": {
+      "filePath": "modules/defense/process_kill.py",
+      "contentHash": "8db675f2e8cb8c94ce5c4cf46f177f11dfb5eef6518a2845eb1be206b1e48e94",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ProcessKillModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 45
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "DefenseModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.engines.kxaction",
+          "specifiers": [
+            "terminate"
+          ]
+        }
+      ],
+      "exports": [
+        "ProcessKillModule"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "modules/defense/process_monitor.py": {
+      "filePath": "modules/defense/process_monitor.py",
+      "contentHash": "4a82f867cc4a98d145c3f172544f26bed02c2d42de316e7bc5cceca5d0bea73a",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ProcessMonitorModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 57
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "DefenseModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.engines.kxscore",
+          "specifiers": [
+            "score_process"
+          ]
+        },
+        {
+          "source": "modules.engines.kxwatch",
+          "specifiers": [
+            "list_processes"
+          ]
+        }
+      ],
+      "exports": [
+        "ProcessMonitorModule"
+      ],
+      "totalLines": 70,
+      "hasStructuralAnalysis": true
+    },
+    "modules/defense/sig_scan.py": {
+      "filePath": "modules/defense/sig_scan.py",
+      "contentHash": "76d03b5ad203bb99dc60a0838af185b66ee8fe5da91784a92e0d5e9b168f0021",
+      "functions": [],
+      "classes": [
+        {
+          "name": "SigScanModule",
+          "methods": [
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "DefenseModule"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "Finding",
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "modules.engines.kxsig",
+          "specifiers": [
+            "load_rules",
+            "scan_file",
+            "scan_text"
+          ]
+        }
+      ],
+      "exports": [
+        "SigScanModule"
+      ],
+      "totalLines": 59,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/__init__.py": {
+      "filePath": "modules/engines/__init__.py",
+      "contentHash": "f1a8e8b53361c3beadce0990446dc754c503f08897eb9a4f03356da3675865b0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/kxaction.py": {
+      "filePath": "modules/engines/kxaction.py",
+      "contentHash": "c0fe5ac31a2827e774aeeb8aff1fc1781e2c7c82284699c930a974ba6f8f4e1b",
+      "functions": [
+        {
+          "name": "terminate",
+          "params": [
+            "pid",
+            "force"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "signal",
+          "specifiers": [
+            "signal"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "terminate"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/kxscore.py": {
+      "filePath": "modules/engines/kxscore.py",
+      "contentHash": "bd1ece5a74f0d505e2e4d1123f544d9890216566584aa0d090bece869d392cfa",
+      "functions": [
+        {
+          "name": "score_process",
+          "params": [
+            "proc"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 29
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "score_process"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/kxsig.py": {
+      "filePath": "modules/engines/kxsig.py",
+      "contentHash": "09664cd8e97c53bd63fc75651637a3f4351a9f4643c5dfdd4a60c51bd1119ec5",
+      "functions": [
+        {
+          "name": "_user_rules_dir",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_disabled_ids",
+          "params": [],
+          "returnType": "set[str]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "load_rules",
+          "params": [
+            "path",
+            "include_user"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "_read_rule_file",
+          "params": [
+            "fp"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "validate_rules",
+          "params": [
+            "rules"
+          ],
+          "returnType": "tuple[list[dict[str, Any]], list[str]]",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "import_user_rules",
+          "params": [
+            "src_path",
+            "name"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "list_user_rule_files",
+          "params": [],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "summarize_rule_catalog",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_builtin_rules",
+          "params": [],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "scan_text",
+          "params": [
+            "text",
+            "rules"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "scan_file",
+          "params": [
+            "path",
+            "rules"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "_user_rules_dir",
+        "_disabled_ids",
+        "load_rules",
+        "_read_rule_file",
+        "validate_rules",
+        "import_user_rules",
+        "list_user_rule_files",
+        "summarize_rule_catalog",
+        "_builtin_rules",
+        "scan_text",
+        "scan_file"
+      ],
+      "totalLines": 196,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/kxwatch.py": {
+      "filePath": "modules/engines/kxwatch.py",
+      "contentHash": "d50ea578b1d74e46808eda85b3b6909878b7165e9d855f6c73673c61b32f8635",
+      "functions": [
+        {
+          "name": "list_processes",
+          "params": [
+            "limit"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_posix_processes",
+          "params": [
+            "limit"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "_windows_processes",
+          "params": [
+            "limit"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 26
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "list_processes",
+        "_posix_processes",
+        "_windows_processes"
+      ],
+      "totalLines": 76,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/nexus_store.py": {
+      "filePath": "modules/engines/nexus_store.py",
+      "contentHash": "764550608f970eeb842f0c7f0e44fa5ae44b763200048321b11eebd76adfaebf",
+      "functions": [],
+      "classes": [
+        {
+          "name": "NexusStore",
+          "methods": [
+            "__init__",
+            "_connect",
+            "_init",
+            "upsert_listener",
+            "upsert_session",
+            "list_listeners",
+            "list_sessions"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 57
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "NexusStore"
+      ],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "modules/engines/report.py": {
+      "filePath": "modules/engines/report.py",
+      "contentHash": "6b0ddf5c92b285eb30313f960020d5447772e3b2e1f88a526fc52ddec91ab151",
+      "functions": [
+        {
+          "name": "findings_report",
+          "params": [
+            "title",
+            "result"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 29
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "html",
+          "specifiers": [
+            "html"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "findings_report"
+      ],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "b01fdb14a903b9aee4de5fa2ef501de5570d10f1aa2cc8d8d070265073a5d923",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 56,
+      "hasStructuralAnalysis": true
+    },
+    "pyproject.toml": {
+      "filePath": "pyproject.toml",
+      "contentHash": "1ae1f0e72512be82d74df83c69639f08b277fb2e627d92d05a6e5bb9bbde1c6a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "requirements.txt": {
+      "filePath": "requirements.txt",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "rules/kxsig/core.json": {
+      "filePath": "rules/kxsig/core.json",
+      "contentHash": "7a67829ccf3726f7803d7e896d0a4145b842cbd19d9f6f25a39c2ba044f4fb6d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 124,
+      "hasStructuralAnalysis": true
+    },
+    "rules/kxsig/user/.gitkeep": {
+      "filePath": "rules/kxsig/user/.gitkeep",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/Install-Kx.ps1": {
+      "filePath": "scripts/Install-Kx.ps1",
+      "contentHash": "9b455ad8ed211c0ebce6adc4ffbb48381ea70747739d993ea732542f3da32481",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/banner.js": {
+      "filePath": "scripts/banner.js",
+      "contentHash": "2a996df4cb1c02b121f4042e1d310bdbeafea81964c8dc611eb22ba37d0a038b",
+      "functions": [
+        {
+          "name": "printKxBanner",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/install-agent-skills.js": {
+      "filePath": "scripts/install-agent-skills.js",
+      "contentHash": "10f245087664f344a5b7bf249f7174248c9a9eb3156a6ebf544a2ce361f854e7",
+      "functions": [
+        {
+          "name": "home",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "globalSkillRoots",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "listSkillDirs",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "copyDir",
+          "params": [
+            "src",
+            "dest"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "installAgentSkills",
+          "params": [],
+          "exported": false,
+          "lineCount": 23
+        },
+        {
+          "name": "printQuietSummary",
+          "params": [
+            "result"
+          ],
+          "exported": false,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 107,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-auth.js": {
+      "filePath": "scripts/kx-auth.js",
+      "contentHash": "9f774587c8d5daf48dfe978d11fa616cdbe301b0521d7f73a8bb8903f903e98d",
+      "functions": [
+        {
+          "name": "hash",
+          "params": [
+            "pw"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "verify",
+          "params": [
+            "password",
+            "stored"
+          ],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "load",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "save",
+          "params": [
+            "store"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "init",
+          "params": [],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "readLine",
+          "params": [
+            "prompt"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "readSecret",
+          "params": [
+            "prompt"
+          ],
+          "exported": false,
+          "lineCount": 34
+        },
+        {
+          "name": "takeBufferedInput",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "login",
+          "params": [],
+          "exported": false,
+          "lineCount": 29
+        },
+        {
+          "name": "handleAuthCmd",
+          "params": [
+            "args",
+            "store",
+            "actor"
+          ],
+          "exported": false,
+          "lineCount": 44
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 202,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-client.js": {
+      "filePath": "scripts/kx-client.js",
+      "contentHash": "c1a60334a1c17accd3777bf04f5a45d8160cff1f83f2d0b62e6357123c45c85f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-command-store.js": {
+      "filePath": "scripts/kx-command-store.js",
+      "contentHash": "74b14547c92067f603766f900b7407a261ab52e6a7b990865e86d980ad353e99",
+      "functions": [
+        {
+          "name": "atomicJson",
+          "params": [
+            "file",
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "sanitizeCommand",
+          "params": [
+            "command"
+          ],
+          "exported": false,
+          "lineCount": 34
+        },
+        {
+          "name": "readHistory",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "rewriteHistory",
+          "params": [
+            "items"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "recordHistory",
+          "params": [
+            "command"
+          ],
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "listHistory",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "searchHistory",
+          "params": [
+            "query",
+            "options"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "clearHistory",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "loadFavorites",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "addFavorite",
+          "params": [
+            "name",
+            "command"
+          ],
+          "exported": false,
+          "lineCount": 20
+        },
+        {
+          "name": "removeFavorite",
+          "params": [
+            "name"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "getFavorite",
+          "params": [
+            "name"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "listFavorites",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "prepareFavoriteRun",
+          "params": [
+            "name"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "loadLexicon",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "complete",
+          "params": [
+            "line"
+          ],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "executeMeta",
+          "params": [
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 48
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 277,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-doctor.js": {
+      "filePath": "scripts/kx-doctor.js",
+      "contentHash": "d119627e0f173a15834b97679280c99aeb590830c17563465f36f14f6c4ac35e",
+      "functions": [
+        {
+          "name": "defaultHome",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "parseArgs",
+          "params": [],
+          "exported": false,
+          "lineCount": 28
+        },
+        {
+          "name": "safeJson",
+          "params": [
+            "file"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "readPackageVersion",
+          "params": [
+            "root"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "redactRemote",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "spawn",
+          "params": [
+            "context",
+            "command",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "add",
+          "params": [
+            "checks",
+            "id",
+            "status",
+            "summary"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "resolveApp",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 21
+        },
+        {
+          "name": "binDirFor",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "pidIsAlive",
+          "params": [
+            "pid"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "inspect",
+          "params": [],
+          "exported": false,
+          "lineCount": 328
+        },
+        {
+          "name": "timestamp",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "atomicJson",
+          "params": [
+            "file",
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "within",
+          "params": [
+            "parent",
+            "target"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "powershellLiteral",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "repairConfig",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "repairShims",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 32
+        },
+        {
+          "name": "repairPath",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 26
+        },
+        {
+          "name": "repairVenv",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "repairPid",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "repairStaging",
+          "params": [
+            "context"
+          ],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "performRepairs",
+          "params": [
+            "parsed",
+            "options",
+            "initialReport"
+          ],
+          "exported": false,
+          "lineCount": 23
+        },
+        {
+          "name": "formatHuman",
+          "params": [
+            "report"
+          ],
+          "exported": false,
+          "lineCount": 27
+        },
+        {
+          "name": "execute",
+          "params": [],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "runDoctor",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 682,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-release.js": {
+      "filePath": "scripts/kx-release.js",
+      "contentHash": "dd84ccb42373b6eb41eaa165e3efcf64da6820bee8d7ccf61b47c3542ef3865c",
+      "functions": [
+        {
+          "name": "statePath",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "atomicWriteJson",
+          "params": [
+            "file",
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "readJson",
+          "params": [
+            "file"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "normalizeEntry",
+          "params": [
+            "entry"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "readState",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "releaseRoot",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "isWithin",
+          "params": [
+            "parent",
+            "target"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "validate",
+          "params": [],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "activate",
+          "params": [],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "rollback",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "currentApp",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 129,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-security.js": {
+      "filePath": "scripts/kx-security.js",
+      "contentHash": "2ac1eddc1ebfbd29a51e333f47b1487a56faad8b0ebb916675401fb0f6fee994",
+      "functions": [
+        {
+          "name": "resolveHome",
+          "params": [
+            "home"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "readJson",
+          "params": [
+            "file",
+            "fallback"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "atomicJson",
+          "params": [
+            "file",
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "canAccess",
+          "params": [
+            "file",
+            "mode"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "getStatus",
+          "params": [],
+          "exported": false,
+          "lineCount": 35
+        },
+        {
+          "name": "applyWizard",
+          "params": [],
+          "exported": false,
+          "lineCount": 25
+        },
+        {
+          "name": "formatStatus",
+          "params": [
+            "status"
+          ],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "printStatus",
+          "params": [
+            "status"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "runWizard",
+          "params": [],
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "changePassword",
+          "params": [],
+          "exported": false,
+          "lineCount": 19
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 24
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 201,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-shell.js": {
+      "filePath": "scripts/kx-shell.js",
+      "contentHash": "f9160d8e2c076087483a4507757192023474378fe68cb0972269ca333fb5aa15",
+      "functions": [
+        {
+          "name": "configPath",
+          "params": [],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "readLang",
+          "params": [],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "writeLang",
+          "params": [
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "splitArgs",
+          "params": [
+            "line"
+          ],
+          "exported": false,
+          "lineCount": 25
+        },
+        {
+          "name": "startKxShell",
+          "params": [],
+          "exported": false,
+          "lineCount": 94
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 185,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-tui.js": {
+      "filePath": "scripts/kx-tui.js",
+      "contentHash": "abe8efc0eb8e047e2010ffe6261d179a89b897a047a9ca4e210e51951d42d0f0",
+      "functions": [
+        {
+          "name": "size",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "delay",
+          "params": [
+            "ms"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "buildCliArgs",
+          "params": [
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "runCmd",
+          "params": [
+            "args",
+            "lang"
+          ],
+          "exported": false,
+          "lineCount": 28
+        },
+        {
+          "name": "startKxTui",
+          "params": [
+            "options"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "startEdexShell",
+          "params": [
+            "options"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "startKxClient",
+          "params": [
+            "options"
+          ],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "KxClient",
+          "methods": [
+            "constructor",
+            "renderLoading",
+            "pulse",
+            "loadAfterLogin",
+            "start",
+            "draw",
+            "showPrompt",
+            "openInput",
+            "handle",
+            "loadSection"
+          ],
+          "properties": [],
+          "exported": false,
+          "lineCount": 254
+        }
+      ],
+      "imports": [],
+      "exports": [],
+      "totalLines": 374,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/kx-update.js": {
+      "filePath": "scripts/kx-update.js",
+      "contentHash": "fa0166ad6c84655307430b23a02acb7c68f3d398273efb14c880b189ae1c23ef",
+      "functions": [
+        {
+          "name": "log",
+          "params": [
+            "msg"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "isWin",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "spawnOptions",
+          "params": [
+            "cmd"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "run",
+          "params": [
+            "cmd",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "capture",
+          "params": [
+            "cmd",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "hasGit",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "updateFromGit",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "updateFromNpxPack",
+          "params": [],
+          "exported": false,
+          "lineCount": 21
+        },
+        {
+          "name": "runSetup",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "smokeTest",
+          "params": [
+            "app"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "gitCommit",
+          "params": [
+            "app"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "seedLegacyRelease",
+          "params": [],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "prepareGitRelease",
+          "params": [],
+          "exported": false,
+          "lineCount": 36
+        },
+        {
+          "name": "printUpdateStatus",
+          "params": [],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "writeStableControlPlane",
+          "params": [],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "writeStableLauncher",
+          "params": [],
+          "exported": false,
+          "lineCount": 38
+        },
+        {
+          "name": "writeShims",
+          "params": [],
+          "exported": false,
+          "lineCount": 47
+        },
+        {
+          "name": "ensurePersistentInstall",
+          "params": [
+            "sourceRoot"
+          ],
+          "exported": false,
+          "lineCount": 24
+        },
+        {
+          "name": "updateKx",
+          "params": [],
+          "exported": false,
+          "lineCount": 38
+        },
+        {
+          "name": "getAppRoot",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 392,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/npm-cli.js": {
+      "filePath": "scripts/npm-cli.js",
+      "contentHash": "02e5e2d808505767a7b47bf9dbf04ee7bf6a6a8d087126da299c9fa6329fbfb5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/npm-kx.js": {
+      "filePath": "scripts/npm-kx.js",
+      "contentHash": "7d907c669b69aacb5c02b701a935f511946f24ccc9551b678e38de87f290012e",
+      "functions": [
+        {
+          "name": "commandMetaArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "runCommandMeta",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "securityArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "runSecurity",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "isUpdate",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "doctorArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "containsKx",
+          "params": [
+            "text"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "shouldEnterProgram",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 161,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/npm-setup.js": {
+      "filePath": "scripts/npm-setup.js",
+      "contentHash": "f4bf415c217e68a24c9a5dc94af45761dc8791d2a90cb3db35c743b032b2e208",
+      "functions": [
+        {
+          "name": "log",
+          "params": [
+            "msg"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "isWin",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "venvPython",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "venvKx",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "readState",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "writeState",
+          "params": [
+            "state"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "spawnOpts",
+          "params": [
+            "cmd"
+          ],
+          "exported": false,
+          "lineCount": 27
+        },
+        {
+          "name": "run",
+          "params": [
+            "cmd",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "runCapture",
+          "params": [
+            "cmd",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "unblockWindowsTree",
+          "params": [
+            "targetPath"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "probePython",
+          "params": [
+            "executable"
+          ],
+          "exported": false,
+          "lineCount": 20
+        },
+        {
+          "name": "windowsPythonCandidates",
+          "params": [],
+          "exported": false,
+          "lineCount": 35
+        },
+        {
+          "name": "findPython",
+          "params": [],
+          "exported": false,
+          "lineCount": 38
+        },
+        {
+          "name": "platformTriple",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "downloadFileSync",
+          "params": [
+            "url",
+            "dest"
+          ],
+          "exported": false,
+          "lineCount": 47
+        },
+        {
+          "name": "extractTarGz",
+          "params": [
+            "archive",
+            "destDir"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "bootstrapPortablePython",
+          "params": [],
+          "exported": false,
+          "lineCount": 121
+        },
+        {
+          "name": "ensurePython",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "resolveRuntime",
+          "params": [],
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "verifyKx",
+          "params": [
+            "pythonPath"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "setup",
+          "params": [],
+          "exported": false,
+          "lineCount": 59
+        },
+        {
+          "name": "ensureSetup",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "setupSync",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "runKx",
+          "params": [
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 555,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/npm-test.js": {
+      "filePath": "scripts/npm-test.js",
+      "contentHash": "2b48580e4c17ee9d5ce94603a394fc2f1d4a1e416e3e505e8afc9261a4fae994",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/npx-entry.js": {
+      "filePath": "scripts/npx-entry.js",
+      "contentHash": "c8211db971eff6d02d8ffca360166ee687422bf4467241ae44e5c41d075e8f98",
+      "functions": [
+        {
+          "name": "printHelp",
+          "params": [],
+          "exported": false,
+          "lineCount": 25
+        },
+        {
+          "name": "parseArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 27
+        },
+        {
+          "name": "preferPersistentApp",
+          "params": [],
+          "exported": false,
+          "lineCount": 24
+        },
+        {
+          "name": "installUserShims",
+          "params": [],
+          "exported": false,
+          "lineCount": 68
+        },
+        {
+          "name": "containsKx",
+          "params": [
+            "text"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "isLoginCommand",
+          "params": [
+            "cmd",
+            "rest"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "startServe",
+          "params": [
+            "_bind"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "doSkillInstall",
+          "params": [
+            "flags"
+          ],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "startInteractive",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "runProgram",
+          "params": [
+            "flags"
+          ],
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "isUpdateArgv",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "doctorArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "securityArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "runSecurity",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "commandMetaArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "runCommandMeta",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 144
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 451,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/publish-npm.ps1": {
+      "filePath": "scripts/publish-npm.ps1",
+      "contentHash": "61b2d4068c9dc5561eafa029741448336c0fa1a3753e3af2d592105972ef4961",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/publish-npm.sh": {
+      "filePath": "scripts/publish-npm.sh",
+      "contentHash": "ab099b03de9ea21e8e2ac4637747e4d2a9f6df6df87339ecbfbf897e8a187c4d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/terminal-ui.js": {
+      "filePath": "scripts/terminal-ui.js",
+      "contentHash": "e948853632fa9c4bcaf5fc3f1da83ee05aad70c79c24e24b24cbd1c08afa6b0a",
+      "functions": [
+        {
+          "name": "colorEnabled",
+          "params": [
+            "explicit"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "stripAnsi",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "codePointWidth",
+          "params": [
+            "cp"
+          ],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "stringWidth",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "clip",
+          "params": [
+            "value",
+            "maxWidth"
+          ],
+          "exported": false,
+          "lineCount": 24
+        },
+        {
+          "name": "pad",
+          "params": [
+            "value",
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "paint",
+          "params": [
+            "value",
+            "style",
+            "enabled"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "center",
+          "params": [
+            "value",
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "clearScreen",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "contentWidth",
+          "params": [
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "logoLines",
+          "params": [
+            "width",
+            "enabled"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "bordered",
+          "params": [
+            "lines",
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "progressBar",
+          "params": [
+            "percent",
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "renderLoading",
+          "params": [],
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "wrapText",
+          "params": [
+            "text",
+            "width"
+          ],
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "renderDashboard",
+          "params": [],
+          "exported": false,
+          "lineCount": 49
+        },
+        {
+          "name": "renderPromptTop",
+          "params": [
+            "color"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "renderPromptBottom",
+          "params": [
+            "color"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "promptPrefix",
+          "params": [
+            "color"
+          ],
+          "exported": false,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 241,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-command-store.js": {
+      "filePath": "scripts/test-command-store.js",
+      "contentHash": "8410d330820b4ece2ce2883196abb8539f6c971192d8daa69a32028d9372e2ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-doctor.js": {
+      "filePath": "scripts/test-doctor.js",
+      "contentHash": "df7e93b394168eb860c12bd3ba3cbcf989a922cb778b96cbf51d1e412e80696f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 144,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-package.js": {
+      "filePath": "scripts/test-package.js",
+      "contentHash": "8a775667a2c22a1d0f9cf889cfdf382036c15d734eaeb0c996ffe28fc73e5d13",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-release-state.js": {
+      "filePath": "scripts/test-release-state.js",
+      "contentHash": "016a4a46c62eff7a8fdd922641cd11c5f64ad23998946cbfdc0afb6dc564cb95",
+      "functions": [
+        {
+          "name": "makeRelease",
+          "params": [
+            "commit"
+          ],
+          "exported": false,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 96,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-security.js": {
+      "filePath": "scripts/test-security.js",
+      "contentHash": "d007a44c39714a8122f1a52635e80530b06c6cbe6ce646b66d71d81748474041",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/test-terminal-ui.js": {
+      "filePath": "scripts/test-terminal-ui.js",
+      "contentHash": "c8d70a25a6e88a6a8b46441107b3be279eb7764fb0da2dd64d4b24b04b3fb4ed",
+      "functions": [
+        {
+          "name": "lines",
+          "params": [
+            "text"
+          ],
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 214,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/uninstall-kx.ps1": {
+      "filePath": "scripts/uninstall-kx.ps1",
+      "contentHash": "fd5d04b5607587c3507573cdfa7403ea868b6460d01bd77f9b1a76640013d2c1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 29,
+      "hasStructuralAnalysis": false
+    },
+    "services/orchestrator/kx_defender/__init__.py": {
+      "filePath": "services/orchestrator/kx_defender/__init__.py",
+      "contentHash": "5db14b355b5cc95afbc9d8c3179d801ebe429c392657cea7f097a93cfd7cdcfd",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/alert_store.py": {
+      "filePath": "services/orchestrator/kx_defender/alert_store.py",
+      "contentHash": "0a101d0016ba56486da67d3e873afa6521bf551e82f4be1c6076ed13f78e887b",
+      "functions": [
+        {
+          "name": "_utc_now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_default_db",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_canonical",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_fingerprint",
+          "params": [
+            "record"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [
+        {
+          "name": "AlertStore",
+          "methods": [
+            "__init__",
+            "_connect",
+            "_initialize",
+            "_event",
+            "_ingest",
+            "ingest",
+            "_alert_dict",
+            "_get_alert",
+            "get_alert",
+            "list_alerts",
+            "transition",
+            "create_case",
+            "add_case_alert",
+            "add_case_note",
+            "close_case",
+            "_get_case",
+            "get_case",
+            "list_cases",
+            "migrate_jsonl"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 421
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "_utc_now",
+        "_default_db",
+        "_canonical",
+        "_fingerprint",
+        "AlertStore"
+      ],
+      "totalLines": 463,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/alerts.py": {
+      "filePath": "services/orchestrator/kx_defender/alerts.py",
+      "contentHash": "eac8cea920cb5ba1961a9b941920b588f61aff8c9f0daa5d7948e6569c49a7ae",
+      "functions": [
+        {
+          "name": "_ensure_parent",
+          "params": [
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "emit_alert",
+          "params": [
+            "module",
+            "title",
+            "severity",
+            "evidence",
+            "also_stderr",
+            "path",
+            "max_lines"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "_maybe_trim",
+          "params": [
+            "path",
+            "max_lines"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "read_recent_alerts",
+          "params": [
+            "limit",
+            "path"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "clear_alerts",
+          "params": [
+            "path"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "emit_from_findings",
+          "params": [
+            "module",
+            "findings",
+            "min_severity",
+            "also_stderr",
+            "path"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Iterable"
+          ]
+        }
+      ],
+      "exports": [
+        "_ensure_parent",
+        "emit_alert",
+        "_maybe_trim",
+        "read_recent_alerts",
+        "clear_alerts",
+        "emit_from_findings"
+      ],
+      "totalLines": 180,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/api.py": {
+      "filePath": "services/orchestrator/kx_defender/api.py",
+      "contentHash": "5a011190e5f1ef04ed8b2ad9c42d81c3b5cbbcc4b06685097d6cb3605c9772e1",
+      "functions": [
+        {
+          "name": "serve",
+          "params": [
+            "host",
+            "port"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "KxAPIHandler",
+          "methods": [
+            "log_message",
+            "_send",
+            "_json",
+            "do_GET",
+            "do_POST"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 78
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "http.server",
+          "specifiers": [
+            "BaseHTTPRequestHandler",
+            "ThreadingHTTPServer"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "parse_qs",
+            "urlparse"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "KxLangError",
+            "parse_line"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "KxAPIHandler",
+        "serve"
+      ],
+      "totalLines": 99,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/auth.py": {
+      "filePath": "services/orchestrator/kx_defender/auth.py",
+      "contentHash": "e4308d8e8759affe12b05d7d59f6f83355ebedd424dc1a750922eb3f0a46d2e1",
+      "functions": [
+        {
+          "name": "_host_from_target",
+          "params": [
+            "target"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "is_local_or_private_host",
+          "params": [
+            "host"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "engagement_allows",
+          "params": [
+            "target",
+            "engagement_file"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "validate_params",
+          "params": [
+            "params"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "mask_secret",
+          "params": [
+            "value",
+            "keep"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [
+        {
+          "name": "AuthorizationError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "imports": [
+        {
+          "source": "ipaddress",
+          "specifiers": [
+            "ipaddress"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urlparse"
+          ]
+        }
+      ],
+      "exports": [
+        "AuthorizationError",
+        "_host_from_target",
+        "is_local_or_private_host",
+        "engagement_allows",
+        "validate_params",
+        "mask_secret"
+      ],
+      "totalLines": 124,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/base.py": {
+      "filePath": "services/orchestrator/kx_defender/base.py",
+      "contentHash": "4ac394a03f0ccb4c9f8fb0a648ec2bca9c92384e9b4afdad59d4fe0588905dfb",
+      "functions": [],
+      "classes": [
+        {
+          "name": "BaseModule",
+          "methods": [
+            "describe",
+            "validate",
+            "run",
+            "execute"
+          ],
+          "properties": [
+            "name",
+            "category",
+            "description"
+          ],
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "AttackModule",
+          "methods": [],
+          "properties": [
+            "category"
+          ],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "DefenseModule",
+          "methods": [],
+          "properties": [
+            "category"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "imports": [
+        {
+          "source": "abc",
+          "specifiers": [
+            "ABC",
+            "abstractmethod"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "validate_params"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "BaseModule",
+        "AttackModule",
+        "DefenseModule"
+      ],
+      "totalLines": 53,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/baseline.py": {
+      "filePath": "services/orchestrator/kx_defender/baseline.py",
+      "contentHash": "1fb9181d7dd85c80d970584a8c6ce9ad219426d84fbf2374cc521b8ee7fff78f",
+      "functions": [
+        {
+          "name": "_utc_now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_sha256",
+          "params": [
+            "path"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_node_version",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "collect_processes",
+          "params": [],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 43
+        }
+      ],
+      "classes": [
+        {
+          "name": "BaselineManager",
+          "methods": [
+            "__init__",
+            "_name",
+            "_path",
+            "_files",
+            "_kx_hashes",
+            "_snapshot",
+            "create",
+            "show",
+            "list",
+            "_process_key",
+            "compare",
+            "delete"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 188
+        }
+      ],
+      "imports": [
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "importlib.metadata",
+          "specifiers": [
+            "importlib.metadata"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Callable"
+          ]
+        }
+      ],
+      "exports": [
+        "_utc_now",
+        "_sha256",
+        "_node_version",
+        "collect_processes",
+        "BaselineManager"
+      ],
+      "totalLines": 299,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/cli.py": {
+      "filePath": "services/orchestrator/kx_defender/cli.py",
+      "contentHash": "919d2c88dfcd7f15e62ee8657cff99dead79a6080fdb8ea4b92262a4c7aeb8be",
+      "functions": [
+        {
+          "name": "_print_json",
+          "params": [
+            "data"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_params_from_ns",
+          "params": [
+            "ns"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "_run",
+          "params": [
+            "module_name",
+            "params"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "build_parser",
+          "params": [],
+          "returnType": "argparse.ArgumentParser",
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "_add_run_flags",
+          "params": [
+            "parser",
+            "require_scope"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "main",
+          "params": [
+            "argv"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "_print_json",
+        "_params_from_ns",
+        "_run",
+        "build_parser",
+        "_add_run_flags",
+        "main"
+      ],
+      "totalLines": 144,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/daemon.py": {
+      "filePath": "services/orchestrator/kx_defender/daemon.py",
+      "contentHash": "91a413afb5703019060ed12ae9b7c2237f833b8d0874d552d011f0f4d1351d72",
+      "functions": [
+        {
+          "name": "_ensure_home",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "load_config",
+          "params": [
+            "path"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "save_config",
+          "params": [
+            "config",
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "read_pid",
+          "params": [
+            "path"
+          ],
+          "returnType": "int | None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "write_pid",
+          "params": [
+            "pid",
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "clear_pid",
+          "params": [
+            "path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "is_running",
+          "params": [
+            "pid"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "daemon_status",
+          "params": [
+            "pid_path"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "daemon_stop",
+          "params": [
+            "pid_path",
+            "timeout"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "_run_watcher_forever",
+          "params": [
+            "config"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "daemon_start",
+          "params": [
+            "config"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "_start_posix",
+          "params": [
+            "config"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 34
+        },
+        {
+          "name": "_start_windows",
+          "params": [
+            "config"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 35
+        },
+        {
+          "name": "_windows_child_entry",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_redirect_std_streams",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "signal",
+          "specifiers": [
+            "signal"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.alerts",
+          "specifiers": [
+            "KX_HOME"
+          ]
+        }
+      ],
+      "exports": [
+        "_ensure_home",
+        "load_config",
+        "save_config",
+        "read_pid",
+        "write_pid",
+        "clear_pid",
+        "is_running",
+        "daemon_status",
+        "daemon_stop",
+        "_run_watcher_forever",
+        "daemon_start",
+        "_start_posix",
+        "_start_windows",
+        "_windows_child_entry",
+        "_redirect_std_streams"
+      ],
+      "totalLines": 347,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/evidence.py": {
+      "filePath": "services/orchestrator/kx_defender/evidence.py",
+      "contentHash": "bc23565de2955ee531e2ca79f548e89711e5402576e8fe29c143515dba74fcd1",
+      "functions": [
+        {
+          "name": "_utc_now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_json_bytes",
+          "params": [
+            "value"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "_safe_component",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_redact",
+          "params": [
+            "value",
+            "profile",
+            "stats",
+            "key"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "_source_payload",
+          "params": [
+            "source_type",
+            "source_id",
+            "alert_store",
+            "run_store"
+          ],
+          "returnType": "tuple[dict[str, bytes], list[str]]",
+          "exported": true,
+          "lineCount": 53
+        },
+        {
+          "name": "export_bundle",
+          "params": [
+            "source_type",
+            "source_id",
+            "destination",
+            "redact",
+            "alert_store",
+            "run_store"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 75
+        },
+        {
+          "name": "_unsafe_name",
+          "params": [
+            "name"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_validate_archive",
+          "params": [
+            "archive"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "verify_bundle",
+          "params": [
+            "path"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 45
+        },
+        {
+          "name": "inspect_bundle",
+          "params": [
+            "path"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "import_bundle",
+          "params": [
+            "path",
+            "root"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 44
+        }
+      ],
+      "classes": [
+        {
+          "name": "EvidenceError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "imports": [
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "stat",
+          "specifiers": [
+            "stat"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "zipfile",
+          "specifiers": [
+            "zipfile"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path",
+            "PurePosixPath"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.alert_store",
+          "specifiers": [
+            "AlertStore"
+          ]
+        },
+        {
+          "source": "kx_defender.store",
+          "specifiers": [
+            "RunStore"
+          ]
+        }
+      ],
+      "exports": [
+        "EvidenceError",
+        "_utc_now",
+        "_json_bytes",
+        "_safe_component",
+        "_redact",
+        "_source_payload",
+        "export_bundle",
+        "_unsafe_name",
+        "_validate_archive",
+        "verify_bundle",
+        "inspect_bundle",
+        "import_bundle"
+      ],
+      "totalLines": 359,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/helptext.py": {
+      "filePath": "services/orchestrator/kx_defender/helptext.py",
+      "contentHash": "b6261395169f01dd0240debdebfff580b642a5c52577a74ddbcafcc7e29d861c",
+      "functions": [
+        {
+          "name": "is_help_token",
+          "params": [
+            "token"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "render_global_help",
+          "params": [
+            "lang"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "render_verb_help",
+          "params": [
+            "verb",
+            "lang"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 45
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "list_verbs",
+            "load_lexicon"
+          ]
+        }
+      ],
+      "exports": [
+        "is_help_token",
+        "render_global_help",
+        "render_verb_help"
+      ],
+      "totalLines": 164,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/i18n.py": {
+      "filePath": "services/orchestrator/kx_defender/i18n.py",
+      "contentHash": "70f35c1486c9b8b6a4114f6b87cea26e6fefe2178568b8d8ada1ff0024194fb4",
+      "functions": [
+        {
+          "name": "config_path",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_read_config",
+          "params": [],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_write_config",
+          "params": [
+            "data"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "normalize_lang",
+          "params": [
+            "value"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "get_lang",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "set_lang",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "t",
+          "params": [
+            "en",
+            "ko",
+            "lang"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        }
+      ],
+      "exports": [
+        "config_path",
+        "_read_config",
+        "_write_config",
+        "normalize_lang",
+        "get_lang",
+        "set_lang",
+        "t"
+      ],
+      "totalLines": 76,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/kx_cli.py": {
+      "filePath": "services/orchestrator/kx_defender/kx_cli.py",
+      "contentHash": "31625f6019c2425f169da84ddc5b0bff91e46bf42dbcf2c32217ddaf054e8de5",
+      "functions": [
+        {
+          "name": "_force_utf8_stdio",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_print_json",
+          "params": [
+            "data"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_print_next",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_repo_root",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "_find_update_js",
+          "params": [],
+          "returnType": "Path | None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_find_entry_js",
+          "params": [],
+          "returnType": "Path | None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "_node_bin",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_run_update",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "_run_hud",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "_emit_help",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "_emit_lang",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "_emit_form",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_emit_suggest",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 76
+        },
+        {
+          "name": "_emit_why",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 105
+        },
+        {
+          "name": "_emit_report",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 35
+        },
+        {
+          "name": "_format_daemon_result",
+          "params": [
+            "subcommand",
+            "payload"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "_emit_daemon",
+          "params": [
+            "args",
+            "pretty"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 66
+        },
+        {
+          "name": "_coerce_value",
+          "params": [
+            "existing",
+            "raw"
+          ],
+          "returnType": "Any",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_emit_sig_meta",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 72
+        },
+        {
+          "name": "_option_value",
+          "params": [
+            "args",
+            "option"
+          ],
+          "returnType": "str | None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_emit_alert",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 113
+        },
+        {
+          "name": "_emit_case",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 67
+        },
+        {
+          "name": "_emit_evidence",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 68
+        },
+        {
+          "name": "_emit_baseline",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 53
+        },
+        {
+          "name": "_emit_playbook",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "_emit_schedule",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 57
+        },
+        {
+          "name": "_emit_dashboard",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "_emit_watch_continuous",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 62
+        },
+        {
+          "name": "_emit_ask",
+          "params": [
+            "args"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "_run_parsed",
+          "params": [
+            "argv",
+            "pretty"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "main",
+          "params": [
+            "argv"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 82
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "platform",
+          "specifiers": [
+            "platform"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "kx_defender.helptext",
+          "specifiers": [
+            "is_help_token",
+            "render_global_help",
+            "render_verb_help"
+          ]
+        },
+        {
+          "source": "kx_defender.i18n",
+          "specifiers": [
+            "get_lang",
+            "set_lang",
+            "t"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "KxLangError",
+            "list_verbs",
+            "parse_argv"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        },
+        {
+          "source": "kx_defender.paramform",
+          "specifiers": [
+            "augment_argv",
+            "collect_from_prompts",
+            "parse_command_form",
+            "schema_for"
+          ]
+        },
+        {
+          "source": "kx_defender.render",
+          "specifiers": [
+            "render_result_text"
+          ]
+        }
+      ],
+      "exports": [
+        "_force_utf8_stdio",
+        "_print_json",
+        "_print_next",
+        "_repo_root",
+        "_find_update_js",
+        "_find_entry_js",
+        "_node_bin",
+        "_run_update",
+        "_run_hud",
+        "_emit_help",
+        "_emit_lang",
+        "_emit_form",
+        "_emit_suggest",
+        "_emit_why",
+        "_emit_report",
+        "_format_daemon_result",
+        "_emit_daemon",
+        "_coerce_value",
+        "_emit_sig_meta",
+        "_option_value",
+        "_emit_alert",
+        "_emit_case",
+        "_emit_evidence",
+        "_emit_baseline",
+        "_emit_playbook",
+        "_emit_schedule",
+        "_emit_dashboard",
+        "_emit_watch_continuous",
+        "_emit_ask",
+        "_run_parsed",
+        "main"
+      ],
+      "totalLines": 1234,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/kx_runner.py": {
+      "filePath": "services/orchestrator/kx_defender/kx_runner.py",
+      "contentHash": "f73e407c62d94c7911146bc429d4c780350f5df811439f8dcd7e9582e6967c40",
+      "functions": [
+        {
+          "name": "main_kx",
+          "params": [
+            "argv"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "_print_result_table",
+          "params": [
+            "result"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [
+        {
+          "name": "KxRunner",
+          "methods": [
+            "__init__",
+            "execute",
+            "_route_to_module",
+            "_preprocess_params",
+            "_handle_special_commands",
+            "_generate_help",
+            "list_commands",
+            "_is_category"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 291
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule",
+            "DefenseModule"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "KxCommand"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "KxRunner",
+        "main_kx",
+        "_print_result_table"
+      ],
+      "totalLines": 354,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/kxlang.py": {
+      "filePath": "services/orchestrator/kx_defender/kxlang.py",
+      "contentHash": "f3c4cf8daa503a7b95d2e1709951d5fabf437ba3f5558e1eefe89829eda77108",
+      "functions": [
+        {
+          "name": "_suggest_verbs",
+          "params": [
+            "bad",
+            "verbs",
+            "limit"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "_edit_distance",
+          "params": [
+            "a",
+            "b"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "load_lexicon",
+          "params": [
+            "path"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "list_verbs",
+          "params": [
+            "lexicon"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "resolve_module",
+          "params": [
+            "verb",
+            "obj",
+            "lexicon"
+          ],
+          "returnType": "tuple[str, str, dict[str, Any]]",
+          "exported": true,
+          "lineCount": 30
+        },
+        {
+          "name": "parse_argv",
+          "params": [
+            "argv",
+            "lexicon"
+          ],
+          "returnType": "KxCommand",
+          "exported": true,
+          "lineCount": 109
+        },
+        {
+          "name": "parse_line",
+          "params": [
+            "line",
+            "lexicon"
+          ],
+          "returnType": "KxCommand",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "KxLangError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "KxCommand",
+          "methods": [
+            "to_dict"
+          ],
+          "properties": [
+            "verb",
+            "obj",
+            "module",
+            "params",
+            "raw"
+          ],
+          "exported": true,
+          "lineCount": 17
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "shlex",
+          "specifiers": [
+            "shlex"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "KxLangError",
+        "_suggest_verbs",
+        "_edit_distance",
+        "KxCommand",
+        "load_lexicon",
+        "list_verbs",
+        "resolve_module",
+        "parse_argv",
+        "parse_line"
+      ],
+      "totalLines": 237,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/kxsig_workbench.py": {
+      "filePath": "services/orchestrator/kx_defender/kxsig_workbench.py",
+      "contentHash": "4d578518c37336e3ea1be4ed96948c6cf004442b9a52ae6d99ad17f1837cdec8",
+      "functions": [
+        {
+          "name": "_utc_now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_repo_rules",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_read_document",
+          "params": [
+            "path"
+          ],
+          "returnType": "tuple[list[dict[str, Any]], dict[str, Any]]",
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [
+        {
+          "name": "RuleWorkbenchError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "RuleWorkbench",
+          "methods": [
+            "__init__",
+            "_categories",
+            "validate_file",
+            "install",
+            "_state",
+            "_save_state",
+            "disable",
+            "enable",
+            "_rule_files",
+            "show",
+            "conflicts",
+            "summary",
+            "test_file",
+            "quarantine"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 262
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        }
+      ],
+      "exports": [
+        "RuleWorkbenchError",
+        "_utc_now",
+        "_repo_rules",
+        "_read_document",
+        "RuleWorkbench"
+      ],
+      "totalLines": 318,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/operations.py": {
+      "filePath": "services/orchestrator/kx_defender/operations.py",
+      "contentHash": "a4cb5b1eb22b93758ef1bb2443f5beff84d7245aa50debf922f0edd6f6ce5d13",
+      "functions": [
+        {
+          "name": "_parse_time",
+          "params": [
+            "value"
+          ],
+          "returnType": "datetime | None",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_home",
+          "params": [],
+          "returnType": "Path",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_release",
+          "params": [
+            "home"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "_rule_summary",
+          "params": [
+            "workbench"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "build_snapshot",
+          "params": [
+            "section",
+            "alert_store",
+            "run_store",
+            "rule_workbench",
+            "daemon_provider",
+            "now"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 76
+        },
+        {
+          "name": "render_snapshot",
+          "params": [
+            "snapshot"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 66
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timedelta",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Callable"
+          ]
+        },
+        {
+          "source": "kx_defender.alert_store",
+          "specifiers": [
+            "AlertStore"
+          ]
+        },
+        {
+          "source": "kx_defender.daemon",
+          "specifiers": [
+            "daemon_status"
+          ]
+        },
+        {
+          "source": "kx_defender.kxsig_workbench",
+          "specifiers": [
+            "RuleWorkbench"
+          ]
+        },
+        {
+          "source": "kx_defender.store",
+          "specifiers": [
+            "RunStore"
+          ]
+        }
+      ],
+      "exports": [
+        "_parse_time",
+        "_home",
+        "_release",
+        "_rule_summary",
+        "build_snapshot",
+        "render_snapshot"
+      ],
+      "totalLines": 202,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/orchestrator.py": {
+      "filePath": "services/orchestrator/kx_defender/orchestrator.py",
+      "contentHash": "f92bc00868de682ae27cb5860e03367870bc51edf5dea7604bd358ccb7c84338",
+      "functions": [],
+      "classes": [
+        {
+          "name": "Orchestrator",
+          "methods": [
+            "__init__",
+            "list_modules",
+            "families",
+            "run",
+            "get_result",
+            "list_results"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 51
+        }
+      ],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "AuthorizationError"
+          ]
+        },
+        {
+          "source": "kx_defender.registry",
+          "specifiers": [
+            "build_registry"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "kx_defender.store",
+          "specifiers": [
+            "RunStore"
+          ]
+        }
+      ],
+      "exports": [
+        "Orchestrator"
+      ],
+      "totalLines": 64,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/paramform.py": {
+      "filePath": "services/orchestrator/kx_defender/paramform.py",
+      "contentHash": "e581cde0ad3a9aad6016a4f3d9bc540182074fcdefda084316a8c6ee7e6df718",
+      "functions": [
+        {
+          "name": "_load",
+          "params": [],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "schema_for",
+          "params": [
+            "verb",
+            "obj",
+            "lexicon_verbs"
+          ],
+          "returnType": "tuple[list[dict[str, Any]], str | None]",
+          "exported": true,
+          "lineCount": 36
+        },
+        {
+          "name": "parse_command_form",
+          "params": [
+            "argv"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "augment_argv",
+          "params": [
+            "argv",
+            "values"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "collect_from_prompts",
+          "params": [
+            "schema",
+            "already_set",
+            "stream_in",
+            "stream_out",
+            "is_live"
+          ],
+          "returnType": "list[tuple[str, str]]",
+          "exported": true,
+          "lineCount": 51
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Iterable",
+            "TextIO"
+          ]
+        }
+      ],
+      "exports": [
+        "_load",
+        "schema_for",
+        "parse_command_form",
+        "augment_argv",
+        "collect_from_prompts"
+      ],
+      "totalLines": 170,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/playbook.py": {
+      "filePath": "services/orchestrator/kx_defender/playbook.py",
+      "contentHash": "bb4ed1a86d0970c47bbab79fa980176df1e8b222b6f92807e55a8985693048b0",
+      "functions": [
+        {
+          "name": "_utc_now",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_redact_text",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_redact_args",
+          "params": [
+            "args"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [
+        {
+          "name": "PlaybookError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "PlaybookRunner",
+          "methods": [
+            "__init__",
+            "_load",
+            "validate",
+            "_execute",
+            "_lock",
+            "_write_journal",
+            "run"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 217
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Callable"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "KxLangError",
+            "parse_argv"
+          ]
+        }
+      ],
+      "exports": [
+        "PlaybookError",
+        "_utc_now",
+        "_redact_text",
+        "_redact_args",
+        "PlaybookRunner"
+      ],
+      "totalLines": 272,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/registry.py": {
+      "filePath": "services/orchestrator/kx_defender/registry.py",
+      "contentHash": "2f2279a088774bfc5d2fae98a2559e3f1dbf98760037099db4588f10c71f8a12",
+      "functions": [
+        {
+          "name": "build_registry",
+          "params": [],
+          "returnType": "Dict[str, AttackModule]",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "resolve_module_name",
+          "params": [
+            "name"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "typing",
+          "specifiers": [
+            "Dict",
+            "Type"
+          ]
+        },
+        {
+          "source": "kx_defender.base",
+          "specifiers": [
+            "AttackModule"
+          ]
+        },
+        {
+          "source": "modules.attack.c2",
+          "specifiers": [
+            "C2Module"
+          ]
+        },
+        {
+          "source": "modules.attack.device_code",
+          "specifiers": [
+            "DeviceCodeModule"
+          ]
+        },
+        {
+          "source": "modules.attack.dpapi",
+          "specifiers": [
+            "DpapiModule"
+          ]
+        },
+        {
+          "source": "modules.attack.kerberoasting",
+          "specifiers": [
+            "KerberoastingModule"
+          ]
+        },
+        {
+          "source": "modules.attack.llm_redteam",
+          "specifiers": [
+            "LlmRedteamModule"
+          ]
+        },
+        {
+          "source": "modules.attack.ntlm_relay",
+          "specifiers": [
+            "NtlmRelayModule"
+          ]
+        },
+        {
+          "source": "modules.attack.web_scanner",
+          "specifiers": [
+            "WebScannerModule"
+          ]
+        },
+        {
+          "source": "modules.attack.wifi",
+          "specifiers": [
+            "WifiModule"
+          ]
+        },
+        {
+          "source": "modules.catalog.factory",
+          "specifiers": [
+            "build_catalog_modules"
+          ]
+        },
+        {
+          "source": "modules.defense.process_kill",
+          "specifiers": [
+            "ProcessKillModule"
+          ]
+        },
+        {
+          "source": "modules.defense.process_monitor",
+          "specifiers": [
+            "ProcessMonitorModule"
+          ]
+        },
+        {
+          "source": "modules.defense.sig_scan",
+          "specifiers": [
+            "SigScanModule"
+          ]
+        }
+      ],
+      "exports": [
+        "build_registry",
+        "resolve_module_name"
+      ],
+      "totalLines": 58,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/render.py": {
+      "filePath": "services/orchestrator/kx_defender/render.py",
+      "contentHash": "61517d31105ef3ca059f2740805178c7e667b96b6a6ae9866dbe8e394b4f922b",
+      "functions": [
+        {
+          "name": "_isatty",
+          "params": [
+            "stream"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_color_enabled",
+          "params": [
+            "color_flag"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "_c",
+          "params": [
+            "name",
+            "use_color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "_clip",
+          "params": [
+            "s",
+            "width"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "render_findings",
+          "params": [
+            "findings",
+            "color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "_dump_evidence",
+          "params": [
+            "obj",
+            "use_color",
+            "indent"
+          ],
+          "returnType": "list[str]",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "_fmt_leaf",
+          "params": [
+            "v",
+            "use_color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "render_process_tree",
+          "params": [
+            "processes",
+            "alert_count",
+            "engine",
+            "color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 59
+        },
+        {
+          "name": "render_signature_matrix",
+          "params": [
+            "hits",
+            "rule_count",
+            "hit_count",
+            "engine",
+            "color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "render_result_text",
+          "params": [
+            "payload",
+            "color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 100
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any",
+            "Iterable"
+          ]
+        }
+      ],
+      "exports": [
+        "_isatty",
+        "_color_enabled",
+        "_c",
+        "_clip",
+        "render_findings",
+        "_dump_evidence",
+        "_fmt_leaf",
+        "render_process_tree",
+        "render_signature_matrix",
+        "render_result_text"
+      ],
+      "totalLines": 370,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/report.py": {
+      "filePath": "services/orchestrator/kx_defender/report.py",
+      "contentHash": "79d7a93ee5940ca9c7f06bd6f920d4582b7c2795f4e74653942c7b5b752c3bac",
+      "functions": [
+        {
+          "name": "_parse_ts",
+          "params": [
+            "ts"
+          ],
+          "returnType": "datetime | None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "load_alerts",
+          "params": [
+            "path"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "summarize",
+          "params": [
+            "alerts",
+            "hours",
+            "now"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 50
+        },
+        {
+          "name": "render_text",
+          "params": [
+            "summary",
+            "color"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 67
+        },
+        {
+          "name": "render_markdown",
+          "params": [
+            "summary"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 32
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "collections",
+          "specifiers": [
+            "Counter",
+            "defaultdict"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timedelta",
+            "timezone"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.alerts",
+          "specifiers": [
+            "ALERT_LOG_PATH"
+          ]
+        }
+      ],
+      "exports": [
+        "_parse_ts",
+        "load_alerts",
+        "summarize",
+        "render_text",
+        "render_markdown"
+      ],
+      "totalLines": 206,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/result.py": {
+      "filePath": "services/orchestrator/kx_defender/result.py",
+      "contentHash": "1cb334e84ce1ab6117f520b5c88dfb3dff8f80141bea59f2ad9cda37c79a5c45",
+      "functions": [
+        {
+          "name": "utc_now_iso",
+          "params": [],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "Finding",
+          "methods": [
+            "to_dict"
+          ],
+          "properties": [
+            "title",
+            "severity",
+            "detail",
+            "evidence"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "ModuleResult",
+          "methods": [
+            "finish",
+            "to_dict",
+            "from_dict"
+          ],
+          "properties": [
+            "module",
+            "status",
+            "mode",
+            "authorized_scope",
+            "findings",
+            "artifacts",
+            "errors",
+            "run_id",
+            "started_at",
+            "finished_at",
+            "meta"
+          ],
+          "exported": true,
+          "lineCount": 40
+        }
+      ],
+      "imports": [
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "asdict",
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid4"
+          ]
+        }
+      ],
+      "exports": [
+        "utc_now_iso",
+        "Finding",
+        "ModuleResult"
+      ],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/scheduler.py": {
+      "filePath": "services/orchestrator/kx_defender/scheduler.py",
+      "contentHash": "db53cc87dc78d223df39c8936e4c139042e83fef52fea66ba15212009fe35aeb",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ScheduleStore",
+          "methods": [
+            "__init__",
+            "_load",
+            "_save",
+            "_name",
+            "_daily",
+            "add",
+            "list",
+            "disable",
+            "enable",
+            "_set_enabled",
+            "run_due"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 115
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "uuid"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.playbook",
+          "specifiers": [
+            "PlaybookError",
+            "PlaybookRunner"
+          ]
+        }
+      ],
+      "exports": [
+        "ScheduleStore"
+      ],
+      "totalLines": 132,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/store.py": {
+      "filePath": "services/orchestrator/kx_defender/store.py",
+      "contentHash": "ffcedfcf37f0d4ff9838aa3193ae71d532e173253a6e8f590e292ce17752a27f",
+      "functions": [],
+      "classes": [
+        {
+          "name": "RunStore",
+          "methods": [
+            "__init__",
+            "_connect",
+            "_init_db",
+            "save",
+            "get",
+            "list_runs"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 76
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sqlite3",
+          "specifiers": [
+            "sqlite3"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        }
+      ],
+      "exports": [
+        "RunStore"
+      ],
+      "totalLines": 90,
+      "hasStructuralAnalysis": true
+    },
+    "services/orchestrator/kx_defender/watcher.py": {
+      "filePath": "services/orchestrator/kx_defender/watcher.py",
+      "contentHash": "92d17d468ccd36b061c10f926423b61d24675a7c859330dd0a2574fcfa5fed88",
+      "functions": [
+        {
+          "name": "_severity_rank",
+          "params": [
+            "sev"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "KxWatcher",
+          "methods": [
+            "__init__",
+            "request_stop",
+            "run",
+            "_one_tick",
+            "_interruptible_sleep"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 137
+        }
+      ],
+      "imports": [
+        {
+          "source": "signal",
+          "specifiers": [
+            "signal"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "kx_defender.alerts",
+          "specifiers": [
+            "emit_alert",
+            "emit_from_findings"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "_severity_rank",
+        "KxWatcher"
+      ],
+      "totalLines": 164,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-c2/SKILL.md": {
+      "filePath": "skills/kx-attack-c2/SKILL.md",
+      "contentHash": "15b79304ae89d91e00dce9d156b717e7b23ed8d605c35b8874f7842a22e33302",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-device_code/SKILL.md": {
+      "filePath": "skills/kx-attack-device_code/SKILL.md",
+      "contentHash": "8914a88270189ba249559b115fccb92b2ebcbd34b3626a84805d1cc010d4107a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-dpapi/SKILL.md": {
+      "filePath": "skills/kx-attack-dpapi/SKILL.md",
+      "contentHash": "f50d5e4674381a8a262e0c28ec330acb0fae94165e6614d4ea3d603f1ceb1b77",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-kerberoasting/SKILL.md": {
+      "filePath": "skills/kx-attack-kerberoasting/SKILL.md",
+      "contentHash": "04a7365443e5204f38672754cdb0a3fa4bbea9c8d85e462bfde11cd80a8d9a05",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-llm_redteam/SKILL.md": {
+      "filePath": "skills/kx-attack-llm_redteam/SKILL.md",
+      "contentHash": "9dfb878eb6a83f3355cba116fa5a8cd89caea41f2e2028ecb7ed05e4ec1dfc9e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-ntlm_relay/SKILL.md": {
+      "filePath": "skills/kx-attack-ntlm_relay/SKILL.md",
+      "contentHash": "1257029130cc2472141c98cec37ae25d4c3447a0a215ea560d4523a587744f71",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-web_scanner/SKILL.md": {
+      "filePath": "skills/kx-attack-web_scanner/SKILL.md",
+      "contentHash": "cb51edb0f057a543ddc9517bbf389343d3e628dea099abb53b88fc71edc21097",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-attack-wifi/SKILL.md": {
+      "filePath": "skills/kx-attack-wifi/SKILL.md",
+      "contentHash": "f8fb25f79ca434de6fccc6b4db345d0090c8bc93a0bb27bb0431965ddce6b739",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-catalog-attack/SKILL.md": {
+      "filePath": "skills/kx-catalog-attack/SKILL.md",
+      "contentHash": "ab51551c70003993b8a941a6f7155746b45f71d5221d0098600adab464938bad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kx-catalog-defense/SKILL.md": {
+      "filePath": "skills/kx-catalog-defense/SKILL.md",
+      "contentHash": "fb8afbe51a5a7dd21eae9accdeb95266b64e88929a5e9a0d35dd370766169e46",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "skills/kxlang/SKILL.md": {
+      "filePath": "skills/kxlang/SKILL.md",
+      "contentHash": "e8d2aac1d85c2c91a5da6d0f8aea2af57c4cb3066a69784c42a6bcb9ba2ac868",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/core/defense/behavior_analyzer.py": {
+      "filePath": "src/core/defense/behavior_analyzer.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/core/defense/process_monitor.ps1": {
+      "filePath": "src/core/defense/process_monitor.ps1",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "src/core/defense/process_terminator.py": {
+      "filePath": "src/core/defense/process_terminator.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "src/core/defense/yara_engine.py": {
+      "filePath": "src/core/defense/yara_engine.py",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_ad_wifi_c2.py": {
+      "filePath": "tests/test_ad_wifi_c2.py",
+      "contentHash": "10e88d95ac92d7fc8c6376a251994ac097f41892047bef2148c6a8add852d588",
+      "functions": [
+        {
+          "name": "test_kerberoasting_execute_fixture",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_dpapi_masks_secrets",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_wifi_cracks_fixture",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_device_code_mock_idp",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_c2_listener_loopback_only",
+          "params": [],
+          "exported": true,
+          "lineCount": 28
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "test_kerberoasting_execute_fixture",
+        "test_dpapi_masks_secrets",
+        "test_wifi_cracks_fixture",
+        "test_device_code_mock_idp",
+        "test_c2_listener_loopback_only"
+      ],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_alert_store.py": {
+      "filePath": "tests/test_alert_store.py",
+      "contentHash": "8dbd30ce7754f7d6f24a2719afc22319177270cc93dafdb6ab5dba0762ae9d6e",
+      "functions": [
+        {
+          "name": "sample",
+          "params": [
+            "ts"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_alert_lifecycle_deduplicates_and_audits",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "test_case_workflow_and_idempotent_jsonl_migration",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_emit_alert_indexes_compatibility_log",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "test_cli_alert_and_case_json_contract",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 68
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "kx_defender.alert_store",
+          "specifiers": [
+            "AlertStore"
+          ]
+        },
+        {
+          "source": "kx_defender.alerts",
+          "specifiers": [
+            "emit_alert"
+          ]
+        }
+      ],
+      "exports": [
+        "sample",
+        "test_alert_lifecycle_deduplicates_and_audits",
+        "test_case_workflow_and_idempotent_jsonl_migration",
+        "test_emit_alert_indexes_compatibility_log",
+        "test_cli_alert_and_case_json_contract"
+      ],
+      "totalLines": 162,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_auth.py": {
+      "filePath": "tests/test_auth.py",
+      "contentHash": "5eb0437836eb4d1b233a7542f7ed2db9276e206a01766d366e72a2961d95354b",
+      "functions": [
+        {
+          "name": "test_simulate_requires_scope",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_simulate_ok_with_lab_scope",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_execute_blocks_public_host",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_execute_allows_localhost",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "kx_defender.auth",
+          "specifiers": [
+            "AuthorizationError",
+            "validate_params"
+          ]
+        }
+      ],
+      "exports": [
+        "test_simulate_requires_scope",
+        "test_simulate_ok_with_lab_scope",
+        "test_execute_blocks_public_host",
+        "test_execute_allows_localhost"
+      ],
+      "totalLines": 36,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_baseline.py": {
+      "filePath": "tests/test_baseline.py",
+      "contentHash": "d193cca43aaf360e52d97ee7f7f8e5269134bbcf0b27d7d909fb2d79388defdd",
+      "functions": [
+        {
+          "name": "test_baseline_create_compare_show_delete",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "test_baseline_rejects_unsafe_name_and_symlink",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_baseline_cli_json_contract",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 36
+        }
+      ],
+      "classes": [
+        {
+          "name": "Processes",
+          "methods": [
+            "__init__",
+            "__call__"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "kx_defender.baseline",
+          "specifiers": [
+            "BaselineManager"
+          ]
+        }
+      ],
+      "exports": [
+        "Processes",
+        "test_baseline_create_compare_show_delete",
+        "test_baseline_rejects_unsafe_name_and_symlink",
+        "test_baseline_cli_json_contract"
+      ],
+      "totalLines": 99,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_catalog.py": {
+      "filePath": "tests/test_catalog.py",
+      "contentHash": "991e08f3724fd7340f9b3c9fb0dbd87d0b72cdb07ce86a8169460511502576b1",
+      "functions": [
+        {
+          "name": "test_catalog_loaded",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "test_named_attack_skills_simulate",
+          "params": [],
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "test_testing_for_prefix_registered",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_defense_families_sample",
+          "params": [],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "test_all_catalog_skills_simulate",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        },
+        {
+          "source": "modules.catalog.factory",
+          "specifiers": [
+            "load_catalog"
+          ]
+        }
+      ],
+      "exports": [
+        "test_catalog_loaded",
+        "test_named_attack_skills_simulate",
+        "test_testing_for_prefix_registered",
+        "test_defense_families_sample",
+        "test_all_catalog_skills_simulate"
+      ],
+      "totalLines": 95,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_evidence.py": {
+      "filePath": "tests/test_evidence.py",
+      "contentHash": "f015eee6a98eba2e300c5588c79d65877b21f77be4930400ff4676c20ab5f5d1",
+      "functions": [
+        {
+          "name": "build_case",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "tuple[AlertStore, str]",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_case_bundle_redacts_hashes_and_imports_read_only",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "test_verify_rejects_duplicate_and_traversal_entries",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_evidence_cli_json_contract",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 34
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "warnings",
+          "specifiers": [
+            "warnings"
+          ]
+        },
+        {
+          "source": "zipfile",
+          "specifiers": [
+            "zipfile"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "kx_defender.alert_store",
+          "specifiers": [
+            "AlertStore"
+          ]
+        },
+        {
+          "source": "kx_defender.evidence",
+          "specifiers": [
+            "EvidenceError",
+            "export_bundle",
+            "import_bundle",
+            "inspect_bundle",
+            "verify_bundle"
+          ]
+        }
+      ],
+      "exports": [
+        "build_case",
+        "test_case_bundle_redacts_hashes_and_imports_read_only",
+        "test_verify_rejects_duplicate_and_traversal_entries",
+        "test_evidence_cli_json_contract"
+      ],
+      "totalLines": 132,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_human_output.py": {
+      "filePath": "tests/test_human_output.py",
+      "contentHash": "c2282d2bb60e0ec5ad1599bb8963455ce4a7e392f9b9fd8d040332272fe572ff",
+      "functions": [
+        {
+          "name": "test_result_text_explains_purpose_result_and_next_action",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "test_daemon_status_has_human_explanation",
+          "params": [
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "test_module_json_escape_hatch",
+          "params": [
+            "capsys"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_ask_accepts_documented_option_separator",
+          "params": [
+            "tmp_path",
+            "monkeypatch",
+            "capsys"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "StringIO"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "kx_defender.kx_cli",
+          "specifiers": [
+            "main"
+          ]
+        },
+        {
+          "source": "kx_defender.kx_cli",
+          "specifiers": [
+            "_format_daemon_result"
+          ]
+        },
+        {
+          "source": "kx_defender.render",
+          "specifiers": [
+            "render_result_text"
+          ]
+        }
+      ],
+      "exports": [
+        "test_result_text_explains_purpose_result_and_next_action",
+        "test_daemon_status_has_human_explanation",
+        "test_module_json_escape_hatch",
+        "test_ask_accepts_documented_option_separator"
+      ],
+      "totalLines": 71,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_kxlang.py": {
+      "filePath": "tests/test_kxlang.py",
+      "contentHash": "19634add589726c37603c1fb56c8dd648d4d70c805c42839045646606bfd2e77",
+      "functions": [
+        {
+          "name": "test_lexicon_has_core_verbs",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_parse_defaults_scope_to_lab",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_parse_sentry_without_flags",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_parse_roast_and_run",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_parse_pact_maps_to_engagement",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_parse_nexus_bind",
+          "params": [],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_parse_sweep_web",
+          "params": [],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "test_unknown_verb",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_kx_cli_lexicon",
+          "params": [
+            "capsys"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_kx_slash_h_help",
+          "params": [
+            "capsys"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "test_kx_slash_h_verb_help",
+          "params": [
+            "capsys"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "test_kx_verb_slash_h",
+          "params": [
+            "capsys"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_kx_help_unknown_verb",
+          "params": [
+            "capsys"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_lang_get_set",
+          "params": [
+            "capsys",
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "test_update_is_meta_not_verb",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_upgrade_alias",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_lang_rejects_unknown",
+          "params": [
+            "capsys",
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "kx_defender.kx_cli",
+          "specifiers": [
+            "kx_main"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "KxLangError",
+            "list_verbs",
+            "parse_argv",
+            "parse_line"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "test_lexicon_has_core_verbs",
+        "test_parse_defaults_scope_to_lab",
+        "test_parse_sentry_without_flags",
+        "test_parse_roast_and_run",
+        "test_parse_pact_maps_to_engagement",
+        "test_parse_nexus_bind",
+        "test_parse_sweep_web",
+        "test_unknown_verb",
+        "test_kx_cli_lexicon",
+        "test_kx_slash_h_help",
+        "test_kx_slash_h_verb_help",
+        "test_kx_verb_slash_h",
+        "test_kx_help_unknown_verb",
+        "test_lang_get_set",
+        "test_update_is_meta_not_verb",
+        "test_upgrade_alias",
+        "test_lang_rejects_unknown"
+      ],
+      "totalLines": 174,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_kxsig_workbench.py": {
+      "filePath": "tests/test_kxsig_workbench.py",
+      "contentHash": "8cd9b39b8e9bdff5912a58847f4431c6b6d394ae903095cd6e3e52f18c33ef99",
+      "functions": [
+        {
+          "name": "write_rules",
+          "params": [
+            "path",
+            "rules"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "rule",
+          "params": [
+            "rule_id",
+            "pattern"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_validate_test_and_rule_state",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_rejects_duplicates_dangerous_regex_and_quarantines",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "test_kxsig_cli_contract",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 49
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "kx_defender.kxsig_workbench",
+          "specifiers": [
+            "RuleWorkbench"
+          ]
+        }
+      ],
+      "exports": [
+        "write_rules",
+        "rule",
+        "test_validate_test_and_rule_state",
+        "test_rejects_duplicates_dangerous_regex_and_quarantines",
+        "test_kxsig_cli_contract"
+      ],
+      "totalLines": 113,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_local_execute.py": {
+      "filePath": "tests/test_local_execute.py",
+      "contentHash": "4afa454aa9790016bf15d8d41f2517ffd0cf4315ea8b969d6f7e654b58eb4228",
+      "functions": [
+        {
+          "name": "test_web_scanner_execute_local",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "test_llm_redteam_execute_fixture_no_api_keys",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [
+        {
+          "name": "_VulnHandler",
+          "methods": [
+            "do_GET",
+            "log_message"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "imports": [
+        {
+          "source": "threading",
+          "specifiers": [
+            "threading"
+          ]
+        },
+        {
+          "source": "http.server",
+          "specifiers": [
+            "BaseHTTPRequestHandler",
+            "HTTPServer"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "_VulnHandler",
+        "test_web_scanner_execute_local",
+        "test_llm_redteam_execute_fixture_no_api_keys"
+      ],
+      "totalLines": 59,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_modules_simulate.py": {
+      "filePath": "tests/test_modules_simulate.py",
+      "contentHash": "5e2c0085f47ab347fa6e5956c8dc287c9969e3b5bd05da95c5bfaa3bdd9fbfb6",
+      "functions": [
+        {
+          "name": "test_registry_lists_phase1_modules",
+          "params": [],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_all_attack_modules_simulate",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        }
+      ],
+      "exports": [
+        "test_registry_lists_phase1_modules",
+        "test_all_attack_modules_simulate"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_operations.py": {
+      "filePath": "tests/test_operations.py",
+      "contentHash": "524be8ea82cc01a24d5f45777bd3527633efb1e5aeec6b2d9a86b454f483ddd9",
+      "functions": [
+        {
+          "name": "test_default_run_store_follows_persistent_home",
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_dashboard_sections_aggregate_local_state",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 72
+        },
+        {
+          "name": "test_dashboard_rejects_unknown_section",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "test_empty_runs_are_explicit",
+          "params": [
+            "tmp_path"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime",
+            "timezone"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "kx_defender.alert_store",
+          "specifiers": [
+            "AlertStore"
+          ]
+        },
+        {
+          "source": "kx_defender.kxsig_workbench",
+          "specifiers": [
+            "RuleWorkbench"
+          ]
+        },
+        {
+          "source": "kx_defender.operations",
+          "specifiers": [
+            "build_snapshot",
+            "render_snapshot"
+          ]
+        },
+        {
+          "source": "kx_defender.result",
+          "specifiers": [
+            "ModuleResult"
+          ]
+        },
+        {
+          "source": "kx_defender.store",
+          "specifiers": [
+            "RunStore"
+          ]
+        }
+      ],
+      "exports": [
+        "test_default_run_store_follows_persistent_home",
+        "test_dashboard_sections_aggregate_local_state",
+        "test_dashboard_rejects_unknown_section",
+        "test_empty_runs_are_explicit"
+      ],
+      "totalLines": 107,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_playbook.py": {
+      "filePath": "tests/test_playbook.py",
+      "contentHash": "7aec1727bceb6f035aedec1fffae0baafdd61d94d45dc945ea5f7632747b1132",
+      "functions": [
+        {
+          "name": "write_playbook",
+          "params": [
+            "path",
+            "live",
+            "on_error"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "test_validate_dry_run_execute_and_live_confirmation",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "test_validation_blocks_meta_commands_and_scheduler_runs_due",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 29
+        },
+        {
+          "name": "test_playbook_and_schedule_cli_contract",
+          "params": [
+            "tmp_path"
+          ],
+          "exported": true,
+          "lineCount": 50
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "kx_defender.playbook",
+          "specifiers": [
+            "PlaybookError",
+            "PlaybookRunner"
+          ]
+        },
+        {
+          "source": "kx_defender.scheduler",
+          "specifiers": [
+            "ScheduleStore"
+          ]
+        }
+      ],
+      "exports": [
+        "write_playbook",
+        "test_validate_dry_run_execute_and_live_confirmation",
+        "test_validation_blocks_meta_commands_and_scheduler_runs_due",
+        "test_playbook_and_schedule_cli_contract"
+      ],
+      "totalLines": 149,
+      "hasStructuralAnalysis": true
+    },
+    "tests/test_system.py": {
+      "filePath": "tests/test_system.py",
+      "contentHash": "7a7e43367d8f3c5fef84a008dda9ba4ea65ce64f2817475beb94cab3e629f6d0",
+      "functions": [
+        {
+          "name": "test_kxsig_hits_lab_marker",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_kxscore_flags_encoded_powershell",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_watch_live_lists_processes",
+          "params": [],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_sig_scan_simulate",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_kill_simulate",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_sweep_html_report",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "test_api_kx_endpoint",
+          "params": [],
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "threading",
+          "specifiers": [
+            "threading"
+          ]
+        },
+        {
+          "source": "http.client",
+          "specifiers": [
+            "HTTPConnection"
+          ]
+        },
+        {
+          "source": "kx_defender.api",
+          "specifiers": [
+            "KxAPIHandler",
+            "serve"
+          ]
+        },
+        {
+          "source": "kx_defender.kxlang",
+          "specifiers": [
+            "parse_line"
+          ]
+        },
+        {
+          "source": "kx_defender.orchestrator",
+          "specifiers": [
+            "Orchestrator"
+          ]
+        },
+        {
+          "source": "modules.engines.kxscore",
+          "specifiers": [
+            "score_process"
+          ]
+        },
+        {
+          "source": "modules.engines.kxsig",
+          "specifiers": [
+            "scan_text"
+          ]
+        },
+        {
+          "source": "modules.engines.report",
+          "specifiers": [
+            "findings_report"
+          ]
+        }
+      ],
+      "exports": [
+        "test_kxsig_hits_lab_marker",
+        "test_kxscore_flags_encoded_powershell",
+        "test_watch_live_lists_processes",
+        "test_sig_scan_simulate",
+        "test_kill_simulate",
+        "test_sweep_html_report",
+        "test_api_kx_endpoint"
+      ],
+      "totalLines": 82,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

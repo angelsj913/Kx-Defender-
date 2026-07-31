@@ -11,3 +11,4 @@ data/*.db
 node_modules/
 package-lock.json
 .kx-runtime.json
+.ua/.trash-*/

@@ -1,0 +1,1235 @@
+{
+  "name": "kx-defender",
+  "description": "Kx-Defender는 KxLang 명령 인터페이스, 로컬 오케스트레이션, 내장 공격·방어 시뮬레이션을 제공하는 Windows 친화형 터미널 보안 실습 플랫폼입니다. 참고: 이 프로젝트에는 소스 파일이 100개 넘게 있으므로 더 빠른 분석이 필요하면 하위 디렉터리로 범위를 좁히는 것을 고려하세요.",
+  "languages": [
+    "javascript",
+    "json",
+    "markdown",
+    "mod",
+    "powershell",
+    "python",
+    "shell",
+    "toml",
+    "txt",
+    "unknown",
+    "yaml"
+  ],
+  "frameworks": [
+    "GitHub Actions",
+    "pytest"
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 28,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/publish-npm.yml",
+      "language": "yaml",
+      "sizeLines": 22,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".ua/.understandignore",
+      "language": "unknown",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/COMMANDS_TREE.md",
+      "language": "markdown",
+      "sizeLines": 344,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "Install-Kx.ps1",
+      "language": "powershell",
+      "sizeLines": 227,
+      "fileCategory": "script"
+    },
+    {
+      "path": "NOTICE",
+      "language": "unknown",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "PRD-KX-DEFENDER-V2.md",
+      "language": "markdown",
+      "sizeLines": 1039,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 285,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "data/.gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/API.md",
+      "language": "markdown",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/COMMANDS_TREE.md",
+      "language": "markdown",
+      "sizeLines": 344,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/EXECUTION_PATHS.md",
+      "language": "markdown",
+      "sizeLines": 362,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/IMPLEMENTATION-PLAN.md",
+      "language": "markdown",
+      "sizeLines": 743,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/KX-COMMANDS.md",
+      "language": "markdown",
+      "sizeLines": 732,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/PROGRAM_GUIDE.md",
+      "language": "markdown",
+      "sizeLines": 285,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/SETUP.md",
+      "language": "markdown",
+      "sizeLines": 10,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/TECHNICAL-APPROACH.md",
+      "language": "markdown",
+      "sizeLines": 1037,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/architecture.md",
+      "language": "markdown",
+      "sizeLines": 137,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/knowledge-graph.json",
+      "language": "json",
+      "sizeLines": 1259,
+      "fileCategory": "config"
+    },
+    {
+      "path": "docs/kxlang.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/policy-self-built.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/prd/kx-cli-stability.md",
+      "language": "markdown",
+      "sizeLines": 208,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/prd/kx-defender-v2.md",
+      "language": "markdown",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/prd/kx-defender-v3.md",
+      "language": "markdown",
+      "sizeLines": 179,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "fixtures/ad/spns.json",
+      "language": "json",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/catalog/kxlang_lexicon.json",
+      "language": "json",
+      "sizeLines": 228,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/catalog/param_schema.json",
+      "language": "json",
+      "sizeLines": 123,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/catalog/skills.json",
+      "language": "json",
+      "sizeLines": 1314,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/dpapi/secrets.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/engagement/lab.example.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "fixtures/llm/fixture_responses.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/llm/payloads.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/playbooks/daily-local-check.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "fixtures/wifi/handshake.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "fixtures/wifi/wordlist.txt",
+      "language": "txt",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "go.mod",
+      "language": "mod",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "modules/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/c2.py",
+      "language": "python",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/device_code.py",
+      "language": "python",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/dpapi.py",
+      "language": "python",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/kerberoasting.py",
+      "language": "python",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/llm_redteam.py",
+      "language": "python",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/ntlm_relay.py",
+      "language": "python",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/web_scanner.py",
+      "language": "python",
+      "sizeLines": 217,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/attack/wifi.py",
+      "language": "python",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/catalog/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/catalog/factory.py",
+      "language": "python",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/catalog/handlers.py",
+      "language": "python",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/defense/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/defense/process_kill.py",
+      "language": "python",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/defense/process_monitor.py",
+      "language": "python",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/defense/sig_scan.py",
+      "language": "python",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/kxaction.py",
+      "language": "python",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/kxscore.py",
+      "language": "python",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/kxsig.py",
+      "language": "python",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/kxwatch.py",
+      "language": "python",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/nexus_store.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "modules/engines/report.py",
+      "language": "python",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 55,
+      "fileCategory": "config"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 29,
+      "fileCategory": "config"
+    },
+    {
+      "path": "requirements.txt",
+      "language": "txt",
+      "sizeLines": 0,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "rules/kxsig/core.json",
+      "language": "json",
+      "sizeLines": 123,
+      "fileCategory": "config"
+    },
+    {
+      "path": "rules/kxsig/user/.gitkeep",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/Install-Kx.ps1",
+      "language": "powershell",
+      "sizeLines": 3,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/banner.js",
+      "language": "javascript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/install-agent-skills.js",
+      "language": "javascript",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-auth.js",
+      "language": "javascript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-client.js",
+      "language": "javascript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-command-store.js",
+      "language": "javascript",
+      "sizeLines": 276,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-doctor.js",
+      "language": "javascript",
+      "sizeLines": 681,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-release.js",
+      "language": "javascript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-security.js",
+      "language": "javascript",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-shell.js",
+      "language": "javascript",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-tui.js",
+      "language": "javascript",
+      "sizeLines": 373,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/kx-update.js",
+      "language": "javascript",
+      "sizeLines": 391,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/npm-cli.js",
+      "language": "javascript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/npm-kx.js",
+      "language": "javascript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/npm-setup.js",
+      "language": "javascript",
+      "sizeLines": 554,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/npm-test.js",
+      "language": "javascript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/npx-entry.js",
+      "language": "javascript",
+      "sizeLines": 450,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/publish-npm.ps1",
+      "language": "powershell",
+      "sizeLines": 26,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/publish-npm.sh",
+      "language": "shell",
+      "sizeLines": 9,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/terminal-ui.js",
+      "language": "javascript",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-command-store.js",
+      "language": "javascript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-doctor.js",
+      "language": "javascript",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-package.js",
+      "language": "javascript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-release-state.js",
+      "language": "javascript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-security.js",
+      "language": "javascript",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/test-terminal-ui.js",
+      "language": "javascript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/uninstall-kx.ps1",
+      "language": "powershell",
+      "sizeLines": 28,
+      "fileCategory": "script"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/__init__.py",
+      "language": "python",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/alert_store.py",
+      "language": "python",
+      "sizeLines": 462,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/alerts.py",
+      "language": "python",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/api.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/auth.py",
+      "language": "python",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/base.py",
+      "language": "python",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/baseline.py",
+      "language": "python",
+      "sizeLines": 298,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/cli.py",
+      "language": "python",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/daemon.py",
+      "language": "python",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/evidence.py",
+      "language": "python",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/helptext.py",
+      "language": "python",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/i18n.py",
+      "language": "python",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/kx_cli.py",
+      "language": "python",
+      "sizeLines": 1233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/kx_runner.py",
+      "language": "python",
+      "sizeLines": 353,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/kxlang.py",
+      "language": "python",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/kxsig_workbench.py",
+      "language": "python",
+      "sizeLines": 317,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/operations.py",
+      "language": "python",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/orchestrator.py",
+      "language": "python",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/paramform.py",
+      "language": "python",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/playbook.py",
+      "language": "python",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/registry.py",
+      "language": "python",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/render.py",
+      "language": "python",
+      "sizeLines": 369,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/report.py",
+      "language": "python",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/result.py",
+      "language": "python",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/scheduler.py",
+      "language": "python",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/store.py",
+      "language": "python",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "services/orchestrator/kx_defender/watcher.py",
+      "language": "python",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "skills/kx-attack-c2/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-device_code/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-dpapi/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-kerberoasting/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-llm_redteam/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-ntlm_relay/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-web_scanner/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-attack-wifi/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 23,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-catalog-attack/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kx-catalog-defense/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "skills/kxlang/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/core/defense/behavior_analyzer.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/defense/process_monitor.ps1",
+      "language": "powershell",
+      "sizeLines": 0,
+      "fileCategory": "script"
+    },
+    {
+      "path": "src/core/defense/process_terminator.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/core/defense/yara_engine.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_ad_wifi_c2.py",
+      "language": "python",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_alert_store.py",
+      "language": "python",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_auth.py",
+      "language": "python",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_baseline.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_catalog.py",
+      "language": "python",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_evidence.py",
+      "language": "python",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_human_output.py",
+      "language": "python",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_kxlang.py",
+      "language": "python",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_kxsig_workbench.py",
+      "language": "python",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_local_execute.py",
+      "language": "python",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_modules_simulate.py",
+      "language": "python",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_operations.py",
+      "language": "python",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_playbook.py",
+      "language": "python",
+      "sizeLines": 148,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_system.py",
+      "language": "python",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 150,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "moderate",
+  "importMap": {
+    ".github/workflows/ci.yml": [],
+    ".github/workflows/publish-npm.yml": [],
+    ".ua/.understandignore": [],
+    ".ua/COMMANDS_TREE.md": [],
+    ".ua/config.json": [],
+    "Install-Kx.ps1": [],
+    "NOTICE": [],
+    "PRD-KX-DEFENDER-V2.md": [],
+    "README.md": [],
+    "data/.gitkeep": [],
+    "docs/API.md": [],
+    "docs/COMMANDS_TREE.md": [],
+    "docs/CONTRIBUTING.md": [],
+    "docs/EXECUTION_PATHS.md": [],
+    "docs/IMPLEMENTATION-PLAN.md": [],
+    "docs/KX-COMMANDS.md": [],
+    "docs/PROGRAM_GUIDE.md": [],
+    "docs/SETUP.md": [],
+    "docs/TECHNICAL-APPROACH.md": [],
+    "docs/architecture.md": [],
+    "docs/knowledge-graph.json": [],
+    "docs/kxlang.md": [],
+    "docs/policy-self-built.md": [],
+    "docs/prd/kx-cli-stability.md": [],
+    "docs/prd/kx-defender-v2.md": [],
+    "docs/prd/kx-defender-v3.md": [],
+    "fixtures/ad/spns.json": [],
+    "fixtures/catalog/kxlang_lexicon.json": [],
+    "fixtures/catalog/param_schema.json": [],
+    "fixtures/catalog/skills.json": [],
+    "fixtures/dpapi/secrets.json": [],
+    "fixtures/engagement/lab.example.txt": [],
+    "fixtures/llm/fixture_responses.json": [],
+    "fixtures/llm/payloads.json": [],
+    "fixtures/playbooks/daily-local-check.json": [],
+    "fixtures/wifi/handshake.txt": [],
+    "fixtures/wifi/wordlist.txt": [],
+    "go.mod": [],
+    "modules/__init__.py": [],
+    "modules/attack/__init__.py": [],
+    "modules/attack/c2.py": [
+      "modules/engines/nexus_store.py"
+    ],
+    "modules/attack/device_code.py": [],
+    "modules/attack/dpapi.py": [],
+    "modules/attack/kerberoasting.py": [],
+    "modules/attack/llm_redteam.py": [],
+    "modules/attack/ntlm_relay.py": [],
+    "modules/attack/web_scanner.py": [
+      "modules/engines/report.py"
+    ],
+    "modules/attack/wifi.py": [],
+    "modules/catalog/__init__.py": [
+      "modules/catalog/factory.py"
+    ],
+    "modules/catalog/factory.py": [
+      "modules/catalog/handlers.py"
+    ],
+    "modules/catalog/handlers.py": [
+      "modules/attack/c2.py",
+      "modules/attack/device_code.py",
+      "modules/attack/dpapi.py",
+      "modules/attack/kerberoasting.py",
+      "modules/attack/llm_redteam.py",
+      "modules/attack/ntlm_relay.py",
+      "modules/attack/web_scanner.py",
+      "modules/attack/wifi.py"
+    ],
+    "modules/defense/__init__.py": [],
+    "modules/defense/process_kill.py": [
+      "modules/engines/kxaction.py"
+    ],
+    "modules/defense/process_monitor.py": [
+      "modules/engines/kxscore.py",
+      "modules/engines/kxwatch.py"
+    ],
+    "modules/defense/sig_scan.py": [
+      "modules/engines/kxsig.py"
+    ],
+    "modules/engines/__init__.py": [],
+    "modules/engines/kxaction.py": [],
+    "modules/engines/kxscore.py": [],
+    "modules/engines/kxsig.py": [],
+    "modules/engines/kxwatch.py": [],
+    "modules/engines/nexus_store.py": [],
+    "modules/engines/report.py": [],
+    "package.json": [],
+    "pyproject.toml": [],
+    "requirements.txt": [],
+    "rules/kxsig/core.json": [],
+    "rules/kxsig/user/.gitkeep": [],
+    "scripts/Install-Kx.ps1": [],
+    "scripts/banner.js": [],
+    "scripts/install-agent-skills.js": [],
+    "scripts/kx-auth.js": [],
+    "scripts/kx-client.js": [
+      "scripts/kx-tui.js"
+    ],
+    "scripts/kx-command-store.js": [],
+    "scripts/kx-doctor.js": [
+      "scripts/kx-update.js"
+    ],
+    "scripts/kx-release.js": [],
+    "scripts/kx-security.js": [
+      "scripts/kx-auth.js"
+    ],
+    "scripts/kx-shell.js": [
+      "scripts/banner.js",
+      "scripts/npm-setup.js"
+    ],
+    "scripts/kx-tui.js": [
+      "scripts/kx-auth.js",
+      "scripts/kx-command-store.js",
+      "scripts/kx-doctor.js",
+      "scripts/kx-release.js",
+      "scripts/kx-security.js",
+      "scripts/kx-shell.js",
+      "scripts/kx-update.js",
+      "scripts/npm-setup.js",
+      "scripts/terminal-ui.js"
+    ],
+    "scripts/kx-update.js": [
+      "scripts/kx-release.js"
+    ],
+    "scripts/npm-cli.js": [
+      "scripts/npm-kx.js",
+      "scripts/npm-setup.js",
+      "scripts/npx-entry.js"
+    ],
+    "scripts/npm-kx.js": [
+      "scripts/kx-command-store.js",
+      "scripts/kx-doctor.js",
+      "scripts/kx-shell.js",
+      "scripts/kx-update.js",
+      "scripts/npm-setup.js"
+    ],
+    "scripts/npm-setup.js": [
+      "package.json"
+    ],
+    "scripts/npm-test.js": [
+      "scripts/npm-setup.js"
+    ],
+    "scripts/npx-entry.js": [
+      "scripts/banner.js",
+      "scripts/install-agent-skills.js",
+      "scripts/kx-doctor.js",
+      "scripts/kx-shell.js",
+      "scripts/kx-tui.js",
+      "scripts/kx-update.js",
+      "scripts/npm-setup.js"
+    ],
+    "scripts/publish-npm.ps1": [],
+    "scripts/publish-npm.sh": [],
+    "scripts/terminal-ui.js": [
+      "scripts/banner.js"
+    ],
+    "scripts/test-command-store.js": [
+      "scripts/kx-command-store.js"
+    ],
+    "scripts/test-doctor.js": [
+      "package.json",
+      "scripts/kx-doctor.js"
+    ],
+    "scripts/test-package.js": [
+      "scripts/npm-setup.js"
+    ],
+    "scripts/test-release-state.js": [
+      "scripts/kx-release.js",
+      "scripts/kx-update.js"
+    ],
+    "scripts/test-security.js": [
+      "scripts/kx-auth.js",
+      "scripts/kx-security.js"
+    ],
+    "scripts/test-terminal-ui.js": [
+      "package.json",
+      "scripts/kx-shell.js",
+      "scripts/kx-tui.js",
+      "scripts/kx-update.js",
+      "scripts/npm-setup.js",
+      "scripts/terminal-ui.js"
+    ],
+    "scripts/uninstall-kx.ps1": [],
+    "services/orchestrator/kx_defender/__init__.py": [],
+    "services/orchestrator/kx_defender/alert_store.py": [],
+    "services/orchestrator/kx_defender/alerts.py": [],
+    "services/orchestrator/kx_defender/api.py": [
+      "services/orchestrator/kx_defender/kxlang.py",
+      "services/orchestrator/kx_defender/orchestrator.py"
+    ],
+    "services/orchestrator/kx_defender/auth.py": [],
+    "services/orchestrator/kx_defender/base.py": [
+      "services/orchestrator/kx_defender/auth.py",
+      "services/orchestrator/kx_defender/result.py"
+    ],
+    "services/orchestrator/kx_defender/baseline.py": [],
+    "services/orchestrator/kx_defender/cli.py": [
+      "services/orchestrator/kx_defender/orchestrator.py"
+    ],
+    "services/orchestrator/kx_defender/daemon.py": [
+      "services/orchestrator/kx_defender/alerts.py"
+    ],
+    "services/orchestrator/kx_defender/evidence.py": [
+      "services/orchestrator/kx_defender/alert_store.py",
+      "services/orchestrator/kx_defender/store.py"
+    ],
+    "services/orchestrator/kx_defender/helptext.py": [
+      "services/orchestrator/kx_defender/kxlang.py"
+    ],
+    "services/orchestrator/kx_defender/i18n.py": [],
+    "services/orchestrator/kx_defender/kx_cli.py": [
+      "services/orchestrator/kx_defender/helptext.py",
+      "services/orchestrator/kx_defender/i18n.py",
+      "services/orchestrator/kx_defender/kxlang.py",
+      "services/orchestrator/kx_defender/orchestrator.py",
+      "services/orchestrator/kx_defender/paramform.py",
+      "services/orchestrator/kx_defender/render.py"
+    ],
+    "services/orchestrator/kx_defender/kx_runner.py": [
+      "services/orchestrator/kx_defender/base.py",
+      "services/orchestrator/kx_defender/kxlang.py",
+      "services/orchestrator/kx_defender/orchestrator.py",
+      "services/orchestrator/kx_defender/result.py"
+    ],
+    "services/orchestrator/kx_defender/kxlang.py": [],
+    "services/orchestrator/kx_defender/kxsig_workbench.py": [],
+    "services/orchestrator/kx_defender/operations.py": [
+      "services/orchestrator/kx_defender/alert_store.py",
+      "services/orchestrator/kx_defender/daemon.py",
+      "services/orchestrator/kx_defender/kxsig_workbench.py",
+      "services/orchestrator/kx_defender/store.py"
+    ],
+    "services/orchestrator/kx_defender/orchestrator.py": [
+      "services/orchestrator/kx_defender/auth.py",
+      "services/orchestrator/kx_defender/registry.py",
+      "services/orchestrator/kx_defender/result.py",
+      "services/orchestrator/kx_defender/store.py"
+    ],
+    "services/orchestrator/kx_defender/paramform.py": [],
+    "services/orchestrator/kx_defender/playbook.py": [
+      "services/orchestrator/kx_defender/kxlang.py"
+    ],
+    "services/orchestrator/kx_defender/registry.py": [
+      "modules/attack/c2.py",
+      "modules/attack/device_code.py",
+      "modules/attack/dpapi.py",
+      "modules/attack/kerberoasting.py",
+      "modules/attack/llm_redteam.py",
+      "modules/attack/ntlm_relay.py",
+      "modules/attack/web_scanner.py",
+      "modules/attack/wifi.py",
+      "modules/catalog/factory.py",
+      "modules/defense/process_kill.py",
+      "modules/defense/process_monitor.py",
+      "modules/defense/sig_scan.py",
+      "services/orchestrator/kx_defender/base.py"
+    ],
+    "services/orchestrator/kx_defender/render.py": [],
+    "services/orchestrator/kx_defender/report.py": [
+      "services/orchestrator/kx_defender/alerts.py"
+    ],
+    "services/orchestrator/kx_defender/result.py": [],
+    "services/orchestrator/kx_defender/scheduler.py": [
+      "services/orchestrator/kx_defender/playbook.py"
+    ],
+    "services/orchestrator/kx_defender/store.py": [
+      "services/orchestrator/kx_defender/result.py"
+    ],
+    "services/orchestrator/kx_defender/watcher.py": [
+      "services/orchestrator/kx_defender/alerts.py",
+      "services/orchestrator/kx_defender/orchestrator.py"
+    ],
+    "skills/kx-attack-c2/SKILL.md": [],
+    "skills/kx-attack-device_code/SKILL.md": [],
+    "skills/kx-attack-dpapi/SKILL.md": [],
+    "skills/kx-attack-kerberoasting/SKILL.md": [],
+    "skills/kx-attack-llm_redteam/SKILL.md": [],
+    "skills/kx-attack-ntlm_relay/SKILL.md": [],
+    "skills/kx-attack-web_scanner/SKILL.md": [],
+    "skills/kx-attack-wifi/SKILL.md": [],
+    "skills/kx-catalog-attack/SKILL.md": [],
+    "skills/kx-catalog-defense/SKILL.md": [],
+    "skills/kxlang/SKILL.md": [],
+    "src/core/defense/behavior_analyzer.py": [],
+    "src/core/defense/process_monitor.ps1": [],
+    "src/core/defense/process_terminator.py": [],
+    "src/core/defense/yara_engine.py": [],
+    "tests/test_ad_wifi_c2.py": [],
+    "tests/test_alert_store.py": [],
+    "tests/test_auth.py": [],
+    "tests/test_baseline.py": [],
+    "tests/test_catalog.py": [
+      "modules/catalog/factory.py"
+    ],
+    "tests/test_evidence.py": [],
+    "tests/test_human_output.py": [],
+    "tests/test_kxlang.py": [],
+    "tests/test_kxsig_workbench.py": [],
+    "tests/test_local_execute.py": [],
+    "tests/test_modules_simulate.py": [],
+    "tests/test_operations.py": [],
+    "tests/test_playbook.py": [],
+    "tests/test_system.py": [
+      "modules/engines/kxscore.py",
+      "modules/engines/kxsig.py",
+      "modules/engines/report.py"
+    ]
+  }
+}
