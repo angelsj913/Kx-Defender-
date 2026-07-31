@@ -66,6 +66,12 @@ assert.strictEqual(
   "absolute executable paths must not be parsed by cmd.exe"
 );
 assert.strictEqual(spawnOptions("git", { platform: "win32" }).shell, true);
+const updaterSource = fs.readFileSync(path.join(__dirname, "kx-update.js"), "utf8");
+assert.match(
+  updaterSource,
+  /reset", "--hard", "FETCH_HEAD"/,
+  "updater must work when the fetched branch has no local tracking ref"
+);
 assert.deepStrictEqual(buildCliArgs(["sentry"]), ["--pretty", "sentry"]);
 assert.deepStrictEqual(
   buildCliArgs(["report", "--json"]),

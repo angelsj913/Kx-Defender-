@@ -59,7 +59,7 @@ function updateFromGit() {
   } else {
     log(`Pulling latest (${BRANCH}) in ${APP}`);
     run("git", ["-C", APP, "fetch", "origin", BRANCH]);
-    run("git", ["-C", APP, "reset", "--hard", `origin/${BRANCH}`]);
+    run("git", ["-C", APP, "reset", "--hard", "FETCH_HEAD"]);
   }
 }
 
