@@ -1,159 +1,232 @@
 "use strict";
 
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
 const readline = require("readline");
 const { spawnSync } = require("child_process");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
 const { login, handleAuthCmd, load: loadUsers } = require("./kx-auth");
+const {
+  clearScreen,
+  colorEnabled,
+  promptPrefix,
+  renderDashboard,
+  renderLoading,
+  renderPromptBottom,
+  renderPromptTop,
+} = require("./terminal-ui");
 
-const C = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  fg: "\x1b[38;2;186;230;236m",
-  accent: "\x1b[38;2;0;255;208m",
-  warn: "\x1b[38;2;255;176;0m",
-  ok: "\x1b[38;2;0;255;136m",
-  mute: "\x1b[38;2;70;100;110m",
+const TEXT = {
+  en: {
+    loading: [
+      "Starting secure session",
+      "Preparing local runtime",
+      "Loading security engines",
+      "Restoring operator settings",
+      "Ready",
+    ],
+    closed: "Session closed.",
+    language: "Language changed to English.",
+    languageHelp: "Use: lang en | lang ko",
+  },
+  ko: {
+    loading: [
+      "보안 세션을 시작하는 중",
+      "로컬 실행 환경을 준비하는 중",
+      "보안 엔진을 불러오는 중",
+      "사용자 설정을 복원하는 중",
+      "준비 완료",
+    ],
+    closed: "세션을 종료했습니다.",
+    language: "언어를 한국어로 변경했습니다.",
+    languageHelp: "사용법: lang en | lang ko",
+  },
 };
 
-const LOGO = [
-  "██╗  ██╗██╗  ██╗",
-  "██║ ██╔╝╚██╗██╔╝",
-  "█████╔╝  ╚███╔╝ ",
-  "██╔═██╗  ██╔██╗ ",
-  "██║  ██╗██╔╝ ██╗",
-  "╚═╝  ╚═╝╚═╝  ╚═╝",
-];
-
-function primaryIpv4() {
-  const ifaces = os.networkInterfaces() || {};
-  for (const list of Object.values(ifaces)) {
-    for (const a of list || []) {
-      if (!a.internal && a.family === "IPv4") return a.address;
-    }
-  }
-  return "0.0.0.0";
+function size() {
+  return {
+    width: Math.max(40, process.stdout.columns || 80),
+    height: Math.max(16, process.stdout.rows || 30),
+  };
 }
 
-function memPct() {
-  const t = os.totalmem();
-  const f = os.freemem();
-  return Math.round(((t - f) / t) * 100);
-}
-
-function centerLogo() {
-  const width = process.stdout.columns || 80;
-  const pad = " ".repeat(Math.max(0, Math.floor((width - 18) / 2)));
-  process.stdout.write("\n\n\n");
-  for (const line of LOGO) {
-    process.stdout.write(`${pad}${C.accent}${C.bold}${line}${C.reset}\n`);
-  }
-  process.stdout.write("\n");
-}
-
-function step(msg) {
-  process.stdout.write(`  ${C.mute}▸ ${msg}${C.reset}   \r`);
-}
-
-function stepDone(msg) {
-  process.stdout.write(`  ${C.ok}✓ ${msg}${C.reset}   \n`);
-}
-
-function printBanner() {
-  const line = "─".repeat(50);
-  process.stdout.write("\n");
-  for (const l of LOGO) {
-    process.stdout.write(`  ${C.accent}${C.bold}${l}${C.reset}\n`);
-  }
-  process.stdout.write(`\n  ${C.mute}KX DEFCOM  ·  OPERATOR CLIENT  ·  v${SETUP_VERSION}${C.reset}\n`);
-  process.stdout.write(`${C.fg}${line}${C.reset}\n`);
-  process.stdout.write(
-    `  ${C.warn}SYS ${os.hostname()}  CPU ${os.cpus()?.length || 0}  RAM ${memPct()}%  LINK ${primaryIpv4()}  ${os.platform()}/${os.arch()}${C.reset}\n`
-  );
-  process.stdout.write(`${C.fg}${line}${C.reset}\n\n`);
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function runCmd(args, lang) {
   const state = readState();
-  const env = { ...process.env, KX_LANG: lang, PYTHONUTF8: "1", PYTHONIOENCODING: "utf-8" };
+  const env = {
+    ...process.env,
+    KX_LANG: lang,
+    PYTHONUTF8: "1",
+    PYTHONIOENCODING: "utf-8",
+  };
   const code = "import sys; from kx_defender.kx_cli import main; sys.argv=['kx']+sys.argv[1:]; main()";
   const pyExe = state?.python || (isWin() ? "python" : "python3");
-  return spawnSync(pyExe, ["-c", code, ...args], {
-    cwd: ROOT, stdio: "inherit", shell: false, windowsHide: true, env,
+  const machineReadable = args.includes("--json");
+  const interactive = args[0] === "ask";
+  const cliArgs = machineReadable ? args.filter((arg) => arg !== "--json") : ["--pretty", ...args];
+  const options = {
+    cwd: ROOT,
+    shell: false,
+    windowsHide: true,
+    env,
+  };
+
+  if (interactive) {
+    return spawnSync(pyExe, ["-c", code, ...cliArgs], { ...options, stdio: "inherit" });
+  }
+  return spawnSync(pyExe, ["-c", code, ...cliArgs], {
+    ...options,
+    encoding: "utf8",
+    stdio: ["inherit", "pipe", "pipe"],
   });
 }
 
 class KxClient {
-  constructor() {
+  constructor({ bootstrap = ensureSetup } = {}) {
+    this.bootstrap = bootstrap;
     this.lang = "en";
     this.user = null;
     this.store = null;
+    this.lastResult = "";
+    this.rl = null;
+    this.loading = false;
+    this.frame = 0;
+    this.onResize = () => {
+      if (this.loading || !this.user || !this.rl) return;
+      this.draw();
+      this.showPrompt(true);
+    };
+  }
+
+  renderLoading(percent, label) {
+    const { width } = size();
+    process.stdout.write(clearScreen());
+    process.stdout.write(renderLoading({
+      width,
+      percent,
+      label,
+      frame: this.frame++,
+      color: colorEnabled(),
+    }));
+    process.stdout.write("\n");
+  }
+
+  async pulse(percent, label, frames = 3) {
+    if (!process.stdout.isTTY || process.env.TERM === "dumb") {
+      console.log(`[Kx] ${label} (${percent}%)`);
+      return;
+    }
+    for (let i = 0; i < frames; i++) {
+      this.renderLoading(percent, label);
+      await delay(80);
+    }
+  }
+
+  async loadAfterLogin() {
+    this.loading = true;
+    const labels = TEXT.en.loading;
+    await this.pulse(0, labels[0]);
+    await this.pulse(20, labels[1]);
+    this.renderLoading(45, labels[2]);
+    this.bootstrap();
+    await this.pulse(70, labels[2]);
+    this.store = loadUsers();
+    await this.pulse(90, labels[3]);
+    this.lang = readLang();
+    await this.pulse(100, TEXT[this.lang].loading[4], 2);
+    this.loading = false;
   }
 
   async start() {
-    process.stdout.write("\x1b[2J\x1b[H");
-    centerLogo();
+    process.stdout.write(clearScreen());
+    const { width } = size();
+    process.stdout.write(renderLoading({
+      width,
+      percent: 0,
+      label: "Sign in to continue",
+      frame: 0,
+      color: colorEnabled(),
+    }));
+    process.stdout.write("\n\n");
 
-    step("환경 초기화 중...");
-    ensureSetup();
-    stepDone("환경 준비 완료");
-
-    step("인증 모듈 로드 중...");
     this.store = loadUsers();
-    stepDone("인증 모듈 준비");
-
-    process.stdout.write("\n");
-
     this.user = await login();
-    this.store = loadUsers();
-
-    process.stdout.write("\x1b[2J\x1b[H");
-    this.lang = readLang();
-    printBanner();
-
-    const ko = this.lang === "ko";
-    console.log(`${C.ok}operator client online  [${this.user.username}]${C.reset}`);
-    console.log(ko
-      ? `${C.mute}/h 도움말  ·  update 업데이트  ·  exit 종료${C.reset}\n`
-      : `${C.mute}/h help  ·  update  ·  exit / logout${C.reset}\n`
-    );
-
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-
-    const ask = () => {
-      if (rl.closed) return;
-      rl.question(`${C.accent}${C.bold} kx>${C.reset} `, (line) => {
-        try { this.handle(line, rl); } catch (err) { console.error(`[Kx] ${err.message || err}`); }
-        if (!rl.closed) ask();
-      });
-    };
-
-    rl.on("close", () => { console.log(`\n${C.ok}[Kx] session closed${C.reset}`); process.exit(0); });
-    ask();
+    await this.loadAfterLogin();
+    this.openInput();
   }
 
-  handle(line, rl) {
-    const trimmed = (line || "").trim();
-    if (!trimmed) return;
+  draw() {
+    const { width, height } = size();
+    process.stdout.write(clearScreen());
+    process.stdout.write(renderDashboard({
+      width,
+      height,
+      lang: this.lang,
+      username: this.user.username,
+      result: this.lastResult,
+      version: `v${SETUP_VERSION}`,
+      color: colorEnabled(),
+    }));
+    process.stdout.write("\n");
+  }
 
+  showPrompt(refresh = false) {
+    if (!this.rl || this.rl.closed) return;
+    const { width } = size();
+    process.stdout.write(`${renderPromptTop(width)}\n`);
+    this.rl.setPrompt(promptPrefix(width));
+    this.rl.prompt(refresh);
+  }
+
+  openInput() {
+    this.draw();
+    this.rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: true,
+      historySize: 100,
+      removeHistoryDuplicates: true,
+    });
+    process.stdout.on("resize", this.onResize);
+    this.rl.on("SIGINT", () => {
+      process.exitCode = 130;
+      this.rl.close();
+    });
+    this.rl.on("line", (line) => {
+      const { width } = size();
+      process.stdout.write(`\n${renderPromptBottom(width)}\n`);
+      this.handle(line);
+      if (!this.rl.closed) {
+        this.draw();
+        this.showPrompt();
+      }
+    });
+    this.rl.on("close", () => {
+      process.stdout.removeListener("resize", this.onResize);
+      console.log(`\n[Kx] ${TEXT[this.lang].closed}`);
+    });
+    this.showPrompt();
+  }
+
+  handle(line) {
+    const trimmed = String(line || "").trim();
+    if (!trimmed) return;
     const lower = trimmed.toLowerCase();
-    if (lower === "exit" || lower === "logout" || lower === "quit" || lower === "q") {
-      if (rl) rl.close();
+    if (["exit", "logout", "quit", "q"].includes(lower)) {
+      this.rl.close();
       return;
     }
-    if (lower === "clear" || lower === "cls") {
-      process.stdout.write("\x1b[2J\x1b[H");
+    if (["clear", "cls"].includes(lower)) {
+      this.lastResult = "";
       return;
     }
 
     let args = splitArgs(trimmed);
-    if (args[0] && args[0].toLowerCase() === "kx") args = args.slice(1);
+    if (args[0]?.toLowerCase() === "kx") args = args.slice(1);
     if (!args.length) args = ["/h"];
-
-    const head = (args[0] || "").toLowerCase();
+    const head = String(args[0] || "").toLowerCase();
 
     if (["users", "useradd", "userdel", "passwd"].includes(head)) {
       this.store = loadUsers();
@@ -161,45 +234,60 @@ class KxClient {
       return;
     }
 
-    if (head === "lang" || head === "language" || head === "locale" || args[0] === "언어") {
-      if (args.length < 2) {
-        console.log(this.lang === "ko" ? `언어: ${this.lang} (한국어)` : `language: ${this.lang} (English)`);
-      } else {
-        const raw = String(args[1]).toLowerCase();
-        let next = null;
-        if (["ko", "kr", "korean", "kor", "한국어", "한글"].includes(raw)) next = "ko";
-        else if (["en", "english", "eng", "us"].includes(raw)) next = "en";
-        if (!next) console.error("[Kx] use: lang en | lang ko");
-        else {
-          writeLang(next);
-          this.lang = next;
-          console.log(next === "ko" ? "언어가 ko (한국어)(으)로 설정되었습니다." : "language set to en (English)");
-        }
+    if (["lang", "language", "locale", "언어"].includes(head)) {
+      const raw = String(args[1] || "").toLowerCase();
+      const next = ["ko", "kr", "korean", "kor", "한국어", "한국"].includes(raw)
+        ? "ko"
+        : ["en", "english", "eng", "us"].includes(raw) ? "en" : null;
+      if (!next) {
+        this.lastResult = TEXT[this.lang].languageHelp;
+        return;
+      }
+      writeLang(next);
+      this.lang = next;
+      this.lastResult = TEXT[next].language;
+      return;
+    }
+
+    if (["update", "upgrade"].includes(head)) {
+      try {
+        require("./kx-update").updateKx();
+        this.lastResult = this.lang === "ko" ? "업데이트가 완료되었습니다." : "Update completed.";
+      } catch (err) {
+        this.lastResult = `[update] ${err.message || err}`;
       }
       return;
     }
 
-    if (lower === "update" || lower === "kx update" || lower === "upgrade") {
-      try { require("./kx-update").updateKx(); } catch (err) { console.error(`[update] ${err.message || err}`); }
-      return;
-    }
-
-    console.log("");
-    runCmd(args, this.lang);
-    console.log("");
+    const result = runCmd(args, this.lang);
+    const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
+    this.lastResult = output || (
+      result.status === 0
+        ? (this.lang === "ko" ? "명령을 완료했습니다." : "Command completed.")
+        : (this.lang === "ko" ? `명령 실패 (코드 ${result.status ?? 1})` : `Command failed (code ${result.status ?? 1}).`)
+    );
   }
 }
 
-function startKxTui() {
-  const ui = new KxClient();
-  ui.start().catch((err) => { console.error(`[Kx] ${err.message || err}`); process.exit(1); });
+function startKxTui(options) {
+  const ui = new KxClient(options);
+  ui.start().catch((err) => {
+    console.error(`[Kx] ${err.message || err}`);
+    process.exitCode = 1;
+  });
+  return ui;
 }
 
-function startEdexShell() { startKxTui(); }
-function startKxClient() { startKxTui(); }
+function startEdexShell(options) { return startKxTui(options); }
+function startKxClient(options) { return startKxTui(options); }
 
-module.exports = { startKxTui, startEdexShell, startKxClient, KxClient, EdexShell: KxClient };
+module.exports = {
+  startKxTui,
+  startEdexShell,
+  startKxClient,
+  KxClient,
+  EdexShell: KxClient,
+  runCmd,
+};
 
-if (require.main === module) {
-  startKxTui();
-}
+if (require.main === module) startKxTui();

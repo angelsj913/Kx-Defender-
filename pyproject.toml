@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kx-defender"
-version = "0.1.1"
+version = "0.4.0"
 description = "Kx-Defender self-built attack/defense platform (KxLang, no external security tools)"
 readme = "README.md"
 requires-python = ">=3.9"

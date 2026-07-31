@@ -1,6 +1,6 @@
 {
   "name": "kx-defender",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Kx DEFCOM native operator client — npx -y --prefer-online angelsj913/Kx-Defender-",
   "license": "Apache-2.0",
   "main": "scripts/npx-entry.js",

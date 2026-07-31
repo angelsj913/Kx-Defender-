@@ -207,6 +207,15 @@ function doSkillInstall(flags) {
   console.log("Done.");
 }
 
+function startInteractive() {
+  startEdexShell({
+    bootstrap() {
+      ensureSetup();
+      installUserShims();
+    },
+  });
+}
+
 function runProgram(flags, { withSkills = false } = {}) {
   if (withSkills || flags.all || flags.global) {
     try {
@@ -215,14 +224,14 @@ function runProgram(flags, { withSkills = false } = {}) {
       console.error(`[Kx] skill install skipped: ${err.message || err}`);
     }
   }
-  ensureSetup();
-  installUserShims();
   if (flags.classic) {
+    ensureSetup();
+    installUserShims();
     printKxBanner();
     startKxShell();
     return;
   }
-  startEdexShell();
+  startInteractive();
 }
 
 function isUpdateArgv(argv) {
@@ -275,9 +284,7 @@ function main() {
       return;
     }
     if ((rest[0] || "").toLowerCase() === "login") {
-      ensureSetup();
-      installUserShims();
-      startEdexShell();
+      startInteractive();
       return;
     }
     ensureSetup();
@@ -292,9 +299,7 @@ function main() {
 
   // login / [login kx] / login-kx → start HUD (re-entry)
   if (isLoginCommand(cmd, rest)) {
-    ensureSetup();
-    installUserShims();
-    startEdexShell();
+    startInteractive();
     return;
   }
 
@@ -306,9 +311,7 @@ function main() {
   }
 
   if (cmd === "hud") {
-    ensureSetup();
-    installUserShims();
-    startEdexShell();
+    startInteractive();
     return;
   }
 

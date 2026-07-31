@@ -376,7 +376,40 @@ def _emit_report(args: list[str]) -> int:
     return 0
 
 
-def _emit_daemon(args: list[str]) -> int:
+def _format_daemon_result(subcommand: str, payload: dict[str, Any]) -> str:
+    """Present daemon state without leaking the internal JSON transport."""
+    ko = get_lang() == "ko"
+    if subcommand == "status":
+        running = bool(payload.get("running"))
+        state = ("실행 중" if running else "중지됨") if ko else ("running" if running else "stopped")
+        reason = payload.get("reason")
+        detail = f"\nReason: {reason}" if reason and not ko else f"\n이유: {reason}" if reason else ""
+        return (f"데몬 상태: {state}" if ko else f"Daemon is {state}") + detail
+    if subcommand == "start":
+        started = bool(payload.get("started"))
+        return (
+            "데몬을 시작했습니다." if started and ko else
+            "데몬 시작에 실패했습니다." if ko else
+            "Daemon started." if started else "Daemon did not start."
+        )
+    if subcommand == "stop":
+        stopped = bool(payload.get("stopped"))
+        return (
+            "데몬을 중지했습니다." if stopped and ko else
+            "데몬이 이미 중지되어 있습니다." if ko else
+            "Daemon stopped." if stopped else "Daemon was already stopped."
+        )
+    if subcommand == "config":
+        cfg = payload.get("config") or {}
+        title = "데몬 설정" if ko else "Daemon configuration"
+        rows = [title, *(f"  {key}: {value}" for key, value in sorted(cfg.items()))]
+        if payload.get("path"):
+            rows.append(f"  {'경로' if ko else 'Path'}: {payload['path']}")
+        return "\n".join(rows)
+    return str(payload)
+
+
+def _emit_daemon(args: list[str], pretty: bool = False) -> int:
     """`kx daemon start|stop|status|config`
 
     Manages the background watcher process. All state local (~/.kx-defender).
@@ -393,18 +426,21 @@ def _emit_daemon(args: list[str]) -> int:
     sub = rest[0].lower()
 
     if sub == "status":
-        _print_json(daemon_status())
+        result = daemon_status()
+        print(_format_daemon_result(sub, result)) if pretty else _print_json(result)
         return 0
 
     if sub == "stop":
-        _print_json(daemon_stop())
+        result = daemon_stop()
+        print(_format_daemon_result(sub, result)) if pretty else _print_json(result)
         return 0
 
     if sub == "config":
         # `kx daemon config` prints; `kx daemon config KEY VALUE ...` sets.
         cfg = load_config()
         if len(rest) == 1:
-            _print_json({"path": str(CONFIG_PATH), "config": cfg})
+            result = {"path": str(CONFIG_PATH), "config": cfg}
+            print(_format_daemon_result(sub, result)) if pretty else _print_json(result)
             return 0
         kv = rest[1:]
         if len(kv) % 2 != 0:
@@ -417,7 +453,8 @@ def _emit_daemon(args: list[str]) -> int:
                 return 2
             cfg[key] = _coerce_value(cfg[key], raw)
         save_config(cfg)
-        _print_json({"path": str(CONFIG_PATH), "config": cfg})
+        result = {"path": str(CONFIG_PATH), "config": cfg}
+        print(_format_daemon_result(sub, result)) if pretty else _print_json(result)
         return 0
 
     if sub == "start":
@@ -433,7 +470,7 @@ def _emit_daemon(args: list[str]) -> int:
         cfg = load_config()
         cfg.update(overrides)
         result = daemon_start(cfg)
-        _print_json(result)
+        print(_format_daemon_result(sub, result)) if pretty else _print_json(result)
         return 0 if result.get("started") else 2
 
     print(f"unknown daemon subcommand: {sub}", file=sys.stderr)
@@ -722,7 +759,7 @@ def main(argv: list[str] | None = None) -> None:
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":
-        raise SystemExit(_emit_daemon(args))
+        raise SystemExit(_emit_daemon(args, pretty=pretty))
 
     # `kx sig import|list|catalog` are meta commands. `kx sig scan|file` are
     # KxLang verb.object invocations and must fall through to parse_argv.

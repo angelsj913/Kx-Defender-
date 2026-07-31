@@ -74,7 +74,7 @@ function readSecret(prompt) {
         // ctrl+c
         if (process.stdin.isTTY) process.stdin.setRawMode(false);
         process.stdout.write("\n");
-        process.exit(0);
+        process.exit(130);
       } else if (code === 127 || code === 8) {
         // backspace / del
         buf = buf.slice(0, -1);

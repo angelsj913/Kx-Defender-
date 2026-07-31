@@ -1,109 +1,100 @@
 # Kx-Defender
 
-Windows-oriented attack + defense platform with proprietary **KxLang/DEFCOM** (`kx`), orchestrator, and in-house modules.
+Kx-Defender is a Windows-friendly terminal security lab with the KxLang command interface, local orchestration, and built-in attack/defense simulations.
 
-License: **Apache-2.0**. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+The interface starts in English. Run `lang ko` after login to switch to Korean; the choice is saved for later sessions.
 
-## KxLang (primary interface)
+## Install and start
 
-```bash
-kx /h
-kx lexicon
-
-# Strike / Sentry
-kx roast tickets --scope lab --realm lab.local --sim
-kx watch procs --scope lab --live
-kx sig scan --scope lab --sim
-kx kill pid --scope lab --pid 4242 --sim
-kx nexus listen --scope lab --bind 127.0.0.1:4455 --live
-kx sweep web --scope owned --url http://127.0.0.1:8080/ --sim
-
-# Console UI
-kx
-```
-
-Full grammar: [`docs/kxlang.md`](docs/kxlang.md)  
-Lexicon: [`fixtures/catalog/kxlang_lexicon.json`](fixtures/catalog/kxlang_lexicon.json)  
-**PRD v3:** [`docs/prd/kx-defender-v3.md`](docs/prd/kx-defender-v3.md)  
-**Architecture:** [`docs/architecture.md`](docs/architecture.md)
-
-| Verb | Meaning |
-|---|---|
-| `sentry` / `trace` / `audit` / `harden` / `triage` / `comply` / `forge` | Defense families |
-| `roast` / `relay` / `loot` / `bait` / `breach` / `crack` | AD / identity / wifi |
-| `nexus` / `graph` / `probe` / `sweep` | C2 listener / Graph mock / LLM / web |
-| `watch` | Process monitor |
-
-Flags: `--scope lab|owned|pact`, `--sim` (default), `--live`, `--at`, `--realm`, `--url`, `--bind`, `--pact-file`
-
-## What this slice includes
-
-### Short aliases (legacy)
-
-| Module | Type | Notes |
-|---|---|---|
-| `kerberoasting` | attack | SPN/TGS lab fixtures |
-| `ntlm_relay` | attack | ESC8 state machine (lab) |
-| `dpapi` | attack | Fixture secret decode (masked) |
-| `device_code` | attack | Mock IdP only (no cloud API keys) |
-| `wifi` | attack | Handshake fixture dictionary crack |
-| `c2` | attack | Listener/session manager only (no implant) |
-| `web_scanner` | attack | Self-built crawler + SQLi/XSS/CSRF |
-| `llm_redteam` | attack | Local payload bank + rule scoring |
-| `process_monitor` | defense | Snapshot stub |
-
-### Full catalog skills (262)
-
-Loaded from [`fixtures/catalog/skills.json`](fixtures/catalog/skills.json):
-
-| Family | Count | Examples |
-|---|---|---|
-| `attack_named` | 10 | Entra(KxBreach), OAuth device-code, Nexus listeners, NTLM ESC8, DPAPI, WiFi, Kerberoasting, KxGraph, KxProbe |
-| `testing_for` | 12 | `testing-for-*` → 자체 KxSweep |
-| `detecting` | 96 | `detecting-*` → 자체 Sentry handlers |
-| `analyzing` | 76 | `analyzing-*` |
-| `auditing` | 12 | `auditing-*` |
-| `securing` | 13 | `securing-*` |
-| `triaging` | 5 | `triaging-*` |
-| `compliance` | 7 | CMMC, PCI-DSS, NERC CIP, ... |
-| `building_defense` | 31 | defensive `building-*` blueprints |
-
-## Install & run (native Operator Client)
+PowerShell:
 
 ```powershell
-npx clear-npx-cache
-npx -y --prefer-online angelsj913/Kx-Defender- update
+npx -y --prefer-online github:angelsj913/Kx-Defender-
+```
+
+The first fresh installation creates this local operator account:
+
+```text
+username: admin
+password: admin
+```
+
+Change the password after login:
+
+```text
+passwd admin <new-password>
+```
+
+Kx-Defender stores its local runtime and settings under `%USERPROFILE%\.kx-defender`. If Python is unavailable, setup downloads a portable Python runtime once.
+
+## Everyday commands
+
+```text
+/h                         Show help
+sentry                     Run the default local detection simulation
+watch procs --scope lab --sim
+sig scan --scope lab --sim
+daemon status              Show background watcher status
+lang ko                    Switch to Korean
+lang en                    Switch to English
+update                     Update from main
+exit                       Close the client
+```
+
+Human-readable output is the interactive default. Use the one-shot CLI without `--pretty` when stable JSON is needed:
+
+```powershell
+kx sentry
+kx --pretty sentry
+```
+
+## Update
+
+Inside the client, run:
+
+```text
+update
+```
+
+Or from PowerShell:
+
+```powershell
+npx -y --prefer-online github:angelsj913/Kx-Defender- update
+```
+
+## Safety model
+
+- Simulation is the default mode.
+- Live execution requires an authorized scope.
+- Only lab, owned, engagement-approved, localhost, RFC1918, `.lab`, `.local`, and `.test` targets are allowed where applicable.
+- Credentials and live service data are not bundled.
+
+## Troubleshooting
+
+If the `kx` command is not available in the current PowerShell session, run:
+
+```powershell
+$env:PATH="$env:LOCALAPPDATA\Kx-Defender\bin;$env:PATH"
 kx
 ```
 
-Primary UI is the **terminal client** (not a web app). Window title: `Kx DEFCOM Client`.
+If setup was interrupted, start the `npx` command again. The installer reuses completed local components.
 
-Also: `irm https://raw.githubusercontent.com/angelsj913/Kx-Defender-/main/Install-Kx.ps1 | iex`
+## Development
 
-If Python is missing, portable CPython is downloaded once to `~/.kx-defender/python`.
-
-### Platform from a clone
-
-```bash
-npm install
-node scripts/npx-entry.js
-# or: node scripts/kx-shell.js
+```powershell
+git clone https://github.com/angelsj913/Kx-Defender-.git
+cd Kx-Defender-
 npm test
+node scripts\npx-entry.js
 ```
 
-## Low-level CLI (`kxctl`)
+The test command validates the terminal renderer, Windows process spawning, authentication, KxLang, and local modules.
 
-Prefer `kx` (KxLang). `kxctl` remains for debugging/module inspection:
+More detail:
 
-```bash
-kxctl modules families
-kxctl modules list --family detecting --names-only
-kxctl skill run attacking-entra-id-with-roadtools --authorized-scope lab --mode simulate --domain contoso.lab.local
-kxctl result list
-```
+- [KxLang grammar](docs/kxlang.md)
+- [Architecture](docs/architecture.md)
+- [License](LICENSE)
 
-### Authorization rules
-
-- `--authorized-scope` is required: `lab | owned | engagement`
-- Default `--mode` is `simulate`
-- `execute` requires localhost / RFC1918 / `.lab` / `.local` / `.test` **or** `--engagement-file` allow-list
+Licensed under Apache-2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).

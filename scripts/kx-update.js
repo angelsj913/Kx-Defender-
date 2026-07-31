@@ -25,10 +25,15 @@ function isWin() {
   return process.platform === "win32";
 }
 
+function spawnOptions(cmd, { platform = process.platform } = {}) {
+  const absolute = path.isAbsolute(cmd) || /^[a-zA-Z]:[\\/]/.test(cmd);
+  return { shell: platform === "win32" && !absolute };
+}
+
 function run(cmd, args, opts = {}) {
   const res = spawnSync(cmd, args, {
     stdio: "inherit",
-    shell: isWin(),
+    ...spawnOptions(cmd),
     windowsHide: true,
     ...opts,
   });
@@ -179,7 +184,15 @@ function getAppRoot() {
   return null;
 }
 
-module.exports = { updateKx, getAppRoot, ensurePersistentInstall, writeShims, APP, HOME };
+module.exports = {
+  updateKx,
+  getAppRoot,
+  ensurePersistentInstall,
+  writeShims,
+  spawnOptions,
+  APP,
+  HOME,
+};
 
 if (require.main === module) {
   try {

@@ -1,26 +1,27 @@
 "use strict";
 
 const { spawnSync } = require("child_process");
-const { ensureSetup, ROOT, isWin, readState } = require("./npm-setup");
+const { ensureSetup, ROOT, readState, spawnOpts } = require("./npm-setup");
+
+const terminal = spawnSync(process.execPath, ["scripts/test-terminal-ui.js"], {
+  cwd: ROOT,
+  stdio: "inherit",
+  shell: false,
+});
+if (terminal.status !== 0) process.exit(terminal.status == null ? 1 : terminal.status);
 
 const runtime = ensureSetup();
 const py = runtime.python || readState().python;
 const pytest = spawnSync(py, ["-c", "import pytest"], {
-  cwd: ROOT,
-  stdio: "ignore",
-  shell: isWin(),
+  ...spawnOpts(py, { cwd: ROOT, stdio: "ignore" }),
 });
 if (pytest.status !== 0) {
   const install = spawnSync(py, ["-m", "pip", "install", "-e", ".[dev]"], {
-    cwd: ROOT,
-    stdio: "inherit",
-    shell: isWin(),
+    ...spawnOpts(py, { cwd: ROOT, stdio: "inherit" }),
   });
   if (install.status !== 0) process.exit(install.status == null ? 1 : install.status);
 }
 const res = spawnSync(py, ["-m", "pytest", "-q"], {
-  cwd: ROOT,
-  stdio: "inherit",
-  shell: isWin(),
+  ...spawnOpts(py, { cwd: ROOT, stdio: "inherit" }),
 });
 process.exit(res.status == null ? 1 : res.status);

@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-__version__ = "0.1.0"
+__version__ = "0.4.0"
 
 # Ensure repo-root `modules/` is importable for editable/CLI installs.
 _REPO_ROOT = Path(__file__).resolve().parents[3]

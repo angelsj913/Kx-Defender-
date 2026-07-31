@@ -285,18 +285,39 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
     scope = str(payload.get("authorized_scope", "?"))
     run_id = str(payload.get("run_id", ""))[:8]
 
-    header = (
-        f"{orange}▸{reset} {accent}{module}{reset}  "
-        f"{muted}status={reset}{status_c}{status}{reset}  "
-        f"{muted}mode={reset}{mode}  "
-        f"{muted}scope={reset}{scope}  "
-        f"{muted}run={reset}{run_id}"
+    findings = payload.get("findings") or []
+    ko = os.environ.get("KX_LANG", "").lower() in {"ko", "kr", "korean"}
+    purpose_label = "목적" if ko else "PURPOSE"
+    why_label = "실행 이유" if ko else "WHY THIS RAN"
+    result_label = "결과" if ko else "RESULT"
+    purpose = (
+        f"{module.replace('-', ' ')} 보안 검사를 수행합니다."
+        if ko else
+        f"Run the {module.replace('-', ' ')} security check."
     )
-
-    parts = [header, ""]
+    why = (
+        f"사용자 요청에 따라 {scope} 범위에서 {mode} 모드로 안전하게 실행했습니다."
+        if ko else
+        f"The command requested a {mode} run within the authorized {scope} scope."
+    )
+    result = (
+        f"상태 {status}; 발견 항목 {len(findings)}개; 실행 ID {run_id or '없음'}."
+        if ko else
+        f"Status {status}; {len(findings)} finding(s); run ID {run_id or 'n/a'}."
+    )
+    parts = [
+        f"{orange}{purpose_label}{reset}",
+        f"  {purpose}",
+        "",
+        f"{orange}{why_label}{reset}",
+        f"  {why}",
+        "",
+        f"{orange}{result_label}{reset}",
+        f"  {status_c}{result}{reset}",
+        "",
+    ]
 
     # Findings
-    findings = payload.get("findings") or []
     if findings:
         parts.append(render_findings(findings, color=color))
 
@@ -314,7 +335,6 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
     # through the wrong renderer.
     artifacts = payload.get("artifacts") or {}
     module_key = module.lower()
-    rendered_widget = False
 
     if module_key == "process_monitor" and isinstance(artifacts.get("processes"), list):
         parts.append(render_process_tree(
@@ -323,7 +343,6 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
             engine=str(artifacts.get("engine") or "KxWatch"),
             color=color,
         ))
-        rendered_widget = True
     elif module_key == "sig_scan" and (artifacts.get("sample_hits") or artifacts.get("file")):
         hits = artifacts.get("sample_hits")
         if hits is None and isinstance(artifacts.get("file"), dict):
@@ -335,14 +354,16 @@ def render_result_text(payload: dict[str, Any], color: bool | None = None) -> st
             engine=str(artifacts.get("engine") or "KxSig"),
             color=color,
         ))
-        rendered_widget = True
 
-    if not rendered_widget and artifacts:
-        parts.append(f"{orange}ARTIFACTS{reset}")
-        # Skip the noisy report_html blob if present
-        preview = {k: v for k, v in artifacts.items() if k != "report_html"}
-        parts.extend(f"  {ln}" for ln in _dump_evidence(preview, use_color))
-        if "report_html" in artifacts:
-            parts.append(f"  {muted}(report_html: {len(artifacts['report_html'])} bytes omitted){reset}")
+    actions = artifacts.get("recommended_actions") or []
+    parts.append(f"{orange}{'다음 조치' if ko else 'NEXT ACTION'}{reset}")
+    if actions:
+        for action in actions[:5]:
+            parts.append(f"  - {action}")
+    else:
+        parts.append(
+            "  결과를 검토하고 필요한 후속 명령을 실행하세요."
+            if ko else "  Review the result and run a follow-up command if needed."
+        )
 
     return "\n".join(parts) + "\n"
