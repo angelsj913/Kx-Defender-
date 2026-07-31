@@ -14,8 +14,8 @@
   },
   "files": [
     "scripts/**",
-    "services/**",
-    "modules/**",
+    "services/**/*.py",
+    "modules/**/*.py",
     "fixtures/**",
     "rules/**",
     "skills/**",

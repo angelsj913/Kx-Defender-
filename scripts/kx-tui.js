@@ -126,7 +126,8 @@ class KxClient {
 
   async loadAfterLogin() {
     this.loading = true;
-    const labels = TEXT.en.loading;
+    this.lang = readLang();
+    const labels = TEXT[this.lang].loading;
     await this.pulse(0, labels[0]);
     await this.pulse(20, labels[1]);
     this.renderLoading(45, labels[2]);
@@ -134,8 +135,7 @@ class KxClient {
     await this.pulse(70, labels[2]);
     this.store = loadUsers();
     await this.pulse(90, labels[3]);
-    this.lang = readLang();
-    await this.pulse(100, TEXT[this.lang].loading[4], 2);
+    await this.pulse(100, labels[4], 2);
     this.loading = false;
   }
 

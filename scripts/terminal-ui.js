@@ -53,13 +53,25 @@ function stringWidth(value) {
 
 function clip(value, maxWidth) {
   if (maxWidth <= 0) return "";
+  const input = String(value || "");
   let out = "";
   let width = 0;
-  for (const ch of stripAnsi(value)) {
+  for (let index = 0; index < input.length;) {
+    if (input[index] === "\x1b") {
+      const match = input.slice(index).match(/^\x1b\[[0-?]*[ -/]*[@-~]/);
+      if (match) {
+        out += match[0];
+        index += match[0].length;
+        continue;
+      }
+    }
+    const cp = input.codePointAt(index);
+    const ch = String.fromCodePoint(cp);
     const next = codePointWidth(ch.codePointAt(0));
     if (width + next > maxWidth) break;
     out += ch;
     width += next;
+    index += ch.length;
   }
   return out;
 }

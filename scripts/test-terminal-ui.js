@@ -43,6 +43,12 @@ for (const width of [60, 72, 80, 100, 140]) {
   assert(lines(loading).every((line) => stringWidth(line) <= width));
 }
 
+assert.match(
+  renderLoading({ width: 80, percent: 20, label: "Loading", frame: 1, color: true }),
+  /\x1b\[/,
+  "TTY loading frames must retain the animated color gradient"
+);
+
 const percents = [0, 20, 45, 70, 90, 100];
 assert.deepStrictEqual([...percents].sort((a, b) => a - b), percents);
 
