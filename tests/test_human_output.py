@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import json
+
+import pytest
+
+from kx_defender.kx_cli import main
 from kx_defender.kx_cli import _format_daemon_result
 from kx_defender.render import render_result_text
 
@@ -39,3 +44,13 @@ def test_daemon_status_has_human_explanation(monkeypatch) -> None:
     assert "Daemon is stopped" in text
     assert "no pid file" in text
     assert not text.lstrip().startswith("{")
+
+
+def test_module_json_escape_hatch(capsys) -> None:
+    with pytest.raises(SystemExit) as exc:
+        main(["sentry", "--json"])
+
+    assert exc.value.code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["status"] == "ok"
+    assert payload["kxlang"]["verb"] == "sentry"

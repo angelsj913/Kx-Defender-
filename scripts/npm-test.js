@@ -10,6 +10,13 @@ const terminal = spawnSync(process.execPath, ["scripts/test-terminal-ui.js"], {
 });
 if (terminal.status !== 0) process.exit(terminal.status == null ? 1 : terminal.status);
 
+const packageTest = spawnSync(process.execPath, ["scripts/test-package.js"], {
+  cwd: ROOT,
+  stdio: "inherit",
+  shell: false,
+});
+if (packageTest.status !== 0) process.exit(packageTest.status == null ? 1 : packageTest.status);
+
 const runtime = ensureSetup();
 const py = runtime.python || readState().python;
 const pytest = spawnSync(py, ["-c", "import pytest"], {

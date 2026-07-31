@@ -53,6 +53,10 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function buildCliArgs(args) {
+  return args.includes("--json") ? [...args] : ["--pretty", ...args];
+}
+
 function runCmd(args, lang) {
   const state = readState();
   const env = {
@@ -63,9 +67,8 @@ function runCmd(args, lang) {
   };
   const code = "import sys; from kx_defender.kx_cli import main; sys.argv=['kx']+sys.argv[1:]; main()";
   const pyExe = state?.python || (isWin() ? "python" : "python3");
-  const machineReadable = args.includes("--json");
   const interactive = args[0] === "ask";
-  const cliArgs = machineReadable ? args.filter((arg) => arg !== "--json") : ["--pretty", ...args];
+  const cliArgs = buildCliArgs(args);
   const options = {
     cwd: ROOT,
     shell: false,
@@ -283,6 +286,7 @@ module.exports = {
   startKxClient,
   KxClient,
   EdexShell: KxClient,
+  buildCliArgs,
   runCmd,
 };
 

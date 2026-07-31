@@ -776,6 +776,9 @@ def main(argv: list[str] | None = None) -> None:
         print("KxLang error: web console removed. Use native client: kx", file=sys.stderr)
         raise SystemExit(2)
 
+    # `--json` is an explicit machine-output escape hatch for commands that
+    # otherwise flow through the interactive client's human-readable default.
+    args = [arg for arg in args if arg != "--json"]
     raise SystemExit(_run_parsed(args, pretty=pretty))
 
 

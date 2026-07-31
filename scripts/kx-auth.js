@@ -8,6 +8,7 @@ const readline = require("readline");
 
 const KX_DIR = path.join(os.homedir(), ".kx-defender");
 const USERS_FILE = path.join(KX_DIR, "users.json");
+let nonTtyLines = null;
 
 function hash(pw) {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -49,6 +50,13 @@ function init() {
 }
 
 function readLine(prompt) {
+  if (!process.stdin.isTTY) {
+    process.stdout.write(prompt);
+    if (nonTtyLines === null) {
+      nonTtyLines = fs.readFileSync(0, "utf8").split(/\r?\n/);
+    }
+    return Promise.resolve(String(nonTtyLines.shift() || "").trim());
+  }
   return new Promise((resolve) => {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout, terminal: true });
     rl.question(prompt, (ans) => { rl.close(); resolve(ans.trim()); });
@@ -56,6 +64,7 @@ function readLine(prompt) {
 }
 
 function readSecret(prompt) {
+  if (!process.stdin.isTTY) return readLine(prompt);
   return new Promise((resolve) => {
     process.stdout.write(prompt);
     let buf = "";
@@ -91,8 +100,10 @@ function readSecret(prompt) {
 
 async function login() {
   const initialPassword = init();
-  const WARN = "\x1b[38;2;255;176;0m";
-  const RESET = "\x1b[0m";
+  const useColor = process.stdout.isTTY && !process.env.NO_COLOR &&
+    !process.env.KX_NO_COLOR && process.env.TERM !== "dumb";
+  const WARN = useColor ? "\x1b[33m" : "";
+  const RESET = useColor ? "\x1b[0m" : "";
 
   if (initialPassword) {
     process.stdout.write(`${WARN}  First-run login: admin / ${initialPassword} (change it after login)${RESET}\n`);

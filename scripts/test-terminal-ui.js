@@ -4,6 +4,7 @@ const assert = require("assert");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const { spawnSync } = require("child_process");
 const {
   clearScreen,
   renderDashboard,
@@ -13,6 +14,7 @@ const {
   stripAnsi,
 } = require("./terminal-ui");
 const { spawnOptions } = require("./kx-update");
+const { buildCliArgs } = require("./kx-tui");
 
 function lines(text) {
   return stripAnsi(text).split(/\r?\n/);
@@ -64,6 +66,12 @@ assert.strictEqual(
   "absolute executable paths must not be parsed by cmd.exe"
 );
 assert.strictEqual(spawnOptions("git", { platform: "win32" }).shell, true);
+assert.deepStrictEqual(buildCliArgs(["sentry"]), ["--pretty", "sentry"]);
+assert.deepStrictEqual(
+  buildCliArgs(["report", "--json"]),
+  ["report", "--json"],
+  "command-level JSON flags must reach the Python CLI"
+);
 
 const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "kx-terminal-test-"));
 const oldConfig = process.env.KX_CONFIG;
@@ -82,6 +90,30 @@ else process.env.KX_CONFIG = oldConfig;
 if (oldLang === undefined) delete process.env.KX_LANG;
 else process.env.KX_LANG = oldLang;
 fs.rmSync(configDir, { recursive: true, force: true });
+
+const authDir = fs.mkdtempSync(path.join(os.tmpdir(), "kx-auth-pipe-test-"));
+const authScript = [
+  "const auth = require(process.argv[1]);",
+  "auth.login().then((user) => {",
+  "  if (user.username !== 'admin') process.exit(2);",
+  "  console.log('LOGIN_OK');",
+  "});",
+].join("\n");
+const authResult = spawnSync(process.execPath, ["-e", authScript, path.join(__dirname, "kx-auth.js")], {
+  input: "admin\nadmin\n",
+  encoding: "utf8",
+  shell: false,
+  env: {
+    ...process.env,
+    HOME: authDir,
+    USERPROFILE: authDir,
+    NO_COLOR: "1",
+  },
+});
+assert.strictEqual(authResult.status, 0, authResult.stderr);
+assert.match(authResult.stdout, /LOGIN_OK/);
+assert.doesNotMatch(authResult.stdout, /\x1b\[/, "NO_COLOR login must not emit ANSI");
+fs.rmSync(authDir, { recursive: true, force: true });
 
 const packageVersion = require("../package.json").version;
 const setupVersion = require("./npm-setup").SETUP_VERSION;
