@@ -195,6 +195,7 @@ const loginRoute = spawnSync(process.execPath, [path.join(__dirname, "npm-kx.js"
     ...process.env,
     HOME: loginRouteDir,
     USERPROFILE: loginRouteDir,
+    LOCALAPPDATA: path.join(loginRouteDir, "LocalAppData"),
     KX_HOME: loginRouteDir,
     KX_DEV: "1",
     NO_COLOR: "1",
