@@ -178,6 +178,38 @@ Baseline files contain hashes and metadata, not passwords or watched-file
 contents. Symbolic links, more than 5,000 files, and hashing files larger than
 50 MiB are rejected or skipped safely.
 
+## Playbooks and schedules
+
+Playbooks are JSON v1 files containing up to 20 validated KxLang steps:
+
+```json
+{
+  "name": "daily-local-check",
+  "version": 1,
+  "steps": [
+    {"run": ["sentry", "--scope", "lab", "--sim"], "timeout": 60},
+    {"run": ["watch", "procs", "--scope", "lab", "--sim"]}
+  ],
+  "on_error": "stop"
+}
+```
+
+```powershell
+kx playbook validate .\daily.json
+kx playbook run .\daily.json --dry-run
+kx playbook run .\daily.json
+kx schedule add daily-check --playbook .\daily.json --daily 09:00
+kx schedule list
+kx schedule disable daily-check
+kx schedule enable daily-check
+```
+
+Steps run sequentially with per-step timeouts and a single-run lock. Meta
+commands cannot appear in playbooks. Live steps require both
+`"allow_live": true` in the file and `--confirm-live` at execution, and live
+playbooks cannot be scheduled. The existing daemon checks due schedules after
+each watcher tick; no OS task or external service is installed.
+
 ## Safety model
 
 - Simulation is the default mode.

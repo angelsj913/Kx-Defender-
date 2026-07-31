@@ -882,6 +882,106 @@ def _emit_baseline(args: list[str]) -> int:
     return 0
 
 
+def _emit_playbook(args: list[str]) -> int:
+    """Validate or run a bounded JSON KxLang playbook."""
+    from kx_defender.playbook import PlaybookError, PlaybookRunner  # noqa: PLC0415
+
+    rest = args[1:]
+    sub = rest[0].lower() if rest else ""
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    runner = PlaybookRunner()
+    try:
+        if sub == "validate":
+            if len(rest) < 2:
+                raise PlaybookError("usage: kx playbook validate <file.json>")
+            result = runner.validate(rest[1])
+            exit_code = 0 if result["valid"] else 2
+        elif sub == "run":
+            if len(rest) < 2:
+                raise PlaybookError(
+                    "usage: kx playbook run <file.json> [--dry-run] [--confirm-live]"
+                )
+            result = runner.run(
+                rest[1],
+                dry_run="--dry-run" in rest,
+                confirm_live="--confirm-live" in rest,
+            )
+            exit_code = 0 if result["status"] in {"ok", "dry-run"} else 2
+        else:
+            raise PlaybookError("use: kx playbook validate|run")
+    except (OSError, PlaybookError) as exc:
+        print(f"Kx playbook error: {exc}", file=sys.stderr)
+        return 2
+    if as_json or sub == "validate" or "--dry-run" in rest:
+        _print_json(result)
+    else:
+        print(
+            f"{result['run_id']}  {result['status']}  "
+            f"steps={len(result['steps'])}  journal={result['journal']}"
+        )
+    return exit_code
+
+
+def _emit_schedule(args: list[str]) -> int:
+    """Manage daily local playbook schedules consumed by the daemon."""
+    from kx_defender.playbook import PlaybookError  # noqa: PLC0415
+    from kx_defender.scheduler import ScheduleStore  # noqa: PLC0415
+
+    rest = args[1:]
+    sub = rest[0].lower() if rest else "list"
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    schedules = ScheduleStore()
+    try:
+        if sub == "add":
+            if len(rest) < 2:
+                raise PlaybookError(
+                    "usage: kx schedule add <name> --playbook <file> --daily HH:MM"
+                )
+            result: object = schedules.add(
+                rest[1],
+                _option_value(rest, "--playbook") or "",
+                _option_value(rest, "--daily") or "",
+            )
+        elif sub == "list":
+            result = {"schedules": schedules.list()}
+        elif sub == "disable":
+            if len(rest) < 2:
+                raise PlaybookError("usage: kx schedule disable <name>")
+            result = schedules.disable(rest[1])
+        elif sub == "enable":
+            if len(rest) < 2:
+                raise PlaybookError("usage: kx schedule enable <name>")
+            result = schedules.enable(rest[1])
+        elif sub == "run-due":
+            result = {"outcomes": schedules.run_due()}
+        else:
+            raise PlaybookError("use: kx schedule add|list|disable|enable")
+    except (OSError, PlaybookError, ValueError) as exc:
+        print(f"Kx schedule error: {exc}", file=sys.stderr)
+        return 2
+    if as_json:
+        _print_json(result)
+    elif isinstance(result, dict) and "schedules" in result:
+        for item in result["schedules"]:
+            print(
+                f"{item['name']}  {item['daily']}  "
+                f"{'enabled' if item['enabled'] else 'disabled'}  "
+                f"last={item['last_status'] or '-'}"
+            )
+        if not result["schedules"]:
+            print("(no schedules)")
+    elif isinstance(result, dict) and "outcomes" in result:
+        print(f"ran {len(result['outcomes'])} due schedule(s)")
+    elif isinstance(result, dict):
+        print(
+            f"{result['name']}  {result['daily']}  "
+            f"{'enabled' if result['enabled'] else 'disabled'}"
+        )
+    return 0
+
+
 def _emit_watch_continuous(args: list[str]) -> int:
     """`kx watch procs --continuous [--interval N] [--min-severity S] [--iter N]`
 
@@ -1068,6 +1168,10 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_evidence(args))
     if head == "baseline":
         raise SystemExit(_emit_baseline(args))
+    if head == "playbook":
+        raise SystemExit(_emit_playbook(args))
+    if head == "schedule":
+        raise SystemExit(_emit_schedule(args))
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":

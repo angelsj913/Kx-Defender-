@@ -184,12 +184,25 @@ def _run_watcher_forever(config: dict[str, Any]) -> None:
         also_stderr=False,
     )
     try:
+        def run_schedules() -> None:
+            from kx_defender.scheduler import ScheduleStore  # noqa: PLC0415
+
+            for outcome in ScheduleStore().run_due():
+                emit_alert(
+                    module="scheduler",
+                    title=f"scheduled playbook {outcome['name']}: {outcome['status']}",
+                    severity="high" if outcome["status"] == "failed" else "info",
+                    evidence=outcome,
+                    also_stderr=False,
+                )
+
         watcher = KxWatcher(
             interval=float(config.get("interval", DEFAULT_CONFIG["interval"])),
             limit=int(config.get("limit", DEFAULT_CONFIG["limit"])),
             min_severity=str(config.get("min_severity", DEFAULT_CONFIG["min_severity"])),
             scope=str(config.get("scope", DEFAULT_CONFIG["scope"])),
             mode=str(config.get("mode", DEFAULT_CONFIG["mode"])),
+            tick_callback=run_schedules,
         )
         watcher.run()
     except Exception as exc:  # noqa: BLE001 - never crash silently

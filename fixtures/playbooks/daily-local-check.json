@@ -1,0 +1,15 @@
+{
+  "name": "daily-local-check",
+  "version": 1,
+  "steps": [
+    {
+      "run": ["sentry", "--scope", "lab", "--sim"],
+      "timeout": 60
+    },
+    {
+      "run": ["watch", "procs", "--scope", "lab", "--sim"],
+      "timeout": 60
+    }
+  ],
+  "on_error": "stop"
+}

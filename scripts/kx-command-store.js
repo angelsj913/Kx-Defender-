@@ -11,7 +11,7 @@ const MAX_HISTORY = 500;
 const SKIP_HEADS = new Set(["passwd", "useradd"]);
 const META_COMMANDS = [
   "alert", "case", "daemon", "doctor", "evidence", "favorite", "history",
-  "lang", "report", "security", "setup", "update", "baseline",
+  "lang", "report", "security", "setup", "update", "baseline", "playbook", "schedule",
 ];
 const COMMON_FLAGS = [
   "--at", "--json", "--live", "--path", "--pretty", "--realm", "--scope",

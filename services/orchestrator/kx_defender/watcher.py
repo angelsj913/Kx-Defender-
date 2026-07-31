@@ -41,6 +41,7 @@ class KxWatcher:
         mode: str = "execute",
         max_iterations: int | None = None,
         stream: Any = None,
+        tick_callback: Any = None,
     ) -> None:
         self.interval = max(1.0, float(interval))
         self.limit = int(limit)
@@ -49,6 +50,7 @@ class KxWatcher:
         self.mode = mode
         self.max_iterations = max_iterations
         self.stream = stream or sys.stderr
+        self.tick_callback = tick_callback
         self._stop = False
         self.orch = Orchestrator()
 
@@ -92,6 +94,11 @@ class KxWatcher:
             snapshot_alerts, snapshot_procs = self._one_tick(iterations)
             total_alerts += snapshot_alerts
             total_procs += snapshot_procs
+            if self.tick_callback is not None:
+                try:
+                    self.tick_callback()
+                except Exception as exc:  # noqa: BLE001 - scheduled work cannot stop watcher
+                    print(f"[kx watch] scheduled work error: {exc}", file=self.stream)
             if self.max_iterations is not None and iterations >= self.max_iterations:
                 break
             self._interruptible_sleep(self.interval)
