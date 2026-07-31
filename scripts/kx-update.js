@@ -216,7 +216,7 @@ const state = json(path.join(home, "current.json"));
 const install = json(path.join(home, "install.json"));
 const app = state && state.current && state.current.app || install && install.app || path.join(home, "app");
 const mode = process.argv[2] || "kx";
-const rest = process.argv.slice(3);
+let rest = process.argv.slice(3);
 let target = path.join(app, "scripts", "npm-kx.js");
 let prefix = [];
 if (mode === "entry") target = path.join(app, "scripts", "npx-entry.js");
@@ -224,6 +224,11 @@ if (mode === "login") { target = path.join(app, "scripts", "npx-entry.js"); pref
 if (mode === "update") {
   const stableUpdater = path.join(home, "control", "kx-update.js");
   target = fs.existsSync(stableUpdater) ? stableUpdater : path.join(app, "scripts", "kx-update.js");
+}
+if (mode === "kx" && ["update", "upgrade"].includes(String(rest[0] || "").toLowerCase())) {
+  const stableUpdater = path.join(home, "control", "kx-update.js");
+  target = fs.existsSync(stableUpdater) ? stableUpdater : path.join(app, "scripts", "kx-update.js");
+  rest = rest.slice(1);
 }
 if (!fs.existsSync(target)) { console.error("[Kx] active release entry is missing: " + target); process.exit(2); }
 const result = spawnSync(process.execPath, [target, ...prefix, ...rest], { stdio: "inherit", shell: false, windowsHide: true });

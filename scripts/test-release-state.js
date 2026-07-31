@@ -68,6 +68,11 @@ launched = require("child_process").spawnSync(process.execPath, [launcher, "upda
   shell: false,
 });
 assert.strictEqual(launched.stdout.trim(), "CONTROL");
+launched = require("child_process").spawnSync(process.execPath, [launcher, "kx", "update", "status"], {
+  encoding: "utf8",
+  shell: false,
+});
+assert.strictEqual(launched.stdout.trim(), "CONTROL");
 
 assert(
   fs.readdirSync(home).every((name) => !name.includes(".tmp-")),
