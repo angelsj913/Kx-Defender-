@@ -103,10 +103,11 @@ const authScript = [
   "auth.login().then((user) => {",
   "  if (user.username !== 'admin') process.exit(2);",
   "  console.log('LOGIN_OK');",
+  "  console.log('REMAINING=' + JSON.stringify(auth.takeBufferedInput()));",
   "});",
 ].join("\n");
 const authResult = spawnSync(process.execPath, ["-e", authScript, path.join(__dirname, "kx-auth.js")], {
-  input: "admin\nadmin\n",
+  input: "admin\nadmin\nsentry\nexit\n",
   encoding: "utf8",
   shell: false,
   env: {
@@ -118,6 +119,7 @@ const authResult = spawnSync(process.execPath, ["-e", authScript, path.join(__di
 });
 assert.strictEqual(authResult.status, 0, authResult.stderr);
 assert.match(authResult.stdout, /LOGIN_OK/);
+assert.match(authResult.stdout, /REMAINING="sentry\\nexit\\n"/);
 assert.doesNotMatch(authResult.stdout, /\x1b\[/, "NO_COLOR login must not emit ANSI");
 fs.rmSync(authDir, { recursive: true, force: true });
 

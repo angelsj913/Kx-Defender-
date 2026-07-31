@@ -2,9 +2,15 @@
 
 const readline = require("readline");
 const { spawnSync } = require("child_process");
+const { Readable } = require("stream");
 const { ensureSetup, SETUP_VERSION, ROOT, isWin, readState } = require("./npm-setup");
 const { readLang, writeLang, splitArgs } = require("./kx-shell");
-const { login, handleAuthCmd, load: loadUsers } = require("./kx-auth");
+const {
+  login,
+  handleAuthCmd,
+  load: loadUsers,
+  takeBufferedInput,
+} = require("./kx-auth");
 const {
   clearScreen,
   colorEnabled,
@@ -104,7 +110,7 @@ class KxClient {
 
   renderLoading(percent, label) {
     const { width } = size();
-    process.stdout.write(clearScreen());
+    if (process.stdout.isTTY) process.stdout.write(clearScreen());
     process.stdout.write(renderLoading({
       width,
       percent,
@@ -141,7 +147,7 @@ class KxClient {
   }
 
   async start() {
-    process.stdout.write(clearScreen());
+    if (process.stdout.isTTY) process.stdout.write(clearScreen());
     const { width } = size();
     process.stdout.write(renderLoading({
       width,
@@ -159,7 +165,7 @@ class KxClient {
 
   draw() {
     const { width, height } = size();
-    process.stdout.write(clearScreen());
+    if (process.stdout.isTTY) process.stdout.write(clearScreen());
     process.stdout.write(renderDashboard({
       width,
       height,
@@ -182,10 +188,12 @@ class KxClient {
 
   openInput() {
     this.draw();
+    const bufferedInput = takeBufferedInput();
+    const input = bufferedInput === null ? process.stdin : Readable.from([bufferedInput]);
     this.rl = readline.createInterface({
-      input: process.stdin,
+      input,
       output: process.stdout,
-      terminal: true,
+      terminal: input === process.stdin && Boolean(process.stdin.isTTY && process.stdout.isTTY),
       historySize: 100,
       removeHistoryDuplicates: true,
     });

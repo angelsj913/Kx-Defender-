@@ -98,6 +98,13 @@ function readSecret(prompt) {
   });
 }
 
+function takeBufferedInput() {
+  if (nonTtyLines === null) return null;
+  const remaining = nonTtyLines.join("\n");
+  nonTtyLines = [];
+  return remaining;
+}
+
 async function login() {
   const initialPassword = init();
   const useColor = process.stdout.isTTY && !process.env.NO_COLOR &&
@@ -173,4 +180,4 @@ function handleAuthCmd(args, store, actor) {
   return false;
 }
 
-module.exports = { login, handleAuthCmd, load, init, hash, verify };
+module.exports = { login, handleAuthCmd, load, init, hash, verify, takeBufferedInput };
