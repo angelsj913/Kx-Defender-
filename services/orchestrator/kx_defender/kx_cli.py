@@ -720,6 +720,76 @@ def _emit_case(args: list[str]) -> int:
     return 0
 
 
+def _emit_evidence(args: list[str]) -> int:
+    """Export, inspect, verify, and safely import local evidence bundles."""
+    from kx_defender.evidence import (  # noqa: PLC0415
+        EvidenceError,
+        export_bundle,
+        import_bundle,
+        inspect_bundle,
+        verify_bundle,
+    )
+
+    rest = args[1:]
+    sub = rest[0].lower() if rest else ""
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    try:
+        if sub == "export":
+            run_id = _option_value(rest, "--run")
+            case_id = _option_value(rest, "--case")
+            destination = _option_value(rest, "--to")
+            if bool(run_id) == bool(case_id) or not destination:
+                raise EvidenceError(
+                    "usage: kx evidence export (--run <id>|--case <id>) --to <file.kxev>"
+                )
+            result = export_bundle(
+                "run" if run_id else "case",
+                run_id or case_id or "",
+                destination,
+                redact=_option_value(rest, "--redact") or "standard",
+            )
+            exit_code = 0
+        elif sub == "inspect":
+            if len(rest) < 2:
+                raise EvidenceError("usage: kx evidence inspect <file.kxev>")
+            result = inspect_bundle(rest[1])
+            exit_code = 0
+        elif sub == "verify":
+            if len(rest) < 2:
+                raise EvidenceError("usage: kx evidence verify <file.kxev>")
+            result = verify_bundle(rest[1])
+            exit_code = 0 if result["valid"] else 2
+        elif sub == "import":
+            if len(rest) < 2 or "--read-only" not in rest:
+                raise EvidenceError(
+                    "usage: kx evidence import <file.kxev> --read-only"
+                )
+            result = import_bundle(rest[1])
+            exit_code = 0
+        else:
+            raise EvidenceError("use: kx evidence export|inspect|verify|import")
+    except (EvidenceError, KeyError, OSError) as exc:
+        print(f"Kx evidence error: {exc}", file=sys.stderr)
+        return 2
+
+    if as_json:
+        _print_json(result)
+    elif sub == "verify":
+        print("bundle valid" if result["valid"] else "bundle invalid")
+        for error in result.get("errors", []):
+            print(f"  {error}", file=sys.stderr)
+    elif sub == "inspect":
+        manifest = result["manifest"]
+        print(
+            f"{manifest['bundle_id']}  {manifest['source']['type']}="
+            f"{manifest['source']['id']}  files={len(result['files'])}"
+        )
+    else:
+        print(f"{result['bundle_id']}  {result['path']}")
+    return exit_code
+
+
 def _emit_watch_continuous(args: list[str]) -> int:
     """`kx watch procs --continuous [--interval N] [--min-severity S] [--iter N]`
 
@@ -902,6 +972,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_alert(args))
     if head == "case" or head == "cases":
         raise SystemExit(_emit_case(args))
+    if head == "evidence":
+        raise SystemExit(_emit_evidence(args))
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":

@@ -100,6 +100,24 @@ kx case close CASE-... --resolution "contained"
 
 Add `--json` to alert and case commands for stable automation output.
 
+## Evidence bundles
+
+Export a run or case into an integrity-checked local bundle. `standard`
+redaction masks secret-bearing fields; `strict` also anonymizes usernames,
+user-home paths, and IP addresses. Binary artifacts are excluded instead of
+being copied without redaction.
+
+```powershell
+kx evidence export --case CASE-... --to incident.kxev --redact strict
+kx evidence export --run RUN-ID --to run.kxev
+kx evidence inspect incident.kxev
+kx evidence verify incident.kxev
+kx evidence import incident.kxev --read-only
+```
+
+Import verifies all hashes and archive paths before writing anything, then
+stores the extracted copy as read-only under `.kx-defender\evidence\imported`.
+
 ## Safety model
 
 - Simulation is the default mode.

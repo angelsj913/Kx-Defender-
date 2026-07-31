@@ -29,6 +29,8 @@ EXAMPLES = [
     "kx alert list --status new --severity high",
     "kx alert ack ALT-... --note investigating",
     "kx case create --from-alert ALT-... --title investigation",
+    "kx evidence export --case CASE-... --to incident.kxev",
+    "kx evidence verify incident.kxev",
     "kx report daily",
     "kx report hours 3 --markdown",
     "kx sig scan --scope lab --sim",
