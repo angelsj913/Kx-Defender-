@@ -137,6 +137,27 @@ kx favorite run daily-check
 Favorites containing credentials are rejected. A favorite containing `--live`
 requires `kx favorite run <name> --confirm-live`.
 
+## KxSig rule workbench
+
+Validate and test user rules before enabling them. User rules and enable/disable
+state live under `.kx-defender\rules\kxsig`, so application updates do not
+overwrite them.
+
+```powershell
+kx sig validate .\custom-rules.json
+kx sig test .\custom-rules.json --sample .\sample.txt
+kx sig import .\custom-rules.json
+kx sig show CUSTOM-001
+kx sig disable CUSTOM-001 --reason "too noisy"
+kx sig enable CUSTOM-001
+kx sig conflicts
+kx sig quarantine .\unsafe-rules.json
+```
+
+Rule tests run in a separate process with a three-second timeout. Duplicate
+IDs, unsupported metadata, nested regex quantifiers, oversized rules, and
+oversized samples are rejected.
+
 ## Safety model
 
 - Simulation is the default mode.

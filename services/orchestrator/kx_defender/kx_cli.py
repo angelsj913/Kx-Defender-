@@ -491,7 +491,7 @@ def _coerce_value(existing: Any, raw: str) -> Any:
 
 
 def _emit_sig_meta(args: list[str]) -> int:
-    """`kx sig import <path>` / `kx sig list` / `kx sig catalog`."""
+    """Manage, validate, and safely test KxSig rules."""
     from datetime import datetime, timezone  # noqa: PLC0415
     from pathlib import Path as _Path  # noqa: PLC0415
     from modules.engines.kxsig import (  # noqa: PLC0415
@@ -499,32 +499,69 @@ def _emit_sig_meta(args: list[str]) -> int:
     )
 
     rest = args[1:]
+    from kx_defender.kxsig_workbench import (  # noqa: PLC0415
+        RuleWorkbench,
+        RuleWorkbenchError,
+    )
+
     if not rest:
-        print("usage: kx sig import <path> | kx sig list | kx sig catalog", file=sys.stderr)
+        print("usage: kx sig validate|test|enable|disable|show|conflicts|quarantine", file=sys.stderr)
         return 2
     sub = rest[0].lower()
+    workbench = RuleWorkbench()
 
-    if sub == "catalog":
-        _print_json(summarize_rule_catalog())
-        return 0
-    if sub == "list":
-        _print_json({"user_files": list_user_rule_files()})
-        return 0
-    if sub == "import":
-        if len(rest) < 2:
-            print("usage: kx sig import <path> [--name <basename>]", file=sys.stderr)
-            return 2
-        src = _Path(rest[1]).expanduser().resolve()
-        name = None
-        if len(rest) >= 4 and rest[2] == "--name":
-            name = rest[3]
-        os.environ["KX_IMPORT_TS"] = datetime.now(timezone.utc).isoformat()
-        outcome = import_user_rules(src, name=name)
-        _print_json(outcome)
-        return 0 if outcome.get("imported") else 2
+    try:
+        if sub == "catalog":
+            outcome = summarize_rule_catalog()
+        elif sub == "list":
+            outcome = {"user_files": list_user_rule_files()}
+        elif sub == "import":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig import <path> [--name <basename>]")
+            src = _Path(rest[1]).expanduser().resolve()
+            name = _option_value(rest, "--name")
+            os.environ["KX_IMPORT_TS"] = datetime.now(timezone.utc).isoformat()
+            outcome = import_user_rules(src, name=name)
+            if not outcome.get("imported"):
+                raise RuleWorkbenchError(str(outcome.get("error") or "rule import failed"))
+        elif sub == "validate":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig validate <file>")
+            outcome = workbench.validate_file(rest[1])
+            _print_json(outcome)
+            return 0 if outcome["valid"] else 2
+        elif sub == "test":
+            if len(rest) < 2 or "--sample" not in rest:
+                raise RuleWorkbenchError("usage: kx sig test <file> --sample <path>")
+            outcome = workbench.test_file(rest[1], _option_value(rest, "--sample") or "")
+        elif sub == "enable":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig enable <rule-id>")
+            workbench.show(rest[1])
+            outcome = workbench.enable(rest[1])
+        elif sub == "disable":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig disable <rule-id> --reason <reason>")
+            workbench.show(rest[1])
+            outcome = workbench.disable(rest[1], _option_value(rest, "--reason") or "")
+        elif sub == "show":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig show <rule-id>")
+            outcome = workbench.show(rest[1])
+        elif sub == "conflicts":
+            outcome = workbench.conflicts()
+        elif sub == "quarantine":
+            if len(rest) < 2:
+                raise RuleWorkbenchError("usage: kx sig quarantine <file>")
+            outcome = workbench.quarantine(rest[1])
+        else:
+            raise RuleWorkbenchError(f"unknown sig subcommand: {sub}")
+    except (RuleWorkbenchError, OSError, ValueError) as exc:
+        print(f"KxSig error: {exc}", file=sys.stderr)
+        return 2
 
-    print(f"unknown sig subcommand: {sub}", file=sys.stderr)
-    return 2
+    _print_json(outcome)
+    return 0
 
 
 def _option_value(args: list[str], option: str) -> str | None:
@@ -981,7 +1018,10 @@ def main(argv: list[str] | None = None) -> None:
 
     # `kx sig import|list|catalog` are meta commands. `kx sig scan|file` are
     # KxLang verb.object invocations and must fall through to parse_argv.
-    if head == "sig" and len(args) >= 2 and args[1].lower() in {"import", "list", "catalog"}:
+    if head == "sig" and len(args) >= 2 and args[1].lower() in {
+        "import", "list", "catalog", "validate", "test", "enable", "disable",
+        "show", "conflicts", "quarantine",
+    }:
         raise SystemExit(_emit_sig_meta(args))
 
     # `kx watch procs --continuous [--interval N] [--min-severity high]`

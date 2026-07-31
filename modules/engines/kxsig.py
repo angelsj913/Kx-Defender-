@@ -10,7 +10,20 @@ from pathlib import Path
 from typing import Any
 
 RULES_DIR = Path(__file__).resolve().parents[2] / "rules" / "kxsig"
-USER_RULES_DIR = RULES_DIR / "user"
+
+
+def _user_rules_dir() -> Path:
+    home = Path(os.environ.get("KX_HOME") or (Path.home() / ".kx-defender"))
+    return home / "rules" / "kxsig" / "user"
+
+
+def _disabled_ids() -> set[str]:
+    state = _user_rules_dir().parent / "state.json"
+    try:
+        value = json.loads(state.read_text(encoding="utf-8"))
+        return set((value.get("disabled") or {}).keys())
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return set()
 
 
 def load_rules(path: Path | None = None, include_user: bool = True) -> list[dict[str, Any]]:
@@ -24,10 +37,14 @@ def load_rules(path: Path | None = None, include_user: bool = True) -> list[dict
     if root.is_dir():
         for fp in sorted(root.glob("*.json")):
             rules.extend(_read_rule_file(fp))
-    if include_user and USER_RULES_DIR.is_dir():
-        for fp in sorted(USER_RULES_DIR.glob("*.json")):
-            rules.extend(_read_rule_file(fp))
-    return rules or _builtin_rules()
+    if include_user:
+        for user_dir in (RULES_DIR / "user", _user_rules_dir()):
+            if user_dir.is_dir():
+                for fp in sorted(user_dir.glob("*.json")):
+                    rules.extend(_read_rule_file(fp))
+    loaded = rules or _builtin_rules()
+    disabled = _disabled_ids()
+    return [rule for rule in loaded if str(rule.get("id") or "") not in disabled]
 
 
 def _read_rule_file(fp: Path) -> list[dict[str, Any]]:
@@ -79,40 +96,28 @@ def import_user_rules(src_path: Path, name: str | None = None) -> dict[str, Any]
 
     Returns a summary dict. Fails safely if the source is missing or invalid.
     """
-    if not src_path.is_file():
-        return {"imported": False, "error": f"source not found: {src_path}"}
-    parsed = _read_rule_file(src_path)
-    if not parsed:
-        return {"imported": False, "error": f"no rules parsed from {src_path}"}
-    valid, errs = validate_rules(parsed)
-    if not valid:
-        return {"imported": False, "error": "no valid rules", "details": errs}
-
-    USER_RULES_DIR.mkdir(parents=True, exist_ok=True)
-    fname = name or src_path.stem
-    if not fname.endswith(".json"):
-        fname += ".json"
-    dest = USER_RULES_DIR / fname
-    payload = {"rules": valid, "_source": str(src_path), "_imported_at": os.environ.get("KX_IMPORT_TS", "")}
     try:
-        dest.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    except OSError as exc:
-        return {"imported": False, "error": f"write failed: {exc}"}
-    return {
-        "imported": True,
-        "destination": str(dest),
-        "count": len(valid),
-        "rejected": len(parsed) - len(valid),
-        "errors": errs,
-    }
+        from kx_defender.kxsig_workbench import RuleWorkbench
+
+        result = RuleWorkbench().install(src_path, name=name)
+        return {
+            "imported": True,
+            "destination": result["destination"],
+            "count": result["rules"],
+            "rejected": 0,
+            "errors": [],
+        }
+    except Exception as exc:
+        return {"imported": False, "error": str(exc)}
 
 
 def list_user_rule_files() -> list[dict[str, Any]]:
     """Enumerate imported user rule files with their rule counts."""
-    if not USER_RULES_DIR.is_dir():
+    user_dir = _user_rules_dir()
+    if not user_dir.is_dir():
         return []
     out: list[dict[str, Any]] = []
-    for fp in sorted(USER_RULES_DIR.glob("*.json")):
+    for fp in sorted(user_dir.glob("*.json")):
         rules = _read_rule_file(fp)
         out.append({"file": str(fp), "count": len(rules)})
     return out
@@ -140,18 +145,21 @@ def _builtin_rules() -> list[dict[str, Any]]:
             "id": "KXSIG-001",
             "name": "suspicious_powershell_enc",
             "severity": "high",
+            "category": "execution",
             "patterns": [r"(?i)powershell.*-enc\s+", r"(?i)frombase64string"],
         },
         {
             "id": "KXSIG-002",
             "name": "mimikatz_strings",
             "severity": "critical",
+            "category": "credential-access",
             "patterns": [r"(?i)sekurlsa::", r"(?i)mimikatz"],
         },
         {
             "id": "KXSIG-003",
             "name": "lab_marker",
             "severity": "medium",
+            "category": "lab-marker",
             "patterns": [r"KX_LAB_MALICIOUS_MARKER"],
         },
     ]
