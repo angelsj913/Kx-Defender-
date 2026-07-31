@@ -210,6 +210,28 @@ commands cannot appear in playbooks. Live steps require both
 playbooks cannot be scheduled. The existing daemon checks due schedules after
 each watcher tick; no OS task or external service is installed.
 
+## Operations dashboard
+
+The interactive client opens on a read-only operational overview. Use number
+keys `1` through `6`, or the section names, to switch between Overview, Alerts,
+Runs, Cases, Rules, and Health. The layout uses compact labels in narrow
+PowerShell windows and redraws when the terminal size changes.
+
+The same bounded snapshots are available without the interactive client:
+
+```powershell
+kx dashboard overview
+kx dashboard alerts
+kx dashboard runs --json
+kx dashboard cases
+kx dashboard rules
+kx dashboard health
+```
+
+Run history and alert/case state share the persistent
+`$HOME\.kx-defender\operator.db`, so an atomic application update does not
+discard or split operational history.
+
 ## Safety model
 
 - Simulation is the default mode.

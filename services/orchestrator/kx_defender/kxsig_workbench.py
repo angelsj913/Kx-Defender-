@@ -236,6 +236,26 @@ class RuleWorkbench:
             "clean": not duplicates and not invalid_files,
         }
 
+    def summary(self) -> dict[str, int]:
+        """Return bounded catalog health counts without exposing rule contents."""
+        files = self._rule_files()
+        total = sum(int(self.validate_file(path).get("rules") or 0) for path in files)
+        disabled = len(self._state()["disabled"])
+        integrity = self.conflicts()
+        quarantined = (
+            len(list(self.quarantine_dir.glob("*")))
+            if self.quarantine_dir.is_dir()
+            else 0
+        )
+        return {
+            "total": total,
+            "enabled": max(0, total - disabled),
+            "disabled": disabled,
+            "quarantined": quarantined,
+            "conflicts": len(integrity["conflicts"]),
+            "invalid_files": len(integrity["invalid_files"]),
+        }
+
     def test_file(
         self, rule_file: Path | str, sample_file: Path | str, timeout: float = 3.0
     ) -> dict[str, Any]:

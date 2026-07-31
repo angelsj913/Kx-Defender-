@@ -161,6 +161,7 @@ function renderDashboard({
   height = 30,
   lang = "en",
   username = "operator",
+  section = "overview",
   result = "",
   version = "",
   color,
@@ -180,6 +181,20 @@ function renderDashboard({
   if (!compact) rows.push("", ...logoLines(inner, enabled), "");
   rows.push(paint(center(title, inner), C.bold, enabled));
   rows.push(paint(center(status, inner), C.green, enabled));
+  const sections = [
+    ["overview", "Overview", "Ovr"],
+    ["alerts", "Alerts", "Alt"],
+    ["runs", "Runs", "Run"],
+    ["cases", "Cases", "Case"],
+    ["rules", "Rules", "Rule"],
+    ["health", "Health", "Hlth"],
+  ];
+  const compactTabs = width < 84;
+  const tabs = sections.map(([key, label, short], index) => {
+    const text = `${index + 1} ${compactTabs ? short : label}`;
+    return key === section ? `[${text}]` : text;
+  }).join(" | ");
+  rows.push(paint(center(tabs, inner), C.cyan, enabled));
   rows.push("");
   const resultTitle = lang === "ko" ? "최근 결과" : "LATEST RESULT";
   const resultLines = result

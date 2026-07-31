@@ -45,6 +45,8 @@ EXAMPLES = [
     "kx baseline compare workstation-clean",
     "kx playbook run daily.json --dry-run",
     "kx schedule add daily-check --playbook daily.json --daily 09:00",
+    "kx dashboard overview",
+    "kx dashboard alerts --json",
     "kx kill pid --scope lab --pid 4242 --sim",
     "kx nexus listen --scope lab --bind 127.0.0.1:4455 --live",
     "kx sweep web --scope owned --url http://127.0.0.1:8080/ --live",

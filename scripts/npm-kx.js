@@ -109,6 +109,7 @@ function shouldEnterProgram(argv) {
       "probe", "sweep", "watch", "kill", "sig", "lang", "lexicon",
       "alert", "alerts", "case", "cases", "evidence", "report", "daemon",
       "why", "form", "suggest", "ask", "baseline", "playbook", "schedule",
+      "dashboard",
     ]);
     if (kxLangVerbs.has(first)) return false;
     return true;

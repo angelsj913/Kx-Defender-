@@ -99,6 +99,7 @@ class KxClient {
     this.lang = "en";
     this.user = null;
     this.lastResult = "";
+    this.section = "overview";
     this.rl = null;
     this.loading = false;
     this.frame = 0;
@@ -172,6 +173,7 @@ class KxClient {
       height,
       lang: this.lang,
       username: this.user.username,
+      section: this.section,
       result: this.lastResult,
       version: `v${SETUP_VERSION}`,
       color: colorEnabled(),
@@ -188,6 +190,7 @@ class KxClient {
   }
 
   openInput() {
+    this.loadSection("overview");
     this.draw();
     const bufferedInput = takeBufferedInput();
     const input = bufferedInput === null ? process.stdin : Readable.from([bufferedInput]);
@@ -239,6 +242,20 @@ class KxClient {
     if (args[0]?.toLowerCase() === "kx") args = args.slice(1);
     if (!args.length) args = ["/h"];
     const head = String(args[0] || "").toLowerCase();
+
+    const sectionNames = ["overview", "alerts", "runs", "cases", "rules", "health"];
+    const numericSection = /^[1-6]$/.test(head) ? sectionNames[Number(head) - 1] : null;
+    const requestedSection = head === "dashboard"
+      ? String(args[1] || "overview").toLowerCase()
+      : numericSection || (sectionNames.includes(head) && args.length === 1 ? head : null);
+    if (requestedSection) {
+      if (!sectionNames.includes(requestedSection)) {
+        this.lastResult = "Use: dashboard overview|alerts|runs|cases|rules|health";
+        return;
+      }
+      this.loadSection(requestedSection);
+      return;
+    }
 
     if (head === "history" || head === "favorite") {
       try {
@@ -311,6 +328,23 @@ class KxClient {
         ? (this.lang === "ko" ? "명령을 완료했습니다." : "Command completed.")
         : (this.lang === "ko" ? `명령 실패 (코드 ${result.status ?? 1})` : `Command failed (code ${result.status ?? 1}).`)
     );
+  }
+
+  loadSection(section) {
+    this.section = section;
+    const result = runCmd(["dashboard", section], this.lang);
+    let output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
+    if (section === "health") {
+      const doctor = require("./kx-doctor").execute([], { write: false }).report.summary;
+      const release = require("./kx-release").readState(require("./kx-update").HOME);
+      const commit = release.current?.commit || "unmanaged";
+      output = [
+        `Doctor: pass=${doctor.pass} warn=${doctor.warn} fail=${doctor.fail}`,
+        `Active update: ${commit}`,
+        output,
+      ].filter(Boolean).join("\n");
+    }
+    this.lastResult = output || `Operations / ${section}`;
   }
 }
 

@@ -26,6 +26,7 @@ for (const width of [60, 72, 80, 100, 140]) {
     height: 30,
     lang: "en",
     username: "admin",
+    section: "alerts",
     result: "Purpose: Validate the terminal layout.\nResult: OK",
     color: false,
   });
@@ -33,6 +34,7 @@ for (const width of [60, 72, 80, 100, 140]) {
     lines(dashboard).every((line) => stringWidth(line) <= width),
     `dashboard overflow at ${width} columns`
   );
+  assert.match(dashboard, /\[2 (?:Alerts|Alt)\]/, "active operations section must be visible");
 
   const loading = renderLoading({
     width,
@@ -120,6 +122,25 @@ delete process.env.KX_DISABLE_HISTORY;
 assert.match(doctorClient.lastResult, /Kx Doctor v1/);
 assert.match(doctorClient.lastResult, /Summary:/);
 assert.doesNotMatch(doctorClient.lastResult, /passwordHash|scrypt\$/);
+
+const dashboardClient = new (require("./kx-tui").KxClient)({ bootstrap() {} });
+dashboardClient.lang = "en";
+dashboardClient.user = { username: "admin", role: "admin" };
+const dashboardHome = fs.mkdtempSync(path.join(os.tmpdir(), "kx-dashboard-test-"));
+const oldDashboardHome = process.env.KX_HOME;
+const oldOperatorDb = process.env.KX_OPERATOR_DB;
+process.env.KX_HOME = dashboardHome;
+process.env.KX_OPERATOR_DB = path.join(dashboardHome, "operator.db");
+dashboardClient.handle("3");
+assert.strictEqual(dashboardClient.section, "runs");
+assert.match(dashboardClient.lastResult, /Operations \/ Runs/);
+dashboardClient.handle("dashboard alerts");
+assert.strictEqual(dashboardClient.section, "alerts");
+if (oldDashboardHome === undefined) delete process.env.KX_HOME;
+else process.env.KX_HOME = oldDashboardHome;
+if (oldOperatorDb === undefined) delete process.env.KX_OPERATOR_DB;
+else process.env.KX_OPERATOR_DB = oldOperatorDb;
+fs.rmSync(dashboardHome, { recursive: true, force: true });
 
 const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "kx-terminal-test-"));
 const oldConfig = process.env.KX_CONFIG;

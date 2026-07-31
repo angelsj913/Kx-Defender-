@@ -6,6 +6,7 @@ import json
 import os
 import platform
 import shutil
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -982,6 +983,29 @@ def _emit_schedule(args: list[str]) -> int:
     return 0
 
 
+def _emit_dashboard(args: list[str]) -> int:
+    """`kx dashboard [section] [--json]` — read-only operations snapshot."""
+    from kx_defender.operations import SECTIONS, build_snapshot, render_snapshot  # noqa: PLC0415
+
+    section = next((value.lower() for value in args[1:] if not value.startswith("-")), "overview")
+    if section not in SECTIONS:
+        print(
+            f"usage: kx dashboard [{'|'.join(SECTIONS)}] [--json]",
+            file=sys.stderr,
+        )
+        return 2
+    try:
+        snapshot = build_snapshot(section)
+    except (OSError, RuntimeError, ValueError, sqlite3.Error) as exc:
+        print(f"Kx dashboard error: {exc}", file=sys.stderr)
+        return 2
+    if "--json" in args:
+        _print_json(snapshot)
+    else:
+        print(render_snapshot(snapshot))
+    return 0
+
+
 def _emit_watch_continuous(args: list[str]) -> int:
     """`kx watch procs --continuous [--interval N] [--min-severity S] [--iter N]`
 
@@ -1172,6 +1196,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_playbook(args))
     if head == "schedule":
         raise SystemExit(_emit_schedule(args))
+    if head == "dashboard":
+        raise SystemExit(_emit_dashboard(args))
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":

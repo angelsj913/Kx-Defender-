@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -12,8 +13,12 @@ from kx_defender.result import ModuleResult
 
 class RunStore:
     def __init__(self, db_path: str | Path | None = None) -> None:
-        root = Path(__file__).resolve().parents[3]
-        default = root / "data" / "kx_defender.db"
+        home = Path(os.environ.get("KX_HOME") or (Path.home() / ".kx-defender"))
+        default = Path(
+            os.environ.get("KX_RUN_DB")
+            or os.environ.get("KX_OPERATOR_DB")
+            or (home / "operator.db")
+        )
         self.db_path = Path(db_path) if db_path else default
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
