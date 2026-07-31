@@ -99,7 +99,7 @@ function clearScreen() {
 }
 
 function contentWidth(width) {
-  return Math.max(38, Math.min(Math.max(40, width - 4), 118));
+  return Math.min(Math.max(40, width - 4), 118);
 }
 
 function logoLines(width, enabled, frame = 0) {

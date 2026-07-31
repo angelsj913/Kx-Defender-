@@ -88,7 +88,6 @@ class KxClient {
     this.bootstrap = bootstrap;
     this.lang = "en";
     this.user = null;
-    this.store = null;
     this.lastResult = "";
     this.rl = null;
     this.loading = false;
@@ -133,7 +132,6 @@ class KxClient {
     this.renderLoading(45, labels[2]);
     this.bootstrap();
     await this.pulse(70, labels[2]);
-    this.store = loadUsers();
     await this.pulse(90, labels[3]);
     await this.pulse(100, labels[4], 2);
     this.loading = false;
@@ -151,7 +149,6 @@ class KxClient {
     }));
     process.stdout.write("\n\n");
 
-    this.store = loadUsers();
     this.user = await login();
     await this.loadAfterLogin();
     this.openInput();
@@ -229,8 +226,7 @@ class KxClient {
     const head = String(args[0] || "").toLowerCase();
 
     if (["users", "useradd", "userdel", "passwd"].includes(head)) {
-      this.store = loadUsers();
-      handleAuthCmd(args, this.store, this.user);
+      handleAuthCmd(args, loadUsers(), this.user);
       return;
     }
 
