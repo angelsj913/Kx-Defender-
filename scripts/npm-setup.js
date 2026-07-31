@@ -58,6 +58,8 @@ function spawnOpts(cmd, extra = {}) {
     ...process.env,
     PYTHONUTF8: "1",
     PYTHONIOENCODING: "utf-8",
+    KX_NODE: process.execPath,
+    KX_NODE_VERSION: process.version,
     ...(extra.env || {}),
   };
   if (absolute && isWin()) {

@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import uuid
@@ -38,9 +39,19 @@ def _sha256(path: Path) -> str | None:
 
 
 def _node_version() -> str:
+    reported = os.environ.get("KX_NODE_VERSION")
+    if reported:
+        return reported
+    configured = os.environ.get("KX_NODE")
+    executable = (
+        configured if configured and Path(configured).is_file()
+        else shutil.which("node") or shutil.which("node.exe")
+    )
+    if not executable:
+        return "unavailable"
     try:
         result = subprocess.run(
-            ["node", "--version"],
+            [executable, "--version"],
             check=False,
             capture_output=True,
             text=True,

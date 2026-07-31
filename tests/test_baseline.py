@@ -31,6 +31,7 @@ def test_baseline_create_compare_show_delete(tmp_path: Path):
     created = manager.create("clean", watched_path=watched)
     assert created["name"] == "clean"
     assert manager.show("clean")["snapshot"]["files"]
+    assert created["snapshot"]["system"]["node"].startswith("v")
 
     changed.write_text("after", encoding="utf-8")
     removed.unlink()
