@@ -10,6 +10,13 @@ const terminal = spawnSync(process.execPath, ["scripts/test-terminal-ui.js"], {
 });
 if (terminal.status !== 0) process.exit(terminal.status == null ? 1 : terminal.status);
 
+const doctor = spawnSync(process.execPath, ["scripts/test-doctor.js"], {
+  cwd: ROOT,
+  stdio: "inherit",
+  shell: false,
+});
+if (doctor.status !== 0) process.exit(doctor.status == null ? 1 : doctor.status);
+
 const packageTest = spawnSync(process.execPath, ["scripts/test-package.js"], {
   cwd: ROOT,
   stdio: "inherit",

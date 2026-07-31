@@ -266,6 +266,12 @@ class KxClient {
       return;
     }
 
+    if (head === "doctor") {
+      const result = require("./kx-doctor").execute(args.slice(1), { write: false });
+      this.lastResult = result.output;
+      return;
+    }
+
     const result = runCmd(args, this.lang);
     const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
     this.lastResult = output || (

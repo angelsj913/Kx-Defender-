@@ -93,6 +93,14 @@ assert.deepStrictEqual(
   "command-level JSON flags must reach the Python CLI"
 );
 
+const doctorClient = new (require("./kx-tui").KxClient)({ bootstrap() {} });
+doctorClient.lang = "en";
+doctorClient.user = { username: "admin", role: "admin" };
+doctorClient.handle("doctor");
+assert.match(doctorClient.lastResult, /Kx Doctor v1/);
+assert.match(doctorClient.lastResult, /Summary:/);
+assert.doesNotMatch(doctorClient.lastResult, /passwordHash|scrypt\$/);
+
 const configDir = fs.mkdtempSync(path.join(os.tmpdir(), "kx-terminal-test-"));
 const oldConfig = process.env.KX_CONFIG;
 const oldLang = process.env.KX_LANG;

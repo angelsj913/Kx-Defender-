@@ -31,6 +31,7 @@ Kx-Defender stores its local runtime and settings under `%USERPROFILE%\.kx-defen
 
 ```text
 /h                         Show help
+kx doctor                  Diagnose the local installation
 sentry                     Run the default local detection simulation
 watch procs --scope lab --sim
 sig scan --scope lab --sim
@@ -79,6 +80,21 @@ kx
 ```
 
 If setup was interrupted, start the `npx` command again. The installer reuses completed local components.
+
+Diagnose the installation without changing files:
+
+```powershell
+kx doctor
+kx doctor --verbose
+kx doctor --json
+```
+
+Repairs are opt-in and preserve a backup where applicable:
+
+```powershell
+kx doctor --repair config
+kx doctor --repair path,shims,venv
+```
 
 ## Development
 

@@ -24,6 +24,7 @@ EXAMPLES = [
     "kx daemon status",
     "kx daemon stop",
     "kx daemon config",
+    "kx doctor",
     "kx why 4242 --tree",
     "kx alert list",
     "kx alert clear",

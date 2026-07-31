@@ -11,6 +11,7 @@
 const path = require("path");
 const { spawnSync } = require("child_process");
 const { runKx, ensureSetup } = require("./npm-setup");
+const { runDoctor } = require("./kx-doctor");
 
 const args = process.argv.slice(2);
 
@@ -23,6 +24,17 @@ function isUpdate(argv) {
     return a1 === "update" || a1 === "upgrade";
   }
   return false;
+}
+
+function doctorArgs(argv) {
+  if (String(argv[0] || "").toLowerCase() === "doctor") return argv.slice(1);
+  if (
+    String(argv[0] || "").toLowerCase() === "kx" &&
+    String(argv[1] || "").toLowerCase() === "doctor"
+  ) {
+    return argv.slice(2);
+  }
+  return null;
 }
 
 function containsKx(text) {
@@ -52,6 +64,11 @@ function shouldEnterProgram(argv) {
     return true;
   }
   return false;
+}
+
+const doctorForward = doctorArgs(args);
+if (doctorForward) {
+  process.exit(runDoctor(doctorForward));
 }
 
 if (isUpdate(args)) {

@@ -28,6 +28,7 @@ const {
 const { printKxBanner } = require("./banner");
 const { startKxTui: startEdexShell } = require("./kx-tui");
 const { startKxShell } = require("./kx-shell");
+const { runDoctor } = require("./kx-doctor");
 
 function printHelp() {
   printKxBanner();
@@ -43,6 +44,7 @@ Client:
 
 One-shot:
   kx /h
+  kx doctor
   kx roast tickets --scope lab --sim
   kx update
 
@@ -242,8 +244,22 @@ function isUpdateArgv(argv) {
   return false;
 }
 
+function doctorArgs(argv) {
+  const a = (argv || []).map((value) => String(value).toLowerCase());
+  if (a[0] === "doctor") return argv.slice(1);
+  if (a[0] === "kx" && a[1] === "doctor") return argv.slice(2);
+  return null;
+}
+
 function main() {
   const rawArgv = process.argv.slice(2);
+
+  // Doctor must work even when setup, Python, or the persistent app is broken.
+  const doctorForward = doctorArgs(rawArgv);
+  if (doctorForward) {
+    process.exitCode = runDoctor(doctorForward);
+    return;
+  }
 
   // CRITICAL: handle update from THIS package before redirecting to
   // ~/.kx-defender/app (which may be an older install without updater).
