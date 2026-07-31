@@ -47,7 +47,10 @@ function run(cmd, args, opts = {}) {
 }
 
 function hasGit() {
-  const res = spawnSync("git", ["--version"], { stdio: "ignore", shell: isWin() });
+  const res = spawnSync("git", ["--version"], {
+    stdio: "ignore",
+    ...spawnOptions("git"),
+  });
   return res.status === 0;
 }
 
@@ -191,6 +194,7 @@ module.exports = {
   ensurePersistentInstall,
   writeShims,
   spawnOptions,
+  hasGit,
   APP,
   HOME,
 };

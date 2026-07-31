@@ -76,6 +76,16 @@ assert.match(
   /reset", "--hard", "FETCH_HEAD"/,
   "updater must work when the fetched branch has no local tracking ref"
 );
+const gitProbe = spawnSync(
+  process.execPath,
+  [
+    "--throw-deprecation",
+    "-e",
+    `require(${JSON.stringify(path.join(__dirname, "kx-update.js"))}).hasGit()`,
+  ],
+  { encoding: "utf8", shell: false }
+);
+assert.strictEqual(gitProbe.status, 0, gitProbe.stderr);
 assert.deepStrictEqual(buildCliArgs(["sentry"]), ["--pretty", "sentry"]);
 assert.deepStrictEqual(
   buildCliArgs(["report", "--json"]),
