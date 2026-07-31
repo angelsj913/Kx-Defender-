@@ -45,6 +45,9 @@ Client:
 One-shot:
   kx /h
   kx doctor
+  kx security status
+  kx security password
+  kx setup wizard
   kx roast tickets --scope lab --sim
   kx update
 
@@ -251,6 +254,25 @@ function doctorArgs(argv) {
   return null;
 }
 
+function securityArgs(argv) {
+  const a = (argv || []).map((value) => String(value).toLowerCase());
+  const offset = a[0] === "kx" ? 1 : 0;
+  if (a[offset] === "security") return argv.slice(offset + 1);
+  if (a[offset] === "setup" && a[offset + 1] === "wizard") {
+    return ["wizard", ...argv.slice(offset + 2)];
+  }
+  return null;
+}
+
+function runSecurity(argv) {
+  const result = spawnSync(process.execPath, [path.join(__dirname, "kx-security.js"), ...argv], {
+    stdio: "inherit",
+    env: process.env,
+    windowsHide: true,
+  });
+  return result.status == null ? 1 : result.status;
+}
+
 function main() {
   const rawArgv = process.argv.slice(2);
 
@@ -258,6 +280,12 @@ function main() {
   const doctorForward = doctorArgs(rawArgv);
   if (doctorForward) {
     process.exitCode = runDoctor(doctorForward);
+    return;
+  }
+
+  const securityForward = securityArgs(rawArgv);
+  if (securityForward) {
+    process.exitCode = runSecurity(securityForward);
     return;
   }
 

@@ -272,6 +272,23 @@ class KxClient {
       return;
     }
 
+    if (head === "security") {
+      const command = String(args[1] || "status").toLowerCase();
+      const security = require("./kx-security");
+      if (command === "status" || command === "permissions") {
+        const status = security.getStatus();
+        this.lastResult = security.formatStatus(status, command === "permissions");
+      } else {
+        this.lastResult = "Run this securely outside the client: kx security password";
+      }
+      return;
+    }
+
+    if (head === "setup" && String(args[1] || "").toLowerCase() === "wizard") {
+      this.lastResult = "Exit the client, then run: kx setup wizard";
+      return;
+    }
+
     const result = runCmd(args, this.lang);
     const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
     this.lastResult = output || (

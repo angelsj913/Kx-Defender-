@@ -18,7 +18,8 @@ const { ensureSetup, runKx, log, SETUP_VERSION } = require("./npm-setup");
 const { printKxBanner } = require("./banner");
 
 function configPath() {
-  return process.env.KX_CONFIG || path.join(os.homedir(), ".kx-defender", "config.json");
+  return process.env.KX_CONFIG ||
+    path.join(process.env.KX_HOME || path.join(os.homedir(), ".kx-defender"), "config.json");
 }
 
 function readLang() {

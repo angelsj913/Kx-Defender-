@@ -24,6 +24,13 @@ const releaseState = spawnSync(process.execPath, ["scripts/test-release-state.js
 });
 if (releaseState.status !== 0) process.exit(releaseState.status == null ? 1 : releaseState.status);
 
+const security = spawnSync(process.execPath, ["scripts/test-security.js"], {
+  cwd: ROOT,
+  stdio: "inherit",
+  shell: false,
+});
+if (security.status !== 0) process.exit(security.status == null ? 1 : security.status);
+
 const packageTest = spawnSync(process.execPath, ["scripts/test-package.js"], {
   cwd: ROOT,
   stdio: "inherit",

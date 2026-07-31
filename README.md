@@ -22,7 +22,9 @@ password: admin
 Change the password after login:
 
 ```text
-passwd admin <new-password>
+kx security password        Change the admin password without exposing it
+kx security status          Check account and configuration security
+kx setup wizard             Configure language and admin password
 ```
 
 Kx-Defender stores its local runtime and settings under `%USERPROFILE%\.kx-defender`. If Python is unavailable, setup downloads a portable Python runtime once.

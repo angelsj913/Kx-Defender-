@@ -15,6 +15,26 @@ const { runDoctor } = require("./kx-doctor");
 
 const args = process.argv.slice(2);
 
+function securityArgs(argv) {
+  const normalized = argv.map((value) => String(value).toLowerCase());
+  const offset = normalized[0] === "kx" ? 1 : 0;
+  if (normalized[offset] === "security") return argv.slice(offset + 1);
+  if (normalized[offset] === "setup" && normalized[offset + 1] === "wizard") {
+    return ["wizard", ...argv.slice(offset + 2)];
+  }
+  return null;
+}
+
+function runSecurity(argv) {
+  const entry = path.join(__dirname, "kx-security.js");
+  const result = spawnSync(process.execPath, [entry, ...argv], {
+    stdio: "inherit",
+    env: process.env,
+    windowsHide: true,
+  });
+  return result.status == null ? 1 : result.status;
+}
+
 function isUpdate(argv) {
   if (!argv.length) return false;
   const a0 = String(argv[0]).toLowerCase();
@@ -69,6 +89,11 @@ function shouldEnterProgram(argv) {
 const doctorForward = doctorArgs(args);
 if (doctorForward) {
   process.exit(runDoctor(doctorForward));
+}
+
+const securityForward = securityArgs(args);
+if (securityForward) {
+  process.exit(runSecurity(securityForward));
 }
 
 if (isUpdate(args)) {

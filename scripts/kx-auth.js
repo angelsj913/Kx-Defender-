@@ -6,8 +6,9 @@ const os = require("os");
 const path = require("path");
 const readline = require("readline");
 
-const KX_DIR = path.join(os.homedir(), ".kx-defender");
+const KX_DIR = process.env.KX_HOME || path.join(os.homedir(), ".kx-defender");
 const USERS_FILE = path.join(KX_DIR, "users.json");
+const CONFIG_FILE = path.join(KX_DIR, "config.json");
 let nonTtyLines = null;
 
 function hash(pw) {
@@ -43,6 +44,13 @@ function save(store) {
 }
 
 function init() {
+  fs.mkdirSync(KX_DIR, { recursive: true });
+  if (!fs.existsSync(CONFIG_FILE)) {
+    fs.writeFileSync(CONFIG_FILE, `${JSON.stringify({ lang: "en" }, null, 2)}\n`, {
+      encoding: "utf8",
+      mode: 0o600,
+    });
+  }
   if (fs.existsSync(USERS_FILE)) return null;
   const password = process.env.KX_INITIAL_ADMIN_PASSWORD || "admin";
   save({ users: [{ username: "admin", passwordHash: hash(password), role: "admin" }] });
@@ -180,4 +188,14 @@ function handleAuthCmd(args, store, actor) {
   return false;
 }
 
-module.exports = { login, handleAuthCmd, load, init, hash, verify, takeBufferedInput };
+module.exports = {
+  login,
+  handleAuthCmd,
+  load,
+  init,
+  hash,
+  verify,
+  readLine,
+  readSecret,
+  takeBufferedInput,
+};
