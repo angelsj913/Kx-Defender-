@@ -73,7 +73,8 @@ if (doctorForward) {
 
 if (isUpdate(args)) {
   try {
-    require("./kx-update").updateKx();
+    const offset = String(args[0]).toLowerCase() === "kx" ? 2 : 1;
+    require("./kx-update").updateKx(args.slice(offset));
     process.exit(0);
   } catch (err) {
     console.error(`[Kx] ${err.message || err}`);

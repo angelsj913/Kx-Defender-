@@ -85,6 +85,19 @@ function add(checks, id, status, summary, extra = {}) {
 }
 
 function resolveApp(home) {
+  const currentPath = path.join(home, "current.json");
+  const current = safeJson(currentPath);
+  if (
+    current.value &&
+    current.value.current &&
+    typeof current.value.current.app === "string"
+  ) {
+    return {
+      app: path.resolve(current.value.current.app),
+      install: current,
+      installPath: currentPath,
+    };
+  }
   const installPath = path.join(home, "install.json");
   const install = safeJson(installPath);
   if (install.value && typeof install.value.app === "string") {
@@ -168,6 +181,26 @@ function inspect(options = {}) {
   }
 
   const { app, install, installPath } = resolveApp(context.home);
+  const pointerPath = path.join(context.home, "current.json");
+  if (fs.existsSync(pointerPath)) {
+    const pointer = safeJson(pointerPath);
+    const validPointer = Boolean(
+      !pointer.error &&
+      pointer.value &&
+      pointer.value.current &&
+      typeof pointer.value.current.app === "string" &&
+      typeof pointer.value.current.commit === "string"
+    );
+    add(
+      checks,
+      "release.pointer",
+      validPointer ? "pass" : "fail",
+      validPointer ? `Release pointer ${pointer.value.current.commit}` : "current.json is invalid",
+      validPointer ? { details: pointerPath } : { details: pointer.error?.message || pointerPath }
+    );
+  } else {
+    add(checks, "release.pointer", "pass", "Legacy install mode; no release pointer yet");
+  }
   const appVersion = readPackageVersion(app);
   if (appVersion) {
     add(checks, "app.install", "pass", `Persistent app ${appVersion}`, { details: app });

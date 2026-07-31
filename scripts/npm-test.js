@@ -17,6 +17,13 @@ const doctor = spawnSync(process.execPath, ["scripts/test-doctor.js"], {
 });
 if (doctor.status !== 0) process.exit(doctor.status == null ? 1 : doctor.status);
 
+const releaseState = spawnSync(process.execPath, ["scripts/test-release-state.js"], {
+  cwd: ROOT,
+  stdio: "inherit",
+  shell: false,
+});
+if (releaseState.status !== 0) process.exit(releaseState.status == null ? 1 : releaseState.status);
+
 const packageTest = spawnSync(process.execPath, ["scripts/test-package.js"], {
   cwd: ROOT,
   stdio: "inherit",

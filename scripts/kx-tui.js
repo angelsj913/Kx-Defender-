@@ -258,7 +258,7 @@ class KxClient {
 
     if (["update", "upgrade"].includes(head)) {
       try {
-        require("./kx-update").updateKx();
+        require("./kx-update").updateKx(args.slice(1));
         this.lastResult = this.lang === "ko" ? "업데이트가 완료되었습니다." : "Update completed.";
       } catch (err) {
         this.lastResult = `[update] ${err.message || err}`;

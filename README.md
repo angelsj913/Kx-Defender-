@@ -63,6 +63,17 @@ Or from PowerShell:
 npx -y --prefer-online github:angelsj913/Kx-Defender- update
 ```
 
+Updates are prepared and tested in a separate release directory before activation:
+
+```powershell
+kx update check
+kx update apply
+kx update status
+kx update rollback
+```
+
+The current release remains active when download, setup, or smoke testing fails.
+
 ## Safety model
 
 - Simulation is the default mode.

@@ -21,6 +21,7 @@ const paths = manifest.files.map((entry) => entry.path.replace(/\\/g, "/"));
 
 assert(paths.includes("scripts/terminal-ui.js"));
 assert(paths.includes("scripts/kx-doctor.js"));
+assert(paths.includes("scripts/kx-release.js"));
 assert(paths.includes("services/orchestrator/kx_defender/kx_cli.py"));
 assert(paths.includes("modules/defense/process_monitor.py"));
 assert(

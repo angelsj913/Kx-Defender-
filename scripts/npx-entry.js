@@ -265,7 +265,8 @@ function main() {
   // ~/.kx-defender/app (which may be an older install without updater).
   if (isUpdateArgv(rawArgv)) {
     try {
-      require("./kx-update").updateKx();
+      const offset = String(rawArgv[0]).toLowerCase() === "kx" ? 2 : 1;
+      require("./kx-update").updateKx(rawArgv.slice(offset));
     } catch (err) {
       console.error(`[Kx] ${err.message || err}`);
       process.exit(err.status || 1);
@@ -296,7 +297,7 @@ function main() {
       return;
     }
     if ((rest[0] || "").toLowerCase() === "update" || (rest[0] || "").toLowerCase() === "upgrade") {
-      require("./kx-update").updateKx();
+      require("./kx-update").updateKx(rest.slice(1));
       return;
     }
     if ((rest[0] || "").toLowerCase() === "login") {
@@ -309,7 +310,7 @@ function main() {
   }
 
   if (cmd === "update" || cmd === "upgrade") {
-    require("./kx-update").updateKx();
+    require("./kx-update").updateKx(rest);
     return;
   }
 
