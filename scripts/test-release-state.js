@@ -58,6 +58,16 @@ launched = require("child_process").spawnSync(process.execPath, [launcher, "kx"]
   shell: false,
 });
 assert.strictEqual(launched.stdout.trim(), "bbbb2222");
+fs.mkdirSync(path.join(home, "control"), { recursive: true });
+fs.writeFileSync(
+  path.join(home, "control", "kx-update.js"),
+  '"use strict"; console.log("CONTROL");\n'
+);
+launched = require("child_process").spawnSync(process.execPath, [launcher, "update", "status"], {
+  encoding: "utf8",
+  shell: false,
+});
+assert.strictEqual(launched.stdout.trim(), "CONTROL");
 
 assert(
   fs.readdirSync(home).every((name) => !name.includes(".tmp-")),

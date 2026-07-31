@@ -192,6 +192,17 @@ function printUpdateStatus() {
   return payload;
 }
 
+function writeStableControlPlane(home = HOME, sourceDir = __dirname) {
+  const control = path.join(home, "control");
+  fs.mkdirSync(control, { recursive: true });
+  for (const name of ["kx-update.js", "kx-release.js"]) {
+    const source = path.join(sourceDir, name);
+    if (!fs.existsSync(source)) throw new Error(`control-plane source is missing: ${source}`);
+    fs.copyFileSync(source, path.join(control, name));
+  }
+  return path.join(control, "kx-update.js");
+}
+
 function writeStableLauncher(home = HOME) {
   fs.mkdirSync(home, { recursive: true });
   const launcher = path.join(home, "launcher.js");
@@ -210,7 +221,10 @@ let target = path.join(app, "scripts", "npm-kx.js");
 let prefix = [];
 if (mode === "entry") target = path.join(app, "scripts", "npx-entry.js");
 if (mode === "login") { target = path.join(app, "scripts", "npx-entry.js"); prefix = ["login", "kx"]; }
-if (mode === "update") target = path.join(app, "scripts", "kx-update.js");
+if (mode === "update") {
+  const stableUpdater = path.join(home, "control", "kx-update.js");
+  target = fs.existsSync(stableUpdater) ? stableUpdater : path.join(app, "scripts", "kx-update.js");
+}
 if (!fs.existsSync(target)) { console.error("[Kx] active release entry is missing: " + target); process.exit(2); }
 const result = spawnSync(process.execPath, [target, ...prefix, ...rest], { stdio: "inherit", shell: false, windowsHide: true });
 process.exit(result.status == null ? 1 : result.status);
@@ -227,6 +241,7 @@ function writeShims() {
     : path.join(os.homedir(), ".local", "bin");
   fs.mkdirSync(binDir, { recursive: true });
   const activeApp = getAppRoot() || APP;
+  writeStableControlPlane();
   const launcher = writeStableLauncher();
   if (isWin()) {
     fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${launcher}" kx %*\r\n`);
@@ -348,6 +363,7 @@ module.exports = {
   ensurePersistentInstall,
   writeShims,
   writeStableLauncher,
+  writeStableControlPlane,
   spawnOptions,
   hasGit,
   APP,
