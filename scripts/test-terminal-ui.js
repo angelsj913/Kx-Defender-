@@ -186,6 +186,25 @@ assert.match(authResult.stdout, /REMAINING="sentry\\nexit\\n"/);
 assert.doesNotMatch(authResult.stdout, /\x1b\[/, "NO_COLOR login must not emit ANSI");
 fs.rmSync(authDir, { recursive: true, force: true });
 
+const loginRouteDir = fs.mkdtempSync(path.join(os.tmpdir(), "kx-login-route-test-"));
+const loginRoute = spawnSync(process.execPath, [path.join(__dirname, "npm-kx.js"), "login"], {
+  input: "admin\nadmin\nexit\n",
+  encoding: "utf8",
+  shell: false,
+  env: {
+    ...process.env,
+    HOME: loginRouteDir,
+    USERPROFILE: loginRouteDir,
+    KX_HOME: loginRouteDir,
+    KX_DEV: "1",
+    NO_COLOR: "1",
+  },
+});
+assert.strictEqual(loginRoute.status, 0, loginRoute.stderr);
+assert.match(loginRoute.stdout, /Session closed\./);
+assert.doesNotMatch(loginRoute.stdout + loginRoute.stderr, /Traceback|FileNotFoundError/);
+fs.rmSync(loginRouteDir, { recursive: true, force: true });
+
 const packageVersion = require("../package.json").version;
 const setupVersion = require("./npm-setup").SETUP_VERSION;
 assert.strictEqual(setupVersion, packageVersion, "setup version must follow package.json");

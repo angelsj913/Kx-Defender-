@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from io import StringIO
 
 import pytest
 
@@ -54,3 +55,16 @@ def test_module_json_escape_hatch(capsys) -> None:
     payload = json.loads(capsys.readouterr().out)
     assert payload["status"] == "ok"
     assert payload["kxlang"]["verb"] == "sentry"
+
+
+def test_ask_accepts_documented_option_separator(
+    tmp_path, monkeypatch, capsys
+) -> None:
+    monkeypatch.setenv("KX_HOME", str(tmp_path))
+    monkeypatch.setattr("sys.stdin", StringIO("\n"))
+
+    with pytest.raises(SystemExit) as exc:
+        main(["ask", "sentry", "detect", "--", "--scope", "lab", "--sim"])
+
+    assert exc.value.code == 0
+    assert "unknown flag '--'" not in capsys.readouterr().err

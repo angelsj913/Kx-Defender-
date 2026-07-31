@@ -1086,6 +1086,8 @@ def _emit_ask(args: list[str]) -> int:
         obj = rest[1]
         idx = 2
     extra = rest[idx:]
+    if extra[:1] == ["--"]:
+        extra = extra[1:]
 
     print(f"[Kx] Interactive parameters for `{verb}{(' ' + obj) if obj else ''}`", file=sys.stderr)
     print(f"[Kx] Press Enter to accept default/placeholder; '*' marks required.\n", file=sys.stderr)

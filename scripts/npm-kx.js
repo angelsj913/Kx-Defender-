@@ -93,6 +93,7 @@ function shouldEnterProgram(argv) {
   if (!argv.length) return true;
   if (isUpdate(argv)) return false;
   const a0 = String(argv[0]).toLowerCase();
+  if (["login", "hud", "shell", "repl", "cli"].includes(a0)) return true;
   if (a0 === "/h" || a0 === "-h" || a0 === "--help" || a0 === "help") return false;
   if (a0 === "kx") {
     const rest = argv.slice(1);
