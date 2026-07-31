@@ -93,6 +93,24 @@ assert.deepStrictEqual(
   "command-level JSON flags must reach the Python CLI"
 );
 
+const evidenceRoute = spawnSync(
+  process.execPath,
+  [
+    path.join(__dirname, "npx-entry.js"),
+    "evidence",
+    "verify",
+    path.join(os.tmpdir(), "kx-evidence-route-test-missing.kxev"),
+  ],
+  {
+    encoding: "utf8",
+    shell: false,
+    env: { ...process.env, KX_DEV: "1", NO_COLOR: "1" },
+  }
+);
+assert.strictEqual(evidenceRoute.status, 2);
+assert.match(evidenceRoute.stderr, /No such file|bundle/i);
+assert.doesNotMatch(evidenceRoute.stdout, /Sign in to continue/);
+
 const doctorClient = new (require("./kx-tui").KxClient)({ bootstrap() {} });
 doctorClient.lang = "en";
 doctorClient.user = { username: "admin", role: "admin" };

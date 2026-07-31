@@ -342,6 +342,16 @@ function main() {
     return;
   }
 
+  const localMetaCommands = new Set([
+    "alert", "alerts", "case", "cases", "evidence", "report", "daemon",
+    "why", "form", "suggest", "ask",
+  ]);
+  if (localMetaCommands.has(cmd)) {
+    ensureSetup();
+    const res = runKx([cmd, ...rest]);
+    process.exit(res.status == null ? 1 : res.status);
+  }
+
   // login / [login kx] / login-kx → start HUD (re-entry)
   if (isLoginCommand(cmd, rest)) {
     startInteractive();
