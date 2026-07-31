@@ -158,6 +158,26 @@ Rule tests run in a separate process with a three-second timeout. Duplicate
 IDs, unsupported metadata, nested regex quantifiers, oversized rules, and
 oversized samples are rejected.
 
+## Baselines and drift
+
+Capture a local system baseline, then explain what changed. The default
+snapshot records process metadata, runtime versions, and hashes of Kx
+configuration and user-rule files. Add `--path` only for a directory you
+explicitly want to monitor.
+
+```powershell
+kx baseline create workstation-clean
+kx baseline create project-clean --path .\project
+kx baseline list
+kx baseline compare workstation-clean
+kx baseline show workstation-clean
+kx baseline delete workstation-clean
+```
+
+Baseline files contain hashes and metadata, not passwords or watched-file
+contents. Symbolic links, more than 5,000 files, and hashing files larger than
+50 MiB are rejected or skipped safely.
+
 ## Safety model
 
 - Simulation is the default mode.

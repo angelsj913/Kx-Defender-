@@ -827,6 +827,61 @@ def _emit_evidence(args: list[str]) -> int:
     return exit_code
 
 
+def _emit_baseline(args: list[str]) -> int:
+    """Create, compare, inspect, and delete local host baselines."""
+    from kx_defender.baseline import BaselineManager  # noqa: PLC0415
+
+    rest = args[1:]
+    sub = rest[0].lower() if rest else "list"
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    manager = BaselineManager()
+    try:
+        if sub == "create":
+            if len(rest) < 2:
+                raise ValueError("usage: kx baseline create <name> [--path <directory>]")
+            result = manager.create(rest[1], watched_path=_option_value(rest, "--path"))
+        elif sub == "list":
+            result = {"baselines": manager.list()}
+        elif sub == "compare":
+            if len(rest) < 2:
+                raise ValueError("usage: kx baseline compare <name>")
+            result = manager.compare(rest[1])
+        elif sub == "show":
+            if len(rest) < 2:
+                raise ValueError("usage: kx baseline show <name>")
+            result = manager.show(rest[1])
+        elif sub == "delete":
+            if len(rest) < 2:
+                raise ValueError("usage: kx baseline delete <name>")
+            result = manager.delete(rest[1])
+        else:
+            raise ValueError("use: kx baseline create|list|compare|show|delete")
+    except (OSError, ValueError) as exc:
+        print(f"Kx baseline error: {exc}", file=sys.stderr)
+        return 2
+
+    if as_json or sub in {"show"}:
+        _print_json(result)
+    elif sub == "list":
+        for item in result["baselines"]:
+            print(f"{item['name']}  {item['created_at']}  {item['watched_path'] or '-'}")
+        if not result["baselines"]:
+            print("(no baselines)")
+    elif sub == "compare":
+        print(
+            f"{result['name']}: {'drift detected' if result['drift'] else 'no drift'}  "
+            f"files +{len(result['added'])}/-{len(result['removed'])}/"
+            f"~{len(result['modified'])}  processes +{len(result['process_new'])}/"
+            f"-{len(result['process_missing'])}"
+        )
+    elif sub == "create":
+        print(f"created baseline {result['name']} at {result['created_at']}")
+    else:
+        print(f"deleted baseline {result['deleted']}")
+    return 0
+
+
 def _emit_watch_continuous(args: list[str]) -> int:
     """`kx watch procs --continuous [--interval N] [--min-severity S] [--iter N]`
 
@@ -1011,6 +1066,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_case(args))
     if head == "evidence":
         raise SystemExit(_emit_evidence(args))
+    if head == "baseline":
+        raise SystemExit(_emit_baseline(args))
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":

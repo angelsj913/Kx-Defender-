@@ -108,7 +108,7 @@ function shouldEnterProgram(argv) {
       "roast", "relay", "loot", "bait", "breach", "crack", "nexus", "graph",
       "probe", "sweep", "watch", "kill", "sig", "lang", "lexicon",
       "alert", "alerts", "case", "cases", "evidence", "report", "daemon",
-      "why", "form", "suggest", "ask",
+      "why", "form", "suggest", "ask", "baseline",
     ]);
     if (kxLangVerbs.has(first)) return false;
     return true;

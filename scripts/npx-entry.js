@@ -368,7 +368,7 @@ function main() {
 
   const localMetaCommands = new Set([
     "alert", "alerts", "case", "cases", "evidence", "report", "daemon",
-    "why", "form", "suggest", "ask",
+    "why", "form", "suggest", "ask", "baseline",
   ]);
   if (localMetaCommands.has(cmd)) {
     ensureSetup();
