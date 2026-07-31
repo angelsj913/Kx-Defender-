@@ -38,6 +38,8 @@ sentry                     Run the default local detection simulation
 watch procs --scope lab --sim
 sig scan --scope lab --sim
 daemon status              Show background watcher status
+alert list --status new    List unhandled local alerts
+case list                  List local incident cases
 lang ko                    Switch to Korean
 lang en                    Switch to English
 update                     Update from main
@@ -75,6 +77,28 @@ kx update rollback
 ```
 
 The current release remains active when download, setup, or smoke testing fails.
+
+## Alerts and cases
+
+Alerts keep a stable local ID, deduplicate repeated findings, and retain every
+status change in `%USERPROFILE%\.kx-defender\operator.db`. The existing
+`alerts.jsonl` file remains as a compatibility log.
+
+```powershell
+kx alert migrate
+kx alert list --status new --severity high
+kx alert show ALT-...
+kx alert ack ALT-... --note "investigating"
+kx alert resolve ALT-... --reason "benign"
+kx alert reopen ALT-...
+
+kx case create --from-alert ALT-... --title "Process investigation"
+kx case add CASE-... ALT-...
+kx case note CASE-... "Collected process tree"
+kx case close CASE-... --resolution "contained"
+```
+
+Add `--json` to alert and case commands for stable automation output.
 
 ## Safety model
 

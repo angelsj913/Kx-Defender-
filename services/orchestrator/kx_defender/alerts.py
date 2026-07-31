@@ -58,8 +58,21 @@ def emit_alert(
         "title": str(title),
         "evidence": evidence or {},
     }
-    line = json.dumps(record, ensure_ascii=False)
     _ensure_parent(target)
+    try:
+        from kx_defender.alert_store import AlertStore
+
+        stored = AlertStore(target.parent / "operator.db").ingest(record)
+        record.update(
+            {
+                "alert_id": stored["alert_id"],
+                "status": stored["status"],
+                "count": stored["count"],
+            }
+        )
+    except Exception as exc:
+        print(f"[kx-alerts] failed to index alert: {exc}", file=sys.stderr)
+    line = json.dumps(record, ensure_ascii=False)
     try:
         # Append first — cheap and atomic on modern filesystems.
         with open(target, "a", encoding="utf-8") as fh:

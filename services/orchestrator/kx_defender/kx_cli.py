@@ -527,52 +527,196 @@ def _emit_sig_meta(args: list[str]) -> int:
     return 2
 
 
-def _emit_alert(args: list[str]) -> int:
-    """`kx alert list|tail|clear|path` — inspect the local alert JSONL.
+def _option_value(args: list[str], option: str) -> str | None:
+    if option not in args:
+        return None
+    index = args.index(option)
+    if index + 1 >= len(args):
+        raise ValueError(f"{option} requires a value")
+    return args[index + 1]
 
-    All I/O is local: alerts are appended to ~/.kx-defender/alerts.jsonl.
-    No external channels (no Slack, no email, no HTTP webhooks).
-    """
-    from kx_defender.alerts import (  # noqa: PLC0415
-        ALERT_LOG_PATH, clear_alerts, read_recent_alerts,
-    )
+
+def _emit_alert(args: list[str]) -> int:
+    """Manage local alerts while retaining the JSONL compatibility log."""
+    from kx_defender.alert_store import AlertStore  # noqa: PLC0415
+    from kx_defender.alerts import ALERT_LOG_PATH, clear_alerts  # noqa: PLC0415
+
     rest = args[1:]
     sub = rest[0].lower() if rest else "list"
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    store = AlertStore()
 
     if sub == "path":
-        print(str(ALERT_LOG_PATH))
+        payload = {"database": str(store.path), "compatibility_log": str(ALERT_LOG_PATH)}
+        if as_json:
+            _print_json(payload)
+        else:
+            print(f"database: {store.path}\ncompatibility log: {ALERT_LOG_PATH}")
         return 0
-
     if sub == "clear":
         n = clear_alerts()
-        print(f"cleared {n} alert(s) from {ALERT_LOG_PATH}", file=sys.stderr)
+        print(
+            f"cleared {n} compatibility log record(s); lifecycle database was retained",
+            file=sys.stderr,
+        )
         return 0
+    if sub == "migrate":
+        outcome = store.migrate_jsonl(ALERT_LOG_PATH)
+        if as_json:
+            _print_json(outcome)
+        else:
+            print(
+                f"imported={outcome['imported']} skipped={outcome['skipped']} "
+                f"invalid={outcome['invalid']}"
+            )
+        return 0 if outcome["invalid"] == 0 else 2
 
-    limit = 25
-    if sub in {"list", "tail"} and len(rest) >= 2:
-        try:
-            limit = max(1, int(rest[1]))
-        except ValueError:
-            print(f"limit must be integer, got {rest[1]!r}", file=sys.stderr)
-            return 2
+    try:
+        if sub == "show":
+            if len(rest) < 2:
+                raise ValueError("usage: kx alert show <alert-id>")
+            alert = store.get_alert(rest[1], include_events=True)
+            if as_json:
+                _print_json(alert)
+            else:
+                print(
+                    f"{alert['alert_id']} [{alert['severity'].upper()}] {alert['status']} "
+                    f"{alert['module']} - {alert['title']}\n"
+                    f"seen: {alert['first_seen']} .. {alert['last_seen']}  count={alert['count']}"
+                )
+                for event in alert["events"]:
+                    suffix = f" - {event['note']}" if event["note"] else ""
+                    print(f"  {event['ts']} {event['actor']} {event['action']}{suffix}")
+            return 0
 
-    alerts = read_recent_alerts(limit=limit)
+        if sub in {"ack", "resolve", "reopen"}:
+            if len(rest) < 2:
+                raise ValueError(f"usage: kx alert {sub} <alert-id>")
+            option = "--reason" if sub == "resolve" else "--note"
+            note = _option_value(rest, option) or ""
+            target = {"ack": "acknowledged", "resolve": "resolved", "reopen": "new"}[sub]
+            alert = store.transition(
+                rest[1],
+                target,
+                actor=os.environ.get("KX_ACTOR") or "admin",
+                note=note,
+            )
+            if as_json:
+                _print_json(alert)
+            else:
+                print(f"{alert['alert_id']} -> {alert['status']}")
+            return 0
+
+        if sub not in {"list", "tail"}:
+            raise ValueError("use: kx alert list|show|ack|resolve|reopen|migrate|path")
+        status = _option_value(rest, "--status")
+        severity = _option_value(rest, "--severity")
+        raw_limit = _option_value(rest, "--limit")
+        if raw_limit is None and len(rest) >= 2 and rest[1].isdigit():
+            raw_limit = rest[1]
+        alerts = store.list_alerts(
+            status=status,
+            severity=severity,
+            limit=int(raw_limit or 25),
+        )
+    except (KeyError, ValueError) as exc:
+        print(f"Kx alert error: {exc}", file=sys.stderr)
+        return 2
+
     if not alerts:
-        print(f"(no alerts in {ALERT_LOG_PATH})", file=sys.stderr)
+        if as_json:
+            _print_json({"alerts": []})
+        else:
+            print("(no alerts)", file=sys.stderr)
+        return 0
+    if as_json:
+        _print_json({"alerts": alerts})
         return 0
 
     from kx_defender.render import _color_enabled, _c, _SEV_COLOR  # noqa: PLC0415
+
     use_color = _color_enabled(None)
     reset = _c("reset", use_color)
     muted = _c("muted", use_color)
     accent = _c("accent", use_color)
-    for a in alerts:
-        sev = str(a.get("severity", "info")).lower()
+    for alert in alerts:
+        sev = str(alert.get("severity", "info")).lower()
         sev_c = _SEV_COLOR.get(sev, "") if use_color else ""
-        ts = a.get("ts", "?")
-        module = a.get("module", "?")
-        title = a.get("title", "")
-        print(f"{muted}{ts}{reset}  {sev_c}[{sev.upper():^8}]{reset}  {accent}{module}{reset}  {title}")
+        print(
+            f"{muted}{alert['last_seen']}{reset}  {sev_c}[{sev.upper():^8}]{reset}  "
+            f"{accent}{alert['alert_id']}{reset}  {alert['status']:<12} "
+            f"{alert['module']}  {alert['title']}  x{alert['count']}"
+        )
+    return 0
+
+
+def _emit_case(args: list[str]) -> int:
+    """Manage local incident cases linked to lifecycle alerts."""
+    from kx_defender.alert_store import AlertStore  # noqa: PLC0415
+
+    rest = args[1:]
+    sub = rest[0].lower() if rest else "list"
+    as_json = "--json" in rest
+    rest = [item for item in rest if item != "--json"]
+    store = AlertStore()
+    actor = os.environ.get("KX_ACTOR") or "admin"
+    try:
+        if sub == "list":
+            payload: object = {
+                "cases": store.list_cases(status=_option_value(rest, "--status"))
+            }
+        elif sub == "show":
+            if len(rest) < 2:
+                raise ValueError("usage: kx case show <case-id>")
+            payload = store.get_case(rest[1])
+        elif sub == "create":
+            title = _option_value(rest, "--title")
+            if not title:
+                raise ValueError(
+                    "usage: kx case create --title <title> [--from-alert <alert-id>]"
+                )
+            payload = store.create_case(
+                title,
+                from_alert=_option_value(rest, "--from-alert"),
+                severity=_option_value(rest, "--severity"),
+            )
+        elif sub == "add":
+            if len(rest) < 3:
+                raise ValueError("usage: kx case add <case-id> <alert-id>")
+            payload = store.add_case_alert(rest[1], rest[2])
+        elif sub == "note":
+            if len(rest) < 3:
+                raise ValueError('usage: kx case note <case-id> "<note>"')
+            payload = store.add_case_note(rest[1], actor, " ".join(rest[2:]))
+        elif sub == "close":
+            if len(rest) < 2:
+                raise ValueError(
+                    "usage: kx case close <case-id> --resolution <resolution>"
+                )
+            resolution = _option_value(rest, "--resolution")
+            if not resolution:
+                raise ValueError("--resolution is required")
+            payload = store.close_case(rest[1], resolution)
+        else:
+            raise ValueError("use: kx case list|show|create|add|note|close")
+    except (KeyError, ValueError) as exc:
+        print(f"Kx case error: {exc}", file=sys.stderr)
+        return 2
+
+    if as_json:
+        _print_json(payload)
+    elif isinstance(payload, dict) and "cases" in payload:
+        for case in payload["cases"]:
+            print(
+                f"{case['case_id']} [{case['severity'].upper()}] "
+                f"{case['status']:<6} {case['title']}"
+            )
+    elif isinstance(payload, dict):
+        print(
+            f"{payload['case_id']} [{payload['severity'].upper()}] "
+            f"{payload['status']} {payload['title']}"
+        )
     return 0
 
 
@@ -756,6 +900,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(_emit_why(args))
     if head == "alert" or head == "alerts":
         raise SystemExit(_emit_alert(args))
+    if head == "case" or head == "cases":
+        raise SystemExit(_emit_case(args))
     if head == "report":
         raise SystemExit(_emit_report(args))
     if head == "daemon":
