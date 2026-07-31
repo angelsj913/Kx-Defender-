@@ -110,9 +110,10 @@ function preferPersistentApp() {
 }
 
 function installUserShims() {
+  let persistentApp = null;
   try {
     const { ensurePersistentInstall } = require("./kx-update");
-    ensurePersistentInstall(ROOT);
+    persistentApp = ensurePersistentInstall(ROOT);
   } catch (_) {
     /* ignore */
   }
@@ -120,6 +121,11 @@ function installUserShims() {
     ? path.join(process.env.LOCALAPPDATA || path.join(os.homedir(), "AppData", "Local"), "Kx-Defender", "bin")
     : path.join(os.homedir(), ".local", "bin");
   fs.mkdirSync(binDir, { recursive: true });
+  if (persistentApp) {
+    log(`CLI shims: ${binDir}`);
+    if (isWin()) log(`This session: $env:PATH="${binDir};$env:PATH"`);
+    return binDir;
+  }
   let root = ROOT;
   try {
     const { getAppRoot } = require("./kx-update");
