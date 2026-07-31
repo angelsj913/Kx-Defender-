@@ -33,6 +33,15 @@ def test_dashboard_sections_aggregate_local_state(tmp_path: Path) -> None:
             "evidence": {"source": "unit"},
         }
     )
+    alerts.ingest(
+        {
+            "ts": "2026-08-01T11:30:00+00:00",
+            "severity": "critical",
+            "module": "test",
+            "title": "Future alert",
+            "evidence": {"source": "clock-skew-test"},
+        }
+    )
     old = alerts.ingest(
         {
             "ts": "2026-07-29T11:30:00+00:00",
@@ -70,9 +79,9 @@ def test_dashboard_sections_aggregate_local_state(tmp_path: Path) -> None:
     assert overview["daemon"]["running"] is False
 
     alerts_view = build_snapshot("alerts", alert_store=alerts)
-    assert len(alerts_view["items"]) == 2
+    assert len(alerts_view["items"]) == 3
     assert alerts_view["by_status"] == {
-        "new": 1,
+        "new": 2,
         "acknowledged": 0,
         "resolved": 1,
     }
@@ -90,3 +99,8 @@ def test_dashboard_rejects_unknown_section() -> None:
         assert "unknown dashboard section" in str(exc)
     else:
         raise AssertionError("unknown section was accepted")
+
+
+def test_empty_runs_are_explicit(tmp_path: Path) -> None:
+    snapshot = build_snapshot("runs", run_store=RunStore(tmp_path / "runs.db"))
+    assert render_snapshot(snapshot).endswith("(no runs)")

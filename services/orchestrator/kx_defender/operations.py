@@ -115,7 +115,7 @@ def build_snapshot(
         item
         for item in alerts
         if (timestamp := _parse_time(item.get("last_seen"))) is not None
-        and timestamp >= cutoff
+        and cutoff <= timestamp <= current
     ]
     by_severity = {severity: 0 for severity in SEVERITIES}
     for item in recent:
@@ -164,10 +164,13 @@ def render_snapshot(snapshot: dict[str, Any]) -> str:
             for item in snapshot["items"]
         )
     elif section == "runs":
-        lines.extend(
-            f"{item['run_id']} {item['module']} {item['status']} {item['created_at']}"
-            for item in snapshot["items"]
-        )
+        if snapshot["items"]:
+            lines.extend(
+                f"{item['run_id']} {item['module']} {item['status']} {item['created_at']}"
+                for item in snapshot["items"]
+            )
+        else:
+            lines.append("(no runs)")
     elif section == "cases":
         lines.append(f"Open cases shown: {snapshot['open']}")
         lines.extend(
