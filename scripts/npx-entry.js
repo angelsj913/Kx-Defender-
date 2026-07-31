@@ -273,6 +273,24 @@ function runSecurity(argv) {
   return result.status == null ? 1 : result.status;
 }
 
+function commandMetaArgs(argv) {
+  const a = (argv || []).map((value) => String(value).toLowerCase());
+  const offset = a[0] === "kx" ? 1 : 0;
+  if (a[offset] === "history" || a[offset] === "favorite") {
+    return argv.slice(offset);
+  }
+  return null;
+}
+
+function runCommandMeta(argv) {
+  const result = spawnSync(process.execPath, [path.join(__dirname, "npm-kx.js"), ...argv], {
+    stdio: "inherit",
+    env: process.env,
+    windowsHide: true,
+  });
+  return result.status == null ? 1 : result.status;
+}
+
 function main() {
   const rawArgv = process.argv.slice(2);
 
@@ -286,6 +304,12 @@ function main() {
   const securityForward = securityArgs(rawArgv);
   if (securityForward) {
     process.exitCode = runSecurity(securityForward);
+    return;
+  }
+
+  const commandMetaForward = commandMetaArgs(rawArgv);
+  if (commandMetaForward) {
+    process.exitCode = runCommandMeta(commandMetaForward);
     return;
   }
 

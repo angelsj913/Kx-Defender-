@@ -15,6 +15,34 @@ const { runDoctor } = require("./kx-doctor");
 
 const args = process.argv.slice(2);
 
+function commandMetaArgs(argv) {
+  const normalized = argv.map((value) => String(value).toLowerCase());
+  const offset = normalized[0] === "kx" ? 1 : 0;
+  if (normalized[offset] === "history" || normalized[offset] === "favorite") {
+    return argv.slice(offset);
+  }
+  return null;
+}
+
+function runCommandMeta(argv) {
+  try {
+    const store = require("./kx-command-store");
+    const result = store.executeMeta(argv);
+    if (result.output) console.log(result.output);
+    if (!result.commandToRun) return result.exitCode;
+    const command = require("./kx-shell").splitArgs(result.commandToRun);
+    const child = spawnSync(process.execPath, [__filename, ...command], {
+      stdio: "inherit",
+      env: process.env,
+      windowsHide: true,
+    });
+    return child.status == null ? 1 : child.status;
+  } catch (error) {
+    console.error(`[Kx] ${error.message || error}`);
+    return 2;
+  }
+}
+
 function securityArgs(argv) {
   const normalized = argv.map((value) => String(value).toLowerCase());
   const offset = normalized[0] === "kx" ? 1 : 0;
@@ -91,6 +119,11 @@ function shouldEnterProgram(argv) {
 const doctorForward = doctorArgs(args);
 if (doctorForward) {
   process.exit(runDoctor(doctorForward));
+}
+
+const commandMetaForward = commandMetaArgs(args);
+if (commandMetaForward) {
+  process.exit(runCommandMeta(commandMetaForward));
 }
 
 const securityForward = securityArgs(args);

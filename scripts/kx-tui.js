@@ -20,6 +20,7 @@ const {
   renderPromptBottom,
   renderPromptTop,
 } = require("./terminal-ui");
+const commandStore = require("./kx-command-store");
 
 const TEXT = {
   en: {
@@ -196,7 +197,9 @@ class KxClient {
       terminal: input === process.stdin && Boolean(process.stdin.isTTY && process.stdout.isTTY),
       historySize: 100,
       removeHistoryDuplicates: true,
+      completer: commandStore.complete,
     });
+    this.rl.history = commandStore.listHistory({ limit: 100 }).map((item) => item.command);
     process.stdout.on("resize", this.onResize);
     this.rl.on("SIGINT", () => {
       process.exitCode = 130;
@@ -230,11 +233,23 @@ class KxClient {
       this.lastResult = "";
       return;
     }
+    commandStore.recordHistory(trimmed);
 
     let args = splitArgs(trimmed);
     if (args[0]?.toLowerCase() === "kx") args = args.slice(1);
     if (!args.length) args = ["/h"];
     const head = String(args[0] || "").toLowerCase();
+
+    if (head === "history" || head === "favorite") {
+      try {
+        const result = commandStore.executeMeta(args);
+        this.lastResult = result.output;
+        if (result.commandToRun) this.handle(result.commandToRun);
+      } catch (error) {
+        this.lastResult = `[${head}] ${error.message || error}`;
+      }
+      return;
+    }
 
     if (["users", "useradd", "userdel", "passwd"].includes(head)) {
       handleAuthCmd(args, loadUsers(), this.user);

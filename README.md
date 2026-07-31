@@ -118,6 +118,25 @@ kx evidence import incident.kxev --read-only
 Import verifies all hashes and archive paths before writing anything, then
 stores the extracted copy as read-only under `.kx-defender\evidence\imported`.
 
+## Command history and favorites
+
+The interactive client provides Tab completion from the KxLang lexicon and
+restores the latest 100 commands for arrow-key navigation. Up to 500 commands
+are kept locally. Password-changing commands are never stored; secret flags
+are saved only as `<redacted>`.
+
+```powershell
+kx history list
+kx history search sentry
+kx history clear --yes
+kx favorite add daily-check "sentry --scope lab --sim"
+kx favorite list
+kx favorite run daily-check
+```
+
+Favorites containing credentials are rejected. A favorite containing `--live`
+requires `kx favorite run <name> --confirm-live`.
+
 ## Safety model
 
 - Simulation is the default mode.

@@ -31,6 +31,8 @@ EXAMPLES = [
     "kx case create --from-alert ALT-... --title investigation",
     "kx evidence export --case CASE-... --to incident.kxev",
     "kx evidence verify incident.kxev",
+    "kx history search sentry",
+    "kx favorite run daily-check",
     "kx report daily",
     "kx report hours 3 --markdown",
     "kx sig scan --scope lab --sim",
