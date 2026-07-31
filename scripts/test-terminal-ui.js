@@ -96,7 +96,7 @@ assert.deepStrictEqual(
 const evidenceRoute = spawnSync(
   process.execPath,
   [
-    path.join(__dirname, "npx-entry.js"),
+    path.join(__dirname, "npm-kx.js"),
     "evidence",
     "verify",
     path.join(os.tmpdir(), "kx-evidence-route-test-missing.kxev"),
