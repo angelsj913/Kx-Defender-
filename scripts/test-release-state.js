@@ -19,6 +19,8 @@ function makeRelease(commit, valid = true) {
       path.join(app, "scripts", "npm-kx.js"),
       `"use strict"; console.log(${JSON.stringify(commit)});\n`
     );
+    fs.writeFileSync(path.join(app, "scripts", "kx-client.js"), `"use strict"; console.log("client-${commit}");\n`);
+    fs.writeFileSync(path.join(app, "scripts", "kx-shell.js"), `"use strict"; console.log("shell-${commit}");\n`);
   }
   return app;
 }
@@ -58,6 +60,16 @@ launched = require("child_process").spawnSync(process.execPath, [launcher, "kx"]
   shell: false,
 });
 assert.strictEqual(launched.stdout.trim(), "bbbb2222");
+launched = require("child_process").spawnSync(process.execPath, [launcher, "client"], {
+  encoding: "utf8",
+  shell: false,
+});
+assert.strictEqual(launched.stdout.trim(), "client-bbbb2222");
+launched = require("child_process").spawnSync(process.execPath, [launcher, "shell"], {
+  encoding: "utf8",
+  shell: false,
+});
+assert.strictEqual(launched.stdout.trim(), "shell-bbbb2222");
 fs.mkdirSync(path.join(home, "control"), { recursive: true });
 fs.writeFileSync(
   path.join(home, "control", "kx-update.js"),

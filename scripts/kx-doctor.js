@@ -486,23 +486,25 @@ function repairConfig(context) {
 function repairShims(context) {
   const { app } = resolveApp(context.home);
   if (!readPackageVersion(app)) throw new Error(`persistent app is missing: ${app}`);
+  const { writeStableControlPlane, writeStableLauncher } = require("./kx-update");
+  writeStableControlPlane(context.home, path.join(app, "scripts"));
+  const launcher = writeStableLauncher(context.home);
   const binDir = binDirFor(context);
   fs.mkdirSync(binDir, { recursive: true });
   const entries = {
-    kx: path.join(app, "scripts", "npm-kx.js"),
-    "kx-defender": path.join(app, "scripts", "npx-entry.js"),
-    "login-kx": path.join(app, "scripts", "npx-entry.js"),
-    "kx-update": path.join(app, "scripts", "kx-update.js"),
+    kx: "kx",
+    "kx-defender": "entry",
+    "kx-client": "client",
+    "kx-shell": "shell",
+    "login-kx": "login",
+    "kx-update": "update",
   };
-  for (const [name, target] of Object.entries(entries)) {
-    if (!fs.existsSync(target)) throw new Error(`shim target is missing: ${target}`);
+  for (const [name, mode] of Object.entries(entries)) {
     if (context.platform === "win32") {
-      const prefix = name === "login-kx" ? " login kx" : "";
-      fs.writeFileSync(path.join(binDir, `${name}.cmd`), `@node "${target}"${prefix} %*\r\n`);
+      fs.writeFileSync(path.join(binDir, `${name}.cmd`), `@node "${launcher}" ${mode} %*\r\n`);
     } else {
-      const prefix = name === "login-kx" ? " login kx" : "";
       const destination = path.join(binDir, name);
-      fs.writeFileSync(destination, `#!/bin/sh\nexec node ${JSON.stringify(target)}${prefix} "$@"\n`);
+      fs.writeFileSync(destination, `#!/bin/sh\nexec node ${JSON.stringify(launcher)} ${mode} "$@"\n`);
       fs.chmodSync(destination, 0o755);
     }
   }

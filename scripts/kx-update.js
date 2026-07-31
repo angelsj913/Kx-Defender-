@@ -221,6 +221,8 @@ let target = path.join(app, "scripts", "npm-kx.js");
 let prefix = [];
 if (mode === "entry") target = path.join(app, "scripts", "npx-entry.js");
 if (mode === "login") { target = path.join(app, "scripts", "npx-entry.js"); prefix = ["login", "kx"]; }
+if (mode === "client") target = path.join(app, "scripts", "kx-client.js");
+if (mode === "shell") target = path.join(app, "scripts", "kx-shell.js");
 if (mode === "update") {
   const stableUpdater = path.join(home, "control", "kx-update.js");
   target = fs.existsSync(stableUpdater) ? stableUpdater : path.join(app, "scripts", "kx-update.js");
@@ -251,6 +253,8 @@ function writeShims() {
   if (isWin()) {
     fs.writeFileSync(path.join(binDir, "kx.cmd"), `@node "${launcher}" kx %*\r\n`);
     fs.writeFileSync(path.join(binDir, "kx-defender.cmd"), `@node "${launcher}" entry %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-client.cmd"), `@node "${launcher}" client %*\r\n`);
+    fs.writeFileSync(path.join(binDir, "kx-shell.cmd"), `@node "${launcher}" shell %*\r\n`);
     fs.writeFileSync(path.join(binDir, "login-kx.cmd"), `@node "${launcher}" login %*\r\n`);
     fs.writeFileSync(
       path.join(binDir, "kx-update.cmd"),
@@ -272,6 +276,8 @@ function writeShims() {
     };
     write("kx", launcher, "kx ");
     write("kx-defender", launcher, "entry ");
+    write("kx-client", launcher, "client ");
+    write("kx-shell", launcher, "shell ");
     write("login-kx", launcher, "login ");
     write("kx-update", launcher, "update ");
   }
