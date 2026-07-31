@@ -1,5 +1,8 @@
 "use strict";
 
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 const { spawnSync } = require("child_process");
 const { ensureSetup, ROOT, readState, spawnOpts } = require("./npm-setup");
 
@@ -47,16 +50,30 @@ if (packageTest.status !== 0) process.exit(packageTest.status == null ? 1 : pack
 
 const runtime = ensureSetup();
 const py = runtime.python || readState().python;
+const pythonTestHome = fs.mkdtempSync(path.join(os.tmpdir(), "kx-python-tests-"));
+const pythonTestEnv = {
+  ...process.env,
+  KX_HOME: pythonTestHome,
+};
+delete pythonTestEnv.KX_OPERATOR_DB;
+delete pythonTestEnv.KX_RUN_DB;
 const pytest = spawnSync(py, ["-c", "import pytest"], {
   ...spawnOpts(py, { cwd: ROOT, stdio: "ignore" }),
+  env: pythonTestEnv,
 });
 if (pytest.status !== 0) {
   const install = spawnSync(py, ["-m", "pip", "install", "-e", ".[dev]"], {
     ...spawnOpts(py, { cwd: ROOT, stdio: "inherit" }),
+    env: pythonTestEnv,
   });
-  if (install.status !== 0) process.exit(install.status == null ? 1 : install.status);
+  if (install.status !== 0) {
+    fs.rmSync(pythonTestHome, { recursive: true, force: true });
+    process.exit(install.status == null ? 1 : install.status);
+  }
 }
 const res = spawnSync(py, ["-m", "pytest", "-q"], {
   ...spawnOpts(py, { cwd: ROOT, stdio: "inherit" }),
+  env: pythonTestEnv,
 });
+fs.rmSync(pythonTestHome, { recursive: true, force: true });
 process.exit(res.status == null ? 1 : res.status);
