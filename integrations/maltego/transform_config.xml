@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TransformRepositories>
+  <TransformRepository name="kx-Defender" description="27 kx-Defender command handlers">
+    <TransformSet name="Attack">
+      <Transform name="kx.roast" displayName="Roast">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxThreat" />
+      </Transform>
+      <Transform name="kx.relay" displayName="Relay">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxThreat" />
+      </Transform>
+      <Transform name="kx.loot" displayName="Loot">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.bait" displayName="Bait">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxAlert" />
+      </Transform>
+      <Transform name="kx.breach" displayName="Breach">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxThreat" />
+      </Transform>
+      <Transform name="kx.crack" displayName="Crack">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.nexus" displayName="Nexus">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxNetwork" />
+      </Transform>
+    </TransformSet>
+
+    <TransformSet name="Defense">
+      <Transform name="kx.sentry" displayName="Sentry">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxAlert" />
+      </Transform>
+      <Transform name="kx.trace" displayName="Trace">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxProcess" />
+      </Transform>
+      <Transform name="kx.audit" displayName="Audit">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.harden" displayName="Harden">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxExecution" />
+      </Transform>
+      <Transform name="kx.triage" displayName="Triage">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.comply" displayName="Comply">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.forge" displayName="Forge">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxExecution" />
+      </Transform>
+      <Transform name="kx.sig" displayName="Sig">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+      <Transform name="kx.watch" displayName="Watch">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxProcess" />
+      </Transform>
+      <Transform name="kx.kill" displayName="Kill">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxProcess" />
+      </Transform>
+    </TransformSet>
+
+    <TransformSet name="Infrastructure">
+      <Transform name="kx.graph" displayName="Graph">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxNetwork" />
+      </Transform>
+      <Transform name="kx.probe" displayName="Probe">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxNetwork" />
+      </Transform>
+      <Transform name="kx.sweep" displayName="Sweep">
+        <Input entityType="KxCommand" />
+        <Output entityType="KxFinding" />
+      </Transform>
+    </TransformSet>
+  </TransformRepository>
+</TransformRepositories>
