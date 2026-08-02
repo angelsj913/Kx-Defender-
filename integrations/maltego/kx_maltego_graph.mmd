@@ -1,0 +1,157 @@
+graph TD
+    Start["kx-Defender<br/>명령어 입력"]
+
+    Start --> Parser["Command Parser<br/>KxLang 검증"]
+
+    Parser --> FamilyRoute{"Command Family<br/>분류"}
+
+    %% ATTACK FAMILY 7
+    FamilyRoute -->|Attack| AttackFamily["🔴 ATTACK FAMILY<br/>7개"]
+    AttackFamily --> Roast["roast tickets<br/>Kerberoasting"]
+    AttackFamily --> Relay["relay<br/>NTLM Relay"]
+    AttackFamily --> Loot["loot<br/>DPAPI Exfil"]
+    AttackFamily --> Bait["bait<br/>OAuth Phishing"]
+    AttackFamily --> Breach["breach<br/>LLM Red Team"]
+    AttackFamily --> Crack["crack<br/>WiFi Crack"]
+    AttackFamily --> Nexus["nexus listen<br/>C2 Listener"]
+
+    %% DEFENSE FAMILY 10
+    FamilyRoute -->|Defense| DefenseFamily["🟢 DEFENSE FAMILY<br/>10개"]
+    DefenseFamily --> Sentry["sentry<br/>Threat Detection"]
+    DefenseFamily --> Trace["trace<br/>Process Behavior"]
+    DefenseFamily --> Audit["audit<br/>Compliance"]
+    DefenseFamily --> Harden["harden<br/>Security Hardening"]
+    DefenseFamily --> Triage["triage<br/>Alert Classification"]
+    DefenseFamily --> Comply["comply<br/>Policy Verification"]
+    DefenseFamily --> Forge["forge<br/>Config Generation"]
+    DefenseFamily --> Sig["sig scan<br/>Malware Scan"]
+    DefenseFamily --> Watch["watch procs<br/>Process Monitor"]
+    DefenseFamily --> Kill["kill pid<br/>Process Terminate"]
+
+    %% INFRASTRUCTURE FAMILY 4
+    FamilyRoute -->|Infrastructure| InfraFamily["🌐 INFRASTRUCTURE<br/>4개"]
+    InfraFamily --> Graph["graph<br/>AD Graph"]
+    InfraFamily --> Probe["probe<br/>Network Probe"]
+    InfraFamily --> Sweep["sweep web<br/>Web Scan"]
+
+    %% UTILITY FAMILY 7
+    FamilyRoute -->|Utility| UtilityFamily["⚙️ UTILITY<br/>7개"]
+    UtilityFamily --> Lexicon["lexicon<br/>Skill Dict"]
+    UtilityFamily --> Lang["lang ko/en<br/>Language"]
+    UtilityFamily --> Update["update<br/>Version"]
+    UtilityFamily --> Help["help /h<br/>Help"]
+    UtilityFamily --> Exit["exit quit q<br/>Exit"]
+
+    %% ROUTES TO SCOPE VALIDATION
+    Roast --> ScopeCheck
+    Relay --> ScopeCheck
+    Loot --> ScopeCheck
+    Bait --> ScopeCheck
+    Breach --> ScopeCheck
+    Crack --> ScopeCheck
+    Nexus --> ScopeCheck
+    Sentry --> ScopeCheck
+    Trace --> ScopeCheck
+    Audit --> ScopeCheck
+    Harden --> ScopeCheck
+    Triage --> ScopeCheck
+    Comply --> ScopeCheck
+    Forge --> ScopeCheck
+    Sig --> ScopeCheck
+    Watch --> ScopeCheck
+    Kill --> ScopeCheck
+    Graph --> ScopeCheck
+    Probe --> ScopeCheck
+    Sweep --> ScopeCheck
+
+    Lexicon --> UtilExec
+    Lang --> UtilExec
+    Update --> UtilExec
+    Help --> UtilExec
+    Exit --> UtilExec
+
+    %% SCOPE VALIDATION
+    ScopeCheck{"Scope<br/>검증"}
+    ScopeCheck -->|lab| Lab["✅ lab<br/>로컬"]
+    ScopeCheck -->|owned| Owned["RFC1918<br/>.local/.test/.lab"]
+    ScopeCheck -->|pact| Pact["--engagement-file<br/>필수"]
+
+    Owned -->|✅| OwnedPass["✅ 통과"]
+    Owned -->|❌| Denied["❌ 거부"]
+    Pact -->|✅| PactPass["✅ 통과"]
+    Pact -->|❌| Denied
+
+    Lab --> ModeCheck
+    OwnedPass --> ModeCheck
+    PactPass --> ModeCheck
+
+    %% MODE VALIDATION
+    ModeCheck{"Mode<br/>검증"}
+    ModeCheck -->|sim| Sim["✅ SIMULATION<br/>안전"]
+    ModeCheck -->|live| Live["🔴 LIVE<br/>실제실행"]
+
+    Sim --> Execute
+    Live --> Execute
+
+    %% EXECUTION
+    Execute["Execute Module<br/>modules/attack<br/>modules/defense<br/>modules/engines"]
+
+    Execute --> EngineRoute{"Engine"}
+    EngineRoute -->|Score| KxScore["kxscore.py"]
+    EngineRoute -->|Action| KxAction["kxaction.py"]
+    EngineRoute -->|Sig| KxSig["kxsig.py"]
+    EngineRoute -->|Watch| KxWatch["kxwatch.py"]
+    EngineRoute -->|Nexus| NexusStore["nexus_store.py"]
+
+    KxScore --> Report["report.py<br/>결과 포맷"]
+    KxAction --> Report
+    KxSig --> Report
+    KxWatch --> Report
+    NexusStore --> Report
+
+    %% UTILITY NO SCOPE
+    UtilExec["Execute<br/>Utility"]
+    UtilExec --> UtilEngine{"Engine"}
+    UtilEngine -->|Catalog| CatalogExec["catalog.py"]
+
+    CatalogExec --> UtilReport["report.py"]
+
+    %% OUTPUT
+    Report --> Output["Output Entity<br/>JSON"]
+    UtilReport --> UtilOutput["Output Entity<br/>JSON"]
+
+    Output --> KxExecution["KxExecution"]
+    Output --> KxFinding["KxFinding"]
+    Output --> KxThreat["KxThreat"]
+    Output --> KxAlert["KxAlert"]
+    Output --> KxProcess["KxProcess"]
+    Output --> KxNetwork["KxNetwork"]
+
+    UtilOutput --> KxExecutionUtil["KxExecution"]
+
+    %% MALTEGO GRAPH
+    KxExecution --> Maltego["Maltego Graph<br/>Entity + Link"]
+    KxFinding --> Maltego
+    KxThreat --> Maltego
+    KxAlert --> Maltego
+    KxProcess --> Maltego
+    KxNetwork --> Maltego
+    KxExecutionUtil --> Maltego
+
+    Maltego --> End["✅ 역추적<br/>완료"]
+    Denied --> End
+
+    %% STYLES
+    style Start fill:#0f0,stroke:#0f0,color:#000
+    style AttackFamily fill:#a00,stroke:#f00,color:#fff
+    style DefenseFamily fill:#0a0,stroke:#0f0,color:#000
+    style InfraFamily fill:#0aa,stroke:#0ff,color:#000
+    style UtilityFamily fill:#aa0,stroke:#ff0,color:#000
+    style ScopeCheck fill:#44a,stroke:#88f,color:#fff
+    style ModeCheck fill:#44a,stroke:#88f,color:#fff
+    style Execute fill:#080,stroke:#0f0,color:#0f0
+    style Report fill:#088,stroke:#0ff,color:#0ff
+    style Output fill:#088,stroke:#0ff,color:#0ff
+    style UtilExec fill:#880,stroke:#ff0,color:#fff
+    style Maltego fill:#408,stroke:#88f,color:#88f
+    style End fill:#0f0,stroke:#0f0,color:#000

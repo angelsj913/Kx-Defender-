@@ -1,0 +1,26 @@
+command_name,family,category,subcommand,scope_required,mode_options,output_entity,execution_engine,description
+roast,attack,privilege_escalation,tickets,lab|owned|pact,sim|live,KxThreat,kxscore.py,Kerberos ticket roasting
+relay,attack,credential_access,relay,lab|owned|pact,sim|live,KxThreat,kxscore.py,NTLM relay attack
+loot,attack,credential_access,loot,lab|owned|pact,sim|live,KxFinding,kxscore.py,DPAPI secrets exfiltration
+bait,attack,credential_access,bait,lab|owned|pact,sim|live,KxAlert,kxscore.py,OAuth device code phishing
+breach,attack,social_engineering,breach,pact,sim|live,KxThreat,kxscore.py,LLM red team attack
+crack,attack,authentication,crack,lab|owned|pact,sim|live,KxFinding,kxscore.py,WiFi password cracking
+nexus,attack,command_control,listen,lab|owned|pact,sim|live,KxNetwork,nexus_store.py,C2 listener
+sentry,defense,threat_detection,sentry,lab|owned|pact,sim|live,KxAlert,kxaction.py,Threat detection
+trace,defense,behavior_analysis,trace,lab|owned|pact,sim|live,KxProcess|KxAlert,kxwatch.py,Process behavior analysis
+audit,defense,compliance,audit,lab|owned|pact,sim|live,KxFinding,kxsig.py,Security audit
+harden,defense,hardening,harden,lab|owned|pact,sim|live,KxExecution,kxaction.py,Security hardening
+triage,defense,incident_response,triage,lab|owned|pact,sim|live,KxFinding,kxsig.py,Alert triage
+comply,defense,compliance,comply,lab|owned|pact,sim|live,KxFinding,kxsig.py,Policy compliance
+forge,defense,hardening,forge,lab|owned|pact,sim|live,KxExecution,kxaction.py,Configuration generation
+sig,defense,malware_detection,scan,lab|owned|pact,sim|live,KxFinding,kxsig.py,Signature scanning
+watch,defense,process_monitoring,procs,lab|owned|pact,sim|live,KxProcess|KxAlert,kxwatch.py,Process monitoring
+kill,defense,process_control,pid,lab|owned|pact,sim|live,KxProcess|KxExecution,kxaction.py,Process termination
+graph,infrastructure,network_mapping,query,lab|owned|pact,sim|live,KxNetwork,nexus_store.py,AD graph simulation
+probe,infrastructure,network_discovery,endpoint,lab|owned|pact,sim|live,KxNetwork|KxFinding,nexus_store.py,Network probing
+sweep,infrastructure,web_scanning,web,lab|owned|pact,sim|live,KxFinding,nexus_store.py,Web scanning
+lexicon,utility,reference,none,lab,sim,KxExecution,catalog.py,Skill dictionary
+lang,utility,configuration,none,lab,sim,KxExecution,catalog.py,Language setting
+update,utility,maintenance,none,lab,sim,KxExecution,catalog.py,Version update
+help,utility,reference,none,lab,sim,KxExecution,catalog.py,Help display
+exit,utility,control,none,lab,sim,none,catalog.py,Program exit
