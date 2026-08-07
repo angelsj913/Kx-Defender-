@@ -11,7 +11,6 @@ from modules.attack.dpapi import DpapiModule
 from modules.attack.kerberoasting import KerberoastingModule
 from modules.attack.llm_redteam import LlmRedteamModule
 from modules.attack.ntlm_relay import NtlmRelayModule
-from modules.attack.ip_rotation import IpRotationModule
 from modules.attack.web_scanner import WebScannerModule
 from modules.attack.wifi import WifiModule
 from modules.catalog.factory import build_catalog_modules
@@ -28,7 +27,6 @@ LEGACY_CLASSES: list[Type[AttackModule]] = [
     C2Module,
     WebScannerModule,
     LlmRedteamModule,
-    IpRotationModule,
     ProcessMonitorModule,
     ProcessKillModule,
     SigScanModule,
@@ -42,7 +40,6 @@ ALIASES: dict[str, str] = {
     "wifi": "performing-wifi-password-cracking-with-aircrack",
     "llm_redteam": "red-teaming-llms-with-garak",
     "c2": "building-red-team-c2-infrastructure-with-havoc",
-    "ip_rotation": "rotating-source-ips-via-proxy-chain",
 }
 
 
